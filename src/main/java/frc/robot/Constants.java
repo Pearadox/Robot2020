@@ -53,4 +53,12 @@ public final class Constants {
 
     public static final double kS = 0.0d; // Volts
   }
+  
+  public static final class MPConstants {
+    public static final double kV = 0;
+    public static final double kA = 0;
+    public static final double kH = 0;
+    public static final double kP = 0;
+    public static final double kD = 0;
+  }
 }

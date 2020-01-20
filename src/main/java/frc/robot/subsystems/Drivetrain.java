@@ -92,7 +92,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * 
+   * Drives 
    * @param throttle throttle (foward positive)
    * @param twist twist (clockwise positive)
    * @param squareInputs square inputs
@@ -123,7 +123,7 @@ public class Drivetrain extends SubsystemBase {
   public double getLeftEncoders() {
     return (leftMasterEncoder.getPosition() 
           + leftSlaveEncoder1.getPosition()
-          + leftSlaveEncoder2.getPosition())/3;
+          + leftSlaveEncoder2.getPosition()) / 3;
   }
 
   /**
@@ -133,15 +133,40 @@ public class Drivetrain extends SubsystemBase {
   public double getRightEncoders() {
     return (rightMasterEncoder.getPosition()
           + rightSlaveEncoder1.getPosition()
-          + rightSlaveEncoder2.getPosition())/3;
+          + rightSlaveEncoder2.getPosition()) / 3;
   }
 
   public Rotation2d getGyroAngle() {
-    return new Rotation2d(Math.toRadians(gyro.getAngle()));
+    return new Rotation2d(Math.toRadians(gyro.getYaw()));
   }
 
   public Pose2d getPosition() { 
     return odometry.getPoseMeters();
+  }
+
+  public void zeroGyro() {
+    gyro.zeroYaw();
+  }
+
+  public void zeroEncoders() {
+    leftMasterEncoder.setPosition(0);
+    leftSlaveEncoder1.setPosition(0);
+    leftSlaveEncoder2.setPosition(0);
+    rightMasterEncoder.setPosition(0);
+    rightSlaveEncoder1.setPosition(0);
+    rightSlaveEncoder2.setPosition(0);
+  }
+
+  public double getLeftVelocity() {
+    return (leftMasterEncoder.getVelocity() 
+        + leftSlaveEncoder1.getVelocity() 
+        + leftSlaveEncoder2.getVelocity()) / 3;
+  }
+  
+  public double getRightVelocity() {
+    return (rightMasterEncoder.getVelocity()
+        + rightSlaveEncoder1.getVelocity()
+        + rightSlaveEncoder2.getVelocity()) / 3;
   }
 
   @Override
