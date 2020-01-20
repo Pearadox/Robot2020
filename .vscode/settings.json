@@ -12,6 +12,6 @@
     "**/.settings": true,
     "**/.factorypath": true
   },
-  "java.checkstyle.configuration": "${workspaceFolder}/pearcheck.xml",
+  "java.checkstyle.configuration": "/google_checks.xml",
   "java.checkstyle.version": "8.28"
 }
