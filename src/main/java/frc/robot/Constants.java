@@ -32,7 +32,7 @@ public final class Constants {
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(6.0d); // Meters 
     
     public static final double DISTANCE_PER_REVOLUTION = WHEEL_DIAMETER * Math.PI;
-    public static final int PULSES_PER_REVOLUTION = 0;
+    public static final int PULSES_PER_REVOLUTION = 1;
     public static final double DISTANCE_PER_PULSE = DISTANCE_PER_REVOLUTION / PULSES_PER_REVOLUTION;
     public static final double SECONDS_PER_MINUTE = 60.0d;
 
@@ -51,14 +51,14 @@ public final class Constants {
     public static final double B = 0.0d;
     public static final double ZETA = 0.0d;
 
-    public static final double kS = 0.0d; // Volts
+    public static final double KS = 0.0d; // Volts
   }
   
   public static final class MPConstants {
-    public static final double kV = 0;
-    public static final double kA = 0;
-    public static final double kH = 0;
-    public static final double kP = 0;
-    public static final double kD = 0;
+    public static final double DEFAULT_KV = 0;
+    public static final double DEFAULT_KA = 0;
+    public static final double DEFAULT_KH = 0;
+    public static final double DEFAULT_KP = 0;
+    public static final double DEFAULT_KD = 0;
   }
 }

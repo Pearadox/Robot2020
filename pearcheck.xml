@@ -45,7 +45,8 @@
             <property name="allowNonPrintableEscapes" value="true"/>
         </module>
         <module name="AvoidStarImport">
-            <property name="excludes" value="frc.robot.subsystems,frc.robot.Constants.DrivetrainConstants,frc.robot.Constants"/>
+            <property name="excludes" value="frc.robot.subsystems,frc.robot.Constants.DrivetrainConstants,frc.robot.Constants,
+            frc.robot.Constants.MPConstants"/>
         </module>
         <module name="OneTopLevelClass"/>
         <module name="NoLineWrap"/>

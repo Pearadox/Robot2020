@@ -47,7 +47,9 @@ public class Drivetrain extends SubsystemBase {
   private final DifferentialDriveOdometry odometry;
 
   
-  
+  /**
+   * Creates a new drivetrain.
+   */
   public Drivetrain() {
     leftMasterMotor = new CANSparkMax(MASTER_LEFT_MOTOR, MotorType.kBrushless);
     leftSlaveMotor1 = new CANSparkMax(SLAVE_LEFT_MOTOR1, MotorType.kBrushless);
@@ -92,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Drives 
+   * Drives the robot using joystick or controller input.
    * @param throttle throttle (foward positive)
    * @param twist twist (clockwise positive)
    * @param squareInputs square inputs
@@ -109,15 +111,29 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput = throttle + twist;
     double rightOutput = throttle - twist;
 
-    leftOutput = leftOutput > MAX_OUTPUT ? MAX_OUTPUT : leftOutput;
-    rightOutput = rightOutput > MAX_OUTPUT ? MAX_OUTPUT : rightOutput;
+    leftOutput = Math.abs(leftOutput) > MAX_OUTPUT 
+      ? Math.copySign(MAX_OUTPUT, leftOutput) : leftOutput;
+    rightOutput = Math.abs(rightOutput) > MAX_OUTPUT 
+      ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
+
+    leftMasterMotor.set(leftOutput);
+    rightMasterMotor.set(rightOutput);
+  }
+
+  public void tankDrive(double leftOutput, double rightOutput) {
+    leftOutput = Math.abs(leftOutput) < THROTTLE_DEADBAND ? 0.0d : leftOutput;
+    rightOutput = Math.abs(rightOutput) < THROTTLE_DEADBAND ? 0.0d : rightOutput;
+    leftOutput = Math.abs(leftOutput) > MAX_OUTPUT 
+      ? Math.copySign(MAX_OUTPUT, leftOutput) : leftOutput;
+    rightOutput = Math.abs(rightOutput) > MAX_OUTPUT 
+      ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
 
     leftMasterMotor.set(leftOutput);
     rightMasterMotor.set(rightOutput);
   }
 
   /**
-   * 
+   * Sums the left encoder positions and averages them.
    * @return total positon of left encoders in meters
    */
   public double getLeftEncoders() {
@@ -127,7 +143,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * 
+   * Averages and returns the right encoder positions.
    * @return total position of right encoders in meters
    */
   public double getRightEncoders() {
@@ -136,8 +152,12 @@ public class Drivetrain extends SubsystemBase {
           + rightSlaveEncoder2.getPosition()) / 3;
   }
 
+  /**
+   * Returns the gyro angle from NavX. Negated because NavX is positive clockwise by default.
+   * @return gyro angle from NavX
+   */
   public Rotation2d getGyroAngle() {
-    return new Rotation2d(Math.toRadians(gyro.getYaw()));
+    return new Rotation2d(Math.toRadians(-gyro.getYaw()));
   }
 
   public Pose2d getPosition() { 
@@ -148,6 +168,9 @@ public class Drivetrain extends SubsystemBase {
     gyro.zeroYaw();
   }
 
+  /**
+   * Zeroes the encoders.
+   */
   public void zeroEncoders() {
     leftMasterEncoder.setPosition(0);
     leftSlaveEncoder1.setPosition(0);
@@ -157,12 +180,20 @@ public class Drivetrain extends SubsystemBase {
     rightSlaveEncoder2.setPosition(0);
   }
 
+  /**
+   * Averages the velocities read by the encoders.
+   * @return the velocity of the left side of the drivetrain in meters per second.
+   */
   public double getLeftVelocity() {
     return (leftMasterEncoder.getVelocity() 
         + leftSlaveEncoder1.getVelocity() 
         + leftSlaveEncoder2.getVelocity()) / 3;
   }
   
+  /**
+   * Averages the velocities read by the encoders.
+   * @return the velocity of the left side of the drivetrain in meters per second.
+   */
   public double getRightVelocity() {
     return (rightMasterEncoder.getVelocity()
         + rightSlaveEncoder1.getVelocity()

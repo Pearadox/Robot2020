@@ -12,15 +12,15 @@ package frc.robot.autonomous;
  */
 
 public class MPPoint {
-    public double pos;
-    public double acc;
-    public double vel;
-    public double hea;
-    
-    public MPPoint(double position, double acceleration, double velocity, double heading) {
-        pos = position;
-        acc = acceleration;
-        vel = velocity;
-        hea = heading;
-    }
+  public double pos;
+  public double acc;
+  public double vel;
+  public double hea;
+
+  public MPPoint(double position, double acceleration, double velocity, double heading) {
+    pos = position;
+    acc = acceleration;
+    vel = velocity;
+    hea = heading;
+  }
 }

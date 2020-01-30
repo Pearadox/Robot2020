@@ -7,13 +7,16 @@
 
 package frc.robot.autonomous;
 
+import static frc.robot.Constants.MPConstants.*;
+
+import frc.robot.subsystems.Drivetrain;
+
 import java.io.IOException;
 import java.util.List;
-import static frc.robot.Constants.MPConstants;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Drivetrain;
+
 
 public class FollowPath extends CommandBase {
   /**
@@ -27,11 +30,11 @@ public class FollowPath extends CommandBase {
   double currentTime;
   double lastError;
 
-  double kP = MPConstants.kP;
-  double kD = MPConstants.kD;
-  double kV = MPConstants.kV;
-  double kA = MPConstants.kA;
-  double kH = MPConstants.kH;
+  double kP = DEFAULT_KP;
+  double kD = DEFAULT_KD;
+  double kV = DEFAULT_KV;
+  double kA = DEFAULT_KA;
+  double kH = DEFAULT_KH;
   private double lastTime = 0.0d;
 
   public FollowPath(Drivetrain drivetrain) throws IOException {
@@ -72,19 +75,21 @@ public class FollowPath extends CommandBase {
 
     double leftOutput = kV * desiredLVel
                       + kA * desiredLAcc
-                      + kH * desiredHea
+                      + kH * (currentHea - desiredHea)
                       + kP * (lastError)
                       + kD * (((desiredLPos - currentLPos) - lastError) / (currentTime - lastTime));
     
                       
     double rightOutput = kV * desiredRVel
                       + kA * desiredRAcc
-              
+                      + kH * (currentHea - desiredHea)
                       + kP * (lastError)
                       + kD * (((desiredRPos - currentRPos) - lastError) / (currentTime - lastTime));
     
     lastError = desiredLPos - currentLPos;
     lastTime = currentTime;
+
+    drivetrain.tankDrive(leftOutput, rightOutput);
   }
 
   // Called once the command ends or is interrupted.

@@ -7,47 +7,54 @@
 
 package frc.robot.autonomous;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Add your docs here.
  */
 public class MPTrajectory {
-    public List<MPPoint> leftTrajectory;
-    public List<MPPoint> rightTrajectory;
+  public List<MPPoint> leftTrajectory;
+  public List<MPPoint> rightTrajectory;
 
-    public MPTrajectory(String fileName) throws IOException {
-        this(new File(fileName), new File(fileName));
+  public MPTrajectory(String fileName) throws IOException {
+    this(new File(fileName), new File(fileName));
+  }
+
+  public MPTrajectory(File leftFile, File rightFile) throws IOException {
+    leftTrajectory = new ArrayList<>();
+    rightTrajectory = new ArrayList<>();
+    
+    BufferedReader leftReader = new BufferedReader(new FileReader(leftFile));
+    BufferedReader rightReader = new BufferedReader(new FileReader(rightFile));
+
+    String raw = leftReader.readLine();
+    String[] line;
+    while (raw != null) {
+      line = raw.split(",");
+      double pos = Double.parseDouble(line[0]);
+      double vel = Double.parseDouble(line[1]);
+      double acc = Double.parseDouble(line[2]);
+      double hea = Double.parseDouble(line[3]);
+      leftTrajectory.add(new MPPoint(pos, vel, acc, hea));
+      raw = leftReader.readLine();
     }
+    leftReader.close();
 
-    public MPTrajectory(File leftFile, File rightFile) throws IOException {
-        BufferedReader leftReader = new BufferedReader(new FileReader(leftFile));
-        BufferedReader rightReader = new BufferedReader(new FileReader(rightFile));
-        
-        String raw = leftReader.readLine();
-        String[] line;
-        while (raw != null) {
-            line = raw.split(",");
-            double pos = Double.parseDouble(line[0]);
-            double vel = Double.parseDouble(line[1]);
-            double acc = Double.parseDouble(line[2]);
-            double hea = Double.parseDouble(line[3]);
-            leftTrajectory.add(new MPPoint(pos, vel, acc, hea));
-            raw = leftReader.readLine();
-        }
-        leftReader.close();
-
-        raw = rightReader.readLine();
-        while (raw != null) {
-            line = raw.split(",");
-            double pos = Double.parseDouble(line[0]);
-            double vel = Double.parseDouble(line[1]);
-            double acc = Double.parseDouble(line[2]);
-            double hea = Double.parseDouble(line[3]);
-            leftTrajectory.add(new MPPoint(pos, vel, acc, hea));
-            raw = rightReader.readLine();
-        }
-        rightReader.close();
+    raw = rightReader.readLine();
+    while (raw != null) {
+      line = raw.split(",");
+      double pos = Double.parseDouble(line[0]);
+      double vel = Double.parseDouble(line[1]);
+      double acc = Double.parseDouble(line[2]);
+      double hea = Double.parseDouble(line[3]);
+      leftTrajectory.add(new MPPoint(pos, vel, acc, hea));
+      raw = rightReader.readLine();
     }
+    rightReader.close();
+  }
 }
