@@ -28,19 +28,15 @@ public class Drivetrain extends SubsystemBase {
    * Creates a new Drivetrain.
    */ 
    
-  private final CANSparkMax leftMasterMotor;
-  private final CANSparkMax leftSlaveMotor1;
-  private final CANSparkMax leftSlaveMotor2;
-  private final CANSparkMax rightMasterMotor;
-  private final CANSparkMax rightSlaveMotor1;
-  private final CANSparkMax rightSlaveMotor2;
+  private final CANSparkMax frontLeftMotor;
+  private final CANSparkMax backLeftMotor;
+  private final CANSparkMax frontRightMotor;
+  private final CANSparkMax backRightMotor;
 
-  private final CANEncoder leftMasterEncoder;
-  private final CANEncoder leftSlaveEncoder1;
-  private final CANEncoder leftSlaveEncoder2;
-  private final CANEncoder rightMasterEncoder;
-  private final CANEncoder rightSlaveEncoder1;
-  private final CANEncoder rightSlaveEncoder2;
+  private final CANEncoder frontLeftEncoder;
+  private final CANEncoder backLeftEncoder;
+  private final CANEncoder frontRightEncoder;
+  private final CANEncoder backRightEncoder;
 
   private final AHRS gyro;
 
@@ -51,42 +47,32 @@ public class Drivetrain extends SubsystemBase {
    * Creates a new drivetrain.
    */
   public Drivetrain() {
-    leftMasterMotor = new CANSparkMax(MASTER_LEFT_MOTOR, MotorType.kBrushless);
-    leftSlaveMotor1 = new CANSparkMax(SLAVE_LEFT_MOTOR1, MotorType.kBrushless);
-    leftSlaveMotor2 = new CANSparkMax(SLAVE_LEFT_MOTOR2, MotorType.kBrushless);
+    frontLeftMotor = new CANSparkMax(FRONT_LEFT_MOTOR, MotorType.kBrushless);
+    backLeftMotor = new CANSparkMax(BACK_LEFT_MOTOR, MotorType.kBrushless);
 
-    rightMasterMotor = new CANSparkMax(MASTER_RIGHT_MOTOR, MotorType.kBrushless);
-    rightSlaveMotor1 = new CANSparkMax(SLAVE_RIGHT_MOTOR1, MotorType.kBrushless);
-    rightSlaveMotor2 = new CANSparkMax(SLAVE_RIGHT_MOTOR2, MotorType.kBrushless);
+    frontRightMotor = new CANSparkMax(FRONT_RIGHT_MOTOR, MotorType.kBrushless);
+    backRightMotor = new CANSparkMax(BACK_RIGHT_MOTOR1, MotorType.kBrushless);
     
-    leftSlaveMotor1.follow(leftMasterMotor);
-    leftSlaveMotor2.follow(leftMasterMotor);
-    rightSlaveMotor1.follow(rightMasterMotor);
-    rightSlaveMotor2.follow(rightMasterMotor);
+    backLeftMotor.follow(frontLeftMotor);
+    backRightMotor.follow(frontRightMotor);
 
-    leftMasterEncoder = new CANEncoder(leftMasterMotor);
-    leftSlaveEncoder1 = new CANEncoder(leftSlaveMotor1);
-    leftSlaveEncoder2 = new CANEncoder(leftSlaveMotor2);
+    frontLeftEncoder = new CANEncoder(frontLeftMotor);
+    backLeftEncoder = new CANEncoder(backLeftMotor);
 
-    rightMasterEncoder = new CANEncoder(rightMasterMotor);
-    rightSlaveEncoder1 = new CANEncoder(rightSlaveMotor1);
-    rightSlaveEncoder2 = new CANEncoder(rightSlaveMotor2);
+    frontRightEncoder = new CANEncoder(frontRightMotor);
+    backRightEncoder = new CANEncoder(backRightMotor);
 
-    leftMasterEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
-    leftSlaveEncoder1.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
-    leftSlaveEncoder2.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+    frontLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+    backLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
 
-    rightMasterEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
-    rightSlaveEncoder1.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
-    rightSlaveEncoder2.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+    frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+    backRightEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
 
-    leftMasterEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
-    leftSlaveEncoder1.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
-    leftSlaveEncoder2.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    frontLeftEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    backLeftEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
 
-    rightMasterEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
-    rightSlaveEncoder1.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
-    rightSlaveEncoder2.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    frontRightEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    backRightEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
 
     gyro = new AHRS(SPI.Port.kMXP);
     
@@ -116,8 +102,8 @@ public class Drivetrain extends SubsystemBase {
     rightOutput = Math.abs(rightOutput) > MAX_OUTPUT 
       ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
 
-    leftMasterMotor.set(leftOutput);
-    rightMasterMotor.set(rightOutput);
+    frontLeftMotor.set(leftOutput);
+    frontRightMotor.set(rightOutput);
   }
 
   public void tankDrive(double leftOutput, double rightOutput) {
@@ -128,8 +114,8 @@ public class Drivetrain extends SubsystemBase {
     rightOutput = Math.abs(rightOutput) > MAX_OUTPUT 
       ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
 
-    leftMasterMotor.set(leftOutput);
-    rightMasterMotor.set(rightOutput);
+    frontLeftMotor.set(leftOutput);
+    frontRightMotor.set(rightOutput);
   }
 
   /**
@@ -137,9 +123,8 @@ public class Drivetrain extends SubsystemBase {
    * @return total positon of left encoders in meters
    */
   public double getLeftEncoders() {
-    return (leftMasterEncoder.getPosition() 
-          + leftSlaveEncoder1.getPosition()
-          + leftSlaveEncoder2.getPosition()) / 3;
+    return (frontLeftEncoder.getPosition() 
+          + backLeftEncoder.getPosition()) / 2;
   }
 
   /**
@@ -147,9 +132,8 @@ public class Drivetrain extends SubsystemBase {
    * @return total position of right encoders in meters
    */
   public double getRightEncoders() {
-    return (rightMasterEncoder.getPosition()
-          + rightSlaveEncoder1.getPosition()
-          + rightSlaveEncoder2.getPosition()) / 3;
+    return (frontRightEncoder.getPosition()
+          + backRightEncoder.getPosition()) / 2;
   }
 
   /**
@@ -172,12 +156,10 @@ public class Drivetrain extends SubsystemBase {
    * Zeroes the encoders.
    */
   public void zeroEncoders() {
-    leftMasterEncoder.setPosition(0);
-    leftSlaveEncoder1.setPosition(0);
-    leftSlaveEncoder2.setPosition(0);
-    rightMasterEncoder.setPosition(0);
-    rightSlaveEncoder1.setPosition(0);
-    rightSlaveEncoder2.setPosition(0);
+    frontLeftEncoder.setPosition(0);
+    backLeftEncoder.setPosition(0);
+    frontRightEncoder.setPosition(0);
+    backRightEncoder.setPosition(0);
   }
 
   /**
@@ -185,9 +167,8 @@ public class Drivetrain extends SubsystemBase {
    * @return the velocity of the left side of the drivetrain in meters per second.
    */
   public double getLeftVelocity() {
-    return (leftMasterEncoder.getVelocity() 
-        + leftSlaveEncoder1.getVelocity() 
-        + leftSlaveEncoder2.getVelocity()) / 3;
+    return (frontLeftEncoder.getVelocity() 
+        + backLeftEncoder.getVelocity()) / 2;
   }
   
   /**
@@ -195,9 +176,8 @@ public class Drivetrain extends SubsystemBase {
    * @return the velocity of the left side of the drivetrain in meters per second.
    */
   public double getRightVelocity() {
-    return (rightMasterEncoder.getVelocity()
-        + rightSlaveEncoder1.getVelocity()
-        + rightSlaveEncoder2.getVelocity()) / 3;
+    return (frontRightEncoder.getVelocity()
+        + backRightEncoder.getVelocity()) / 2;
   }
 
   @Override

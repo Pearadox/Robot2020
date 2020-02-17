@@ -20,17 +20,15 @@ import edu.wpi.first.wpilibj.util.Units;
  */
 public final class Constants {
   public static final class DrivetrainConstants {
-    public static final int MASTER_RIGHT_MOTOR = 0;
-    public static final int SLAVE_RIGHT_MOTOR1 = 1;
-    public static final int SLAVE_RIGHT_MOTOR2 = 2;
+    public static final int FRONT_RIGHT_MOTOR = 2;
+    public static final int BACK_RIGHT_MOTOR1 = 3;
     
-    public static final int MASTER_LEFT_MOTOR = 3;
-    public static final int SLAVE_LEFT_MOTOR1 = 4;
-    public static final int SLAVE_LEFT_MOTOR2 = 5;
+    public static final int FRONT_LEFT_MOTOR = 4;
+    public static final int BACK_LEFT_MOTOR = 5;
 
     public static final double DRIVE_BASE_WIDTH = 0.0d; // Meters 
     public static final double WHEEL_DIAMETER = Units.inchesToMeters(6.0d); // Meters 
-    
+
     public static final double DISTANCE_PER_REVOLUTION = WHEEL_DIAMETER * Math.PI;
     public static final int PULSES_PER_REVOLUTION = 1;
     public static final double DISTANCE_PER_PULSE = DISTANCE_PER_REVOLUTION / PULSES_PER_REVOLUTION;
@@ -47,6 +45,16 @@ public final class Constants {
     public static final double MAX_ACCELERATION = 0.0d; // Meters per second^2
   }
 
+  public static final class FlywheelConstants {
+    public static final int LEFT_FLY_MOTOR = 7;
+    public static final int RIGHT_FLY_MOTOR = 8;
+    public static final int ACCEL_FLY_MOTOR = 0;
+    public static final int HOOD_FLY_MOTOR = 6;
+
+    public static final double flykP = 0.018;
+    public static final double flykD = 0.004;
+  }
+
   public static final class RamseteConstants {
     public static final double B = 0.0d;
     public static final double ZETA = 0.0d;
@@ -60,5 +68,22 @@ public final class Constants {
     public static final double DEFAULT_KH = 0;
     public static final double DEFAULT_KP = 0;
     public static final double DEFAULT_KD = 0;
+  }
+
+  public static final class TowerConstants {
+    public static final int TOWER_MOTOR = 12;
+  }
+
+  public static final class ClimberConstants {
+    public static final int CLIMB_MOTOR = 9;
+    public static final int TRANSVERSE_CLIMB_MOTOR = 10;
+  }
+
+  public static final class IntakeConstants {
+    public static final int INTAKE_MOTOR = 13;
+  }
+
+  public static final class TransportConstants {
+    public static final int TRANSPORT_MOTOR = 11;
   }
 }
