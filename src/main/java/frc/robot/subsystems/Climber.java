@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.ClimberConstants.*;
 
@@ -17,6 +19,7 @@ public class Climber extends SubsystemBase {
    */
 
   private CANSparkMax climbMotor;
+  private CANSparkMax transverseMotor;
   private final static Climber INSTANCE = new Climber();
 
   /**
@@ -24,17 +27,22 @@ public class Climber extends SubsystemBase {
    * This constructor is private since this class is a Singleton. External classes
    * should use the {@link #getInstance()} method to get the instance.
    */
-  public Climber() {
+  private Climber() {
     // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     climbMotor = new CANSparkMax(CLIMB_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushed);
+    transverseMotor = new CANSparkMax(TRANSVERSE_CLIMB_MOTOR, MotorType.kBrushed);
     climbMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
   }
 
   public void setClimbMotor(double setSpeed) {
     climbMotor.set(setSpeed);
+  }
+
+  public void setTransverseMotor(double setSpeed) {
+    transverseMotor.set(setSpeed);
   }
 
   /**

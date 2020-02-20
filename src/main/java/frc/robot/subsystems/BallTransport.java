@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.TransportConstants.*;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public class BallTransport extends SubsystemBase {
 
@@ -25,8 +26,9 @@ public class BallTransport extends SubsystemBase {
    * should use the {@link #getInstance()} method to get the instance.
    */
   private VictorSPX transportMotor;
+  private TalonSRX hopperMotor;
 
-  public BallTransport() {
+  private BallTransport() {
     // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem

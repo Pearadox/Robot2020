@@ -17,11 +17,12 @@ public class FlywheelPID extends CommandBase {
   private double kD;
   private double targetRPM;
   private double feedForward = 0.0023;
-  private double accelPercent = 0.7;
+  // private double accelPercent = 0.7;
 
-  public FlywheelPID(Flywheel flywheelSubsystem) {
+  public FlywheelPID(Flywheel flywheelSubsystem, double targetRPM) {
     this.flywheelSubsystem = flywheelSubsystem;
     addRequirements(flywheelSubsystem);
+    this.targetRPM = targetRPM;
     if (!SmartDashboard.containsKey("flywheelRPM")) {
       SmartDashboard.putNumber("flywheelRPM", 0);
     }
@@ -55,6 +56,5 @@ public class FlywheelPID extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-
   }
 }

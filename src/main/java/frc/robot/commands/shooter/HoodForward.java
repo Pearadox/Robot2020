@@ -11,24 +11,24 @@ import frc.robot.subsystems.Flywheel;
 public class HoodForward extends CommandBase
 {
     @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField", "FieldCanBeLocal"})
-    private final Flywheel flywheelSubsystem;
+    private final Flywheel flywheel;
 
     /**
      * Creates a new ExampleCommand.
      *
-     * @param flywheelSubsystem The subsystem used by this command.
+     * @param Flywheel The subsystem used by this command.
      */
     public double degrees = 0;
     public double degreeError = 0;
     public double lastDegree = 0;
-    public HoodForward(Flywheel flywheelSubsystem)
+    private double maxAngle = 60;
+    public HoodForward(Flywheel flywheel)
     {
-        this.flywheelSubsystem = flywheelSubsystem;
-        addRequirements(flywheelSubsystem);
-        if (!SmartDashboard.containsKey("hoodDegree")) {
-            SmartDashboard.putNumber("hoodDegree", SmartDashboard.getNumber("hoodDegree", 0));
+        this.flywheel = flywheel;
+        addRequirements(flywheel);
+        if (!SmartDashboard.containsKey("HoodDegree")) {
+            SmartDashboard.putNumber("HoodDegree", SmartDashboard.getNumber("HoodDegree", 0));
         }
-        flywheelSubsystem.hoodEncoder.setPosition(0);
     }
 
     @Override
@@ -37,15 +37,18 @@ public class HoodForward extends CommandBase
    
     @Override
     public void execute() {
-        degrees = flywheelSubsystem.getHoodAngle();
-        SmartDashboard.putNumber("hoodDegree", degrees);
-        degreeError = degrees - lastDegree;
-        flywheelSubsystem.setHoodFlyMotor(-1);
-        lastDegree = degrees;
+        degrees = flywheel.getHoodAngle();
+        SmartDashboard.putNumber("HoodDegree", degrees);
+        if (degrees >= maxAngle -1) {
+            flywheel.setHoodFlyMotor(-0.5);
+        }
+        else {
+            flywheel.setHoodFlyMotor(-1);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return lastDegree <= 0.5;
+        return degrees >= maxAngle;
     }
 }

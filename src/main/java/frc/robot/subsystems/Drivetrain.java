@@ -85,6 +85,22 @@ public class Drivetrain extends SubsystemBase {
    * @param twist twist (clockwise positive)
    * @param squareInputs square inputs
    */
+
+  public void leftFrontDrive(double setSpeed) {
+    leftFrontDrive(setSpeed);
+  }
+
+  public void leftBackDrive(double setSpeed) {
+    leftBackDrive(setSpeed);
+  }
+  
+  public void rightFrontDrive(double setSpeed) {
+    rightFrontDrive(setSpeed);
+  }
+
+  public void rightBackDrive(double setSpeed) {
+    rightBackDrive(setSpeed);
+  }
   public void arcadeDrive(double throttle, double twist, boolean squareInputs) {
     if (squareInputs) {
       throttle = Math.copySign(throttle * throttle, throttle);
