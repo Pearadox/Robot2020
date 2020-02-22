@@ -3,13 +3,13 @@ package frc.lib.motors;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class Neo550 extends MotorConfiguration {
-  Neo550() { this(false, false, null, new FeedbackSensor(FeedbackDevice.IntegratedSensor, 42)); }
+public class Snowblower extends MotorConfiguration {
+  Snowblower() { this(false, false, null, null); }
 
-  Neo550(boolean coast, boolean inverted, SpeedController master, FeedbackSensor feedbackDevice) {
-    brushed = false;
-    stallLimit = 20;
-    freeLimit = 35;
+  Snowblower(boolean coast, boolean inverted, SpeedController master, FeedbackSensor feedbackDevice) {
+    brushed = true;
+    stallLimit = 60;
+    freeLimit = 80;
     stallThreshold = 30;
     peakCurrentTime = 1000;
     this.coast = coast;
@@ -20,21 +20,21 @@ public class Neo550 extends MotorConfiguration {
 
   @Override
   public MotorConfiguration setIdleMode(boolean coast) {
-    return new Neo550(coast, inverted, master, feedbackDevice);
+    return new Snowblower(coast, inverted, master, feedbackDevice);
   }
 
   @Override
   public MotorConfiguration setInverted(boolean inverted) {
-    return new Neo550(coast, inverted, master, feedbackDevice);
+    return new Snowblower(coast, inverted, master, feedbackDevice);
   }
 
   @Override
   public MotorConfiguration withMaster(SpeedController master) {
-    return new Neo550(coast, inverted, master, feedbackDevice);
+    return new Snowblower(coast, inverted, master, feedbackDevice);
   }
 
   @Override
   public MotorConfiguration withFeedbackDevice(FeedbackSensor feedbackDevice) {
-    return new Neo550(coast, inverted, master, feedbackDevice);
+    return new Snowblower(coast, inverted, master, feedbackDevice);
   }
 }

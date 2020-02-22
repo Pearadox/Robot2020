@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class Motors {
 
-  public static final MotorConfiguration Neo = new Neo(false, false, null);
-  public static final MotorConfiguration Neo550 = new Neo550(false, false, null);
-
+  public static final MotorConfiguration Neo = new Neo();
+  public static final MotorConfiguration Neo550 = new Neo550();
+  public static final MotorConfiguration Snowblower = new Snowblower();
 }

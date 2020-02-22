@@ -4,15 +4,26 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.SpeedController;
 
 public abstract class MotorConfiguration {
-  public boolean brushed;
-  public boolean coast;
-  public boolean inverted;
-  public FeedbackDevice feedbackDevice;
-  public SpeedController master;
-  public int stallLimit;
-  public int freeLimit;
-  public int stallThreshold;
-  public int peakCurrentTime;
+  public static class FeedbackSensor {
+    public final FeedbackDevice device;
+    public final int CPR;
+
+    public FeedbackSensor(FeedbackDevice device, int CPR) {
+      this.device = device;
+      this.CPR = CPR;
+    }
+  }
+
+  boolean brushed;
+  boolean coast;
+  boolean inverted;
+  FeedbackSensor feedbackDevice;
+  int feedbackCPR;
+  SpeedController master;
+  int stallLimit;
+  int freeLimit;
+  int stallThreshold;
+  int peakCurrentTime;
 
   public abstract MotorConfiguration setIdleMode(boolean coast);
 
@@ -20,5 +31,5 @@ public abstract class MotorConfiguration {
 
   public abstract MotorConfiguration withMaster(SpeedController master);
 
-  public abstract MotorConfiguration withFeedbackDevice(FeedbackDevice device);
+  public abstract MotorConfiguration withFeedbackDevice(FeedbackSensor feedbackDevice);
 }

@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.motors.Motors;
-import frc.lib.motors.SparkMaxFactory;
+import frc.lib.motors.MotorControllerFactory;
 
 
 
@@ -48,11 +48,11 @@ public class Drivetrain extends SubsystemBase {
    * Creates a new drivetrain.
    */
   public Drivetrain() {
-    frontLeftMotor = SparkMaxFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.Neo);
-    backLeftMotor = SparkMaxFactory.createSparkMax(BACK_LEFT_MOTOR, Motors.Neo.withMaster(frontLeftMotor));
+    frontLeftMotor = MotorControllerFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.Neo);
+    backLeftMotor = MotorControllerFactory.createSparkMax(BACK_LEFT_MOTOR, Motors.Neo.withMaster(frontLeftMotor));
 
-    frontRightMotor = SparkMaxFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo);
-    backRightMotor = SparkMaxFactory.createSparkMax(BACK_RIGHT_MOTOR, Motors.Neo.withMaster(frontRightMotor));
+    frontRightMotor = MotorControllerFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo);
+    backRightMotor = MotorControllerFactory.createSparkMax(BACK_RIGHT_MOTOR, Motors.Neo.withMaster(frontRightMotor));
     
     frontLeftEncoder = new CANEncoder(frontLeftMotor);
     backLeftEncoder = new CANEncoder(backLeftMotor);
