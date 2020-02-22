@@ -14,14 +14,13 @@ import static frc.robot.Constants.DrivetrainConstants.*;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.Motors;
-import frc.lib.SparkMaxFactory;
+import frc.lib.motors.Motors;
+import frc.lib.motors.SparkMaxFactory;
 
 
 
@@ -49,11 +48,11 @@ public class Drivetrain extends SubsystemBase {
    * Creates a new drivetrain.
    */
   public Drivetrain() {
-    frontLeftMotor = SparkMaxFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.BigNeo, false);
-    backLeftMotor = SparkMaxFactory.createSlaveSparkMax(BACK_LEFT_MOTOR, Motors.BigNeo, frontLeftMotor, false);
+    frontLeftMotor = SparkMaxFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.Neo);
+    backLeftMotor = SparkMaxFactory.createSparkMax(BACK_LEFT_MOTOR, Motors.Neo.withMaster(frontLeftMotor));
 
-    frontRightMotor = SparkMaxFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.BigNeo, false);
-    backRightMotor = SparkMaxFactory.createSlaveSparkMax(BACK_RIGHT_MOTOR1, Motors.BigNeo, frontRightMotor, false);
+    frontRightMotor = SparkMaxFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo);
+    backRightMotor = SparkMaxFactory.createSparkMax(BACK_RIGHT_MOTOR, Motors.Neo.withMaster(frontRightMotor));
     
     frontLeftEncoder = new CANEncoder(frontLeftMotor);
     backLeftEncoder = new CANEncoder(backLeftMotor);
@@ -78,12 +77,7 @@ public class Drivetrain extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
   }
 
-  /**
-   * Drives the robot using joystick or controller input.
-   * @param throttle throttle (foward positive)
-   * @param twist twist (clockwise positive)
-   * @param squareInputs square inputs
-   */
+
 
   public void leftFrontDrive(double setSpeed) {
     leftFrontDrive(setSpeed);
@@ -100,6 +94,13 @@ public class Drivetrain extends SubsystemBase {
   public void rightBackDrive(double setSpeed) {
     rightBackDrive(setSpeed);
   }
+
+  /**
+   * Drives the robot using joystick or controller input.
+   * @param throttle throttle (foward positive)
+   * @param twist twist (clockwise positive)
+   * @param squareInputs square inputs
+   */
   public void arcadeDrive(double throttle, double twist, boolean squareInputs) {
     if (squareInputs) {
       throttle = Math.copySign(throttle * throttle, throttle);

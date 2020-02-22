@@ -12,14 +12,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import frc.lib.MotorConfiguration;
-import frc.lib.Motors;
-import frc.lib.SparkMaxFactory;
-import frc.lib.TalonSRXFactory;
+import frc.lib.motors.Motors;
+import frc.lib.motors.SparkMaxFactory;
+import frc.lib.motors.TalonSRXFactory;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.FlywheelConstants.*;
@@ -39,8 +37,8 @@ public class Flywheel extends SubsystemBase {
   public double targetFlyRPM = 0;
 
   public Flywheel() {
-    leftFlyMotor = SparkMaxFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.BigNeo, true);
-    rightFlyMotor = SparkMaxFactory.createInvertedSparkMax(RIGHT_FLY_MOTOR, Motors.BigNeo, true);
+    leftFlyMotor = SparkMaxFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.Neo.setIdleMode(false));
+    rightFlyMotor = SparkMaxFactory.createSparkMax(RIGHT_FLY_MOTOR, Motors.Neo.setIdleMode(false).setInverted(true));
     hoodFlyMotor = TalonSRXFactory.createTalonSRXWithEncoder(HOOD_FLY_MOTOR, Motors.Snowblower, false, FeedbackDevice.QuadEncoder, 8192);
     // accelFlyMotor = CANSparkMax(ACCEL_FLY_MOTOR, MotorType.kBrushless);
 

@@ -4,8 +4,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.Motors;
-import frc.lib.TalonSRXFactory;
+import frc.lib.motors.Motors;
+import frc.lib.motors.TalonSRXFactory;
 
 import static frc.robot.Constants.TransportConstants.*;
 
