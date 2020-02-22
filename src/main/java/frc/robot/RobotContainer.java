@@ -7,16 +7,19 @@
 
 package frc.robot;
 
-import java.sql.DriverPropertyInfo;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.*;
+import frc.robot.commands.climber.ClimbDown;
+import frc.robot.commands.climber.ClimbUp;
+import frc.robot.commands.intake.IntakeRollers;
+import frc.robot.commands.intake.IntakeToggle;
+import frc.robot.commands.shooter.*;
+import frc.robot.commands.transportsystem.TransportInSystem;
+import frc.robot.commands.transportsystem.TransportLoadInSystem;
 import frc.robot.subsystems.*;
 
 /**
@@ -30,7 +33,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private Joystick driverJoyStick = new Joystick(0);
   private Joystick operatorJoystick = new Joystick(1);
-  BallTransport ballTransport = BallTransport.getInstance();
+  BallHopper ballTransport = BallHopper.getInstance();
   BallTower ballTower = new BallTower();
   Climber climber = Climber.getInstance();
   Intake intake = Intake.getInstance();
@@ -53,6 +56,7 @@ public class RobotContainer {
    * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
+  JoystickButton btn6 = new JoystickButton(driverJoyStick, 6);
   JoystickButton btn7 = new JoystickButton(driverJoyStick, 7);
   JoystickButton btn8 = new JoystickButton(driverJoyStick, 8);
   JoystickButton btn9 = new JoystickButton(driverJoyStick, 9);
@@ -68,6 +72,19 @@ public class RobotContainer {
   JoystickButton opbtn12 = new JoystickButton(operatorJoystick, 12);
 
   private void configureButtonBindings() {
+    btn6.whenPressed(new IntakeToggle(intake));
+    btn7.whenPressed(new TransportLoadInSystem());
+    btn8.whileHeld(new TransportInSystem().alongWith(new FlywheelTriangle()));
+    btn9.whileHeld(new TransportInSystem().alongWith(new FlywheelSector()));
+    btn10.whileHeld(new TransportInSystem().alongWith(new FlywheelTrench()));
+    btn11.whileHeld(new IntakeRollers(intake));
+
+    opbtn7.whileHeld(new ClimbUp(climber));
+    opbtn8.whileHeld(new ClimbDown(climber));
+    opbtn9.whenPressed(new HoodSector());
+    opbtn10.whenPressed(new HoodTrench());
+    opbtn11.whileHeld(new TransportInSystem().alongWith(new FlywheelSector()));
+    opbtn12.whileHeld(new TransportInSystem().alongWith(new FlywheelTrench()));
   }
 
   private void configureDefaultCommands() {

@@ -11,13 +11,15 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import frc.lib.MotorConfiguration;
+import frc.lib.Motors;
+import frc.lib.SparkMaxFactory;
+import frc.lib.TalonSRXFactory;
+
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.EncoderType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.FlywheelConstants.*;
@@ -37,29 +39,18 @@ public class Flywheel extends SubsystemBase {
   public double targetFlyRPM = 0;
 
   public Flywheel() {
-    leftFlyMotor = new CANSparkMax(LEFT_FLY_MOTOR, MotorType.kBrushless);
-    rightFlyMotor = new CANSparkMax(RIGHT_FLY_MOTOR, MotorType.kBrushless);
-    hoodFlyMotor = new TalonSRX(HOOD_FLY_MOTOR);
+    leftFlyMotor = SparkMaxFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.BigNeo, true);
+    rightFlyMotor = SparkMaxFactory.createInvertedSparkMax(RIGHT_FLY_MOTOR, Motors.BigNeo, true);
+    hoodFlyMotor = TalonSRXFactory.createTalonSRXWithEncoder(HOOD_FLY_MOTOR, Motors.Snowblower, false, FeedbackDevice.QuadEncoder, 8192);
     // accelFlyMotor = CANSparkMax(ACCEL_FLY_MOTOR, MotorType.kBrushless);
 
     leftFlyEncoder = new CANEncoder(leftFlyMotor);
     rightFlyEncoder = new CANEncoder(rightFlyMotor);
-    
-    leftFlyMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    rightFlyMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    hoodFlyMotor.setNeutralMode(NeutralMode.Brake);
-    leftFlyMotor.setSmartCurrentLimit(80, 5000, 5500);
-    rightFlyMotor.setSmartCurrentLimit(80, 5000, 5500);
-    leftFlyMotor.setInverted(false);
-    rightFlyMotor.setInverted(true);
-    hoodFlyMotor.configFactoryDefault();
-    
     leftFlyEncoder.setVelocityConversionFactor(-1);
     rightFlyEncoder.setVelocityConversionFactor(-1);
-    hoodFlyMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+
     hoodFlyMotor.setSelectedSensorPosition(0);
     
-
     if (!SmartDashboard.containsKey("FlywheelRPM")) {
       SmartDashboard.putNumber("FlywheelRPM", getFlyTargetRPM());
     }

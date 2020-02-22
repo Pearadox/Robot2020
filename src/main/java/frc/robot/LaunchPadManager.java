@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.autonomous.*;
 import frc.robot.subsystems.*;
 
 public class LaunchPadManager {
@@ -100,8 +99,10 @@ public class LaunchPadManager {
         if (btns[7][7]) new RunCommand(() -> {new BallTower().setTowerMotor(setSpeed);}, new BallTower());// Ball Tower motor
         else if(!btns[7][7]) new InstantCommand(() -> {new BallTower().setTowerMotor(0);}, new BallTower());// stop Ball Tower motor
         
-        if (btns[8][0]) new RunCommand(() -> {BallTransport.getInstance().setTransportMotor(setSpeed);}, BallTransport.getInstance());// tower motor
-        else if(!btns[8][0]) new InstantCommand(() -> {BallTransport.getInstance().setTransportMotor(0);}, BallTransport.getInstance());// stop tower motor
+        if (btns[8][0]) new RunCommand(() -> {
+          BallHopper.getInstance().setTransportMotor(setSpeed);}, BallHopper.getInstance());// tower motor
+        else if(!btns[8][0]) new InstantCommand(() -> {
+          BallHopper.getInstance().setTransportMotor(0);}, BallHopper.getInstance());// stop tower motor
         
         if (btns[8][1]) new RunCommand(() -> {Intake.getInstance().topIntakeRoller(setSpeed);}, Intake.getInstance());// top Intake motor
         else if(!btns[8][1]) new InstantCommand(() -> {Intake.getInstance().topIntakeRoller(0);}, Intake.getInstance());// stop top Intake motor

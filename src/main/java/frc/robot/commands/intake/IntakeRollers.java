@@ -29,7 +29,15 @@ public class IntakeRollers extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setIntakeRoller(0.75, 0.75);
+    if (intake.getIntakeRotation() >= 0) {
+      intake.setIntakeRoller(0.0, 0.0);
+    }
+    else if (intake.getIntakeRotation() >= 1 && intake.getIntakeRotation() <= 1.5) {
+      intake.setIntakeRoller(0.75, 0.75);
+    }
+    else if (intake.getIntakeRotation() >= 1.5) {
+      intake.setIntakeRoller(0.75, 0.75);
+    }
   }
 
   // Called once the command ends or is interrupted.

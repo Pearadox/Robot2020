@@ -1,15 +1,15 @@
 package frc.robot.commands.transportsystem;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.BallTower;
+import frc.robot.subsystems.BallHopper;
 
 
-public class TowerLoadIn extends CommandBase {
-  private final BallTower ballTower;
+public class HopperIn extends CommandBase {
+  private final BallHopper ballTransport;
 
-  public TowerLoadIn(BallTower ballTower) {
-    this.ballTower = ballTower;
-    addRequirements(ballTower);
+  public HopperIn(BallHopper ballTransport) {
+    this.ballTransport = ballTransport;
+    addRequirements(ballTransport);
   }
 
   @Override
@@ -18,7 +18,7 @@ public class TowerLoadIn extends CommandBase {
 
   @Override
   public void execute() {
-    ballTower.setTowerMotor(0.5);
+    ballTransport.setTransportMotor(0.5);
   }
 
   @Override
