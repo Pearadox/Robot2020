@@ -11,15 +11,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.climber.ClimbDown;
 import frc.robot.commands.climber.ClimbUp;
+import frc.robot.commands.intake.IntakeHome;
 import frc.robot.commands.intake.IntakeRollers;
 import frc.robot.commands.intake.IntakeToggle;
 import frc.robot.commands.shooter.*;
-import frc.robot.commands.transportsystem.TransportInSystem;
-import frc.robot.commands.transportsystem.TransportLoadInSystem;
+import frc.robot.commands.transportsystem.*;
 import frc.robot.subsystems.*;
 
 /**
@@ -64,6 +65,10 @@ public class RobotContainer {
   JoystickButton btn11 = new JoystickButton(driverJoyStick, 11);
   JoystickButton btn12 = new JoystickButton(driverJoyStick, 12);
 
+  JoystickButton opbtn3 = new JoystickButton(operatorJoystick, 3);
+  JoystickButton opbtn4 = new JoystickButton(operatorJoystick, 4);
+  JoystickButton opbtn5 = new JoystickButton(operatorJoystick, 5);
+  JoystickButton opbtn6 = new JoystickButton(operatorJoystick, 6);
   JoystickButton opbtn7 = new JoystickButton(operatorJoystick, 7);
   JoystickButton opbtn8 = new JoystickButton(operatorJoystick, 8);
   JoystickButton opbtn9 = new JoystickButton(operatorJoystick, 9);
@@ -73,18 +78,22 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     btn6.whenPressed(new IntakeToggle(intake));
-    btn7.whenPressed(new TransportLoadInSystem());
-    btn8.whileHeld(new TransportInSystem().alongWith(new FlywheelTriangle()));
-    btn9.whileHeld(new TransportInSystem().alongWith(new FlywheelSector()));
-    btn10.whileHeld(new TransportInSystem().alongWith(new FlywheelTrench()));
+    btn7.whenPressed(new TransportInSystem());
+    btn8.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelTriangle()));
+    btn9.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelSector()));
+    btn10.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelTrench()));
     btn11.whileHeld(new IntakeRollers(intake));
 
+    opbtn3.whileHeld(new TowerLoadOut(ballTower));
+    opbtn4.whenPressed(new TowerLevelUp(ballTower));
+    opbtn5.whileHeld(new TransportLoadOutSystem());
+    opbtn6.whenPressed(new IntakeHome(intake));
     opbtn7.whileHeld(new ClimbUp(climber));
     opbtn8.whileHeld(new ClimbDown(climber));
     opbtn9.whenPressed(new HoodSector());
     opbtn10.whenPressed(new HoodTrench());
-    opbtn11.whileHeld(new TransportInSystem().alongWith(new FlywheelSector()));
-    opbtn12.whileHeld(new TransportInSystem().alongWith(new FlywheelTrench()));
+    opbtn11.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelSector()));
+    opbtn12.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelTrench()));
   }
 
   private void configureDefaultCommands() {
@@ -100,7 +109,6 @@ public class RobotContainer {
         drivetrain.arcadeDrive(driverJoyStick.getY(), driverJoyStick.getZ(), true);
       }, drivetrain));
     }
-    
   }
 
   /**

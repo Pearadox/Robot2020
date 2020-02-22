@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.lib.motors.MotorConfiguration;
 import frc.lib.motors.Motors;
 import frc.lib.motors.MotorControllerFactory;
@@ -28,7 +29,7 @@ public class Flywheel extends SubsystemBase {
   private final CANSparkMax leftFlyMotor;
   private final CANSparkMax rightFlyMotor;
 //  private final CANSparkMax accelFlyMotor;
-  public final TalonSRX hoodFlyMotor;
+  public final WPI_TalonSRX hoodFlyMotor;
 
   CANEncoder leftFlyEncoder;
   CANEncoder rightFlyEncoder;

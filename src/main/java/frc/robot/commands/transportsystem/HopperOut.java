@@ -19,7 +19,7 @@ public class HopperOut extends CommandBase {
 
   @Override
   public void execute() {
-    ballTransport.setTransportMotor(-0.5);
+    ballTransport.outTransport(0.5);
   }
 
   @Override

@@ -18,7 +18,7 @@ public class TowerDown extends CommandBase {
 
   @Override
   public void execute() {
-    ballTower.setTowerMotor(-0.5);
+    ballTower.outTower(0.5);
   }
 
   @Override

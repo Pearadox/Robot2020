@@ -26,7 +26,7 @@ public class IntakeHome extends CommandBase {
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    if (intakeRotation > 2.0) {
+    if (intakeRotation < 0.5) {
       return true;
     }
     else {

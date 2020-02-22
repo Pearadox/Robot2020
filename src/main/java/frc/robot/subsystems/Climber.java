@@ -6,6 +6,10 @@ import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.motors.MotorConfiguration;
+import frc.lib.motors.MotorControllerFactory;
+import frc.lib.motors.Motors;
+
 import static frc.robot.Constants.ClimberConstants.*;
 
 public class Climber extends SubsystemBase {
@@ -32,9 +36,8 @@ public class Climber extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    climbMotor = new CANSparkMax(CLIMB_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushed);
-    transverseMotor = new CANSparkMax(TRANSVERSE_CLIMB_MOTOR, MotorType.kBrushed);
-    climbMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    climbMotor = MotorControllerFactory.createSparkMax(CLIMB_MOTOR, Motors.Bag);
+    transverseMotor = MotorControllerFactory.createSparkMax(TRANSVERSE_CLIMB_MOTOR, Motors.Neo550);
   }
 
   public void setClimbMotor(double setSpeed) {

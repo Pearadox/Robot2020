@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.TowerConstants.*;
 import edu.wpi.first.wpilibj.DigitalInput;
+import frc.lib.motors.MotorControllerFactory;
+import frc.lib.motors.Motors;
 
 public class BallTower extends SubsystemBase {
 
@@ -25,7 +27,7 @@ public class BallTower extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    towerMotor = new VictorSPX(TOWER_MOTOR);
+    towerMotor = MotorControllerFactory.createVictorSPX(TOWER_MOTOR, Motors.Bag);
     levelOne = new DigitalInput(LEVEL_ONE);
     levelTwo = new DigitalInput(LEVEL_TWO);
     levelThree = new DigitalInput(LEVEL_THREE);

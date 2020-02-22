@@ -59,7 +59,7 @@ public class LaunchPadManager {
             for(int c = 0; c < 9; c++) {
                 String key = r + ":" + c;
                 lastBtns[r][c] = btns[r][c];
-                btns[r][c] = isConnected ? table.getEntry(key).getBoolean(false) : false;
+                btns[r][c] = isConnected && table.getEntry(key).getBoolean(false);
                 presses[r][c] = false;
                 if(btns[r][c] && !lastBtns[r][c]) presses[r][c] = true;
             }
@@ -75,6 +75,8 @@ public class LaunchPadManager {
     }
 
     public void teleopLoop() {
+
+
         if (btns[7][0]) new RunCommand(() -> {new Drivetrain().leftFrontDrive(setSpeed);}, new Drivetrain());// front left motor
         else if (!btns[7][0]) new InstantCommand(() -> {new Drivetrain().leftFrontDrive(0);}, new Drivetrain());// stop left right motor
 
@@ -122,7 +124,7 @@ public class LaunchPadManager {
 
     /*
     Mappings:
-    0:0 climber open override  --  while
+    0:0   --  while
     0:1 climber close override  --  while
     0:2 arm reset zero  --  while
     0:4 cancel auto  --  function

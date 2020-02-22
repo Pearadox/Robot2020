@@ -35,7 +35,7 @@ public class TowerLevelUp extends CommandBase {
   public void execute() {
     currentLevel = ballTower.getTowerLevel();
     if (currentLevel != lastLevel + 1) {
-      ballTower.setTowerMotor(0.5);
+      ballTower.inTower(0.5);
     }
   }
 

@@ -3,13 +3,15 @@ package frc.lib.motors;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class Snowblower extends MotorConfiguration {
-  Snowblower() { this(false, false, null, null); }
+public class Bag extends MotorConfiguration{
+  Bag() {
+    this(false, false, null, null);
+  }
 
-  Snowblower(boolean coast, boolean inverted, SpeedController master, FeedbackSensor feedbackDevice) {
-    brushed = true;
-    stallLimit = 60;
-    freeLimit = 80;
+  Bag(boolean coast, boolean inverted, SpeedController master, FeedbackSensor feedbackDevice) {
+    brushed = false;
+    stallLimit = 30;
+    freeLimit = 45;
     stallThreshold = 30;
     peakCurrentTime = 1000;
     this.coast = coast;
@@ -20,24 +22,24 @@ public class Snowblower extends MotorConfiguration {
 
   @Override
   public MotorConfiguration setIdleMode(boolean coast) {
-    return new Snowblower(coast, inverted, master, feedbackDevice);
+    return new Bag(coast, inverted, master, feedbackDevice);
   }
 
   @Override
   public MotorConfiguration setInverted(boolean inverted) {
-    return new Snowblower(coast, inverted, master, feedbackDevice);
+    return new Bag(coast, inverted, master, feedbackDevice);
   }
 
   @Override
   public MotorConfiguration withMaster(SpeedController master) {
-    return new Snowblower(coast, inverted, master, feedbackDevice);
+    return new Bag(coast, inverted, master, feedbackDevice);
   }
 
   @Override
   public MotorConfiguration withFeedbackDevice(FeedbackSensor feedbackDevice) {
     if (feedbackDevice.device == FeedbackDevice.IntegratedSensor) {
-      throw new IllegalArgumentException("Snowblower motor has no integrated encoder");
+      throw new IllegalArgumentException("Bag motor has no integrated encoder");
     }
-    return new Snowblower(coast, inverted, master, feedbackDevice);
+    return new Bag(coast, inverted, master, feedbackDevice);
   }
 }

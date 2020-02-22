@@ -9,4 +9,5 @@ public class Motors {
   public static final MotorConfiguration Neo = new Neo();
   public static final MotorConfiguration Neo550 = new Neo550();
   public static final MotorConfiguration Snowblower = new Snowblower();
+  public static final MotorConfiguration Bag = new Bag();
 }

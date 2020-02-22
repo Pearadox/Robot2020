@@ -35,7 +35,7 @@ public class TowerLevelDown extends CommandBase {
   public void execute() {
     currentLevel = ballTower.getTowerLevel();
     if (currentLevel != lastLevel - 1) {
-      ballTower.setTowerMotor(0.5);
+      ballTower.outTower(0.5);
     }
   }
 

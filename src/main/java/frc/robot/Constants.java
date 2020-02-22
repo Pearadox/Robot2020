@@ -74,6 +74,6 @@ public final class Constants {
     }
 
     public static final class TransportConstants {
-        public static final int TRANSPORT_MOTOR = 11;
+        public static final int HOPPER_MOTOR = 11;
     }
 }

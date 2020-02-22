@@ -4,6 +4,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.motors.MotorControllerFactory;
 import frc.lib.motors.Motors;
 
 import static frc.robot.Constants.TransportConstants.*;
@@ -31,7 +32,7 @@ public class BallHopper extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    // transportMotor = TalonSRXFactory.createVictorSPX(TRANSPORT_MOTOR, Motors.BagMotor, false);
+    transportMotor = MotorControllerFactory.createVictorSPX(HOPPER_MOTOR, Motors.Bag);
   }
   
   public void setTransportMotor(double setSpeed) {

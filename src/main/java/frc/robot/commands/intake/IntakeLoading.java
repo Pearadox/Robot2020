@@ -20,13 +20,18 @@ public class IntakeLoading extends CommandBase {
   @Override
   public void execute() {
     intakeRotation = intake.getIntakeRotation();
-    intake.setIntakeArm(0.5);
+    if (intakeRotation >= -2.0) {
+      intake.setIntakeArm(-0.5);
+    }
+    else {
+      intake.setIntakeArm(0.5);
+    }
   }
 
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    if (intakeRotation > 1.5) {
+    if (intakeRotation >= -1.55 && intakeRotation <= -1.45) {
       return true;
     }
     else {

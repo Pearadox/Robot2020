@@ -10,6 +10,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.motors.MotorControllerFactory;
+import frc.lib.motors.Motors;
 
 public class Intake extends SubsystemBase {
 
@@ -37,12 +39,12 @@ public class Intake extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    intakeArm = new TalonSRX(ARM_INTAKE_MOTOR);
-    intakeTopRoller = new CANSparkMax(TOP_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
-    intakeBotRoller = new CANSparkMax(BOT_INTAKE_MOTOR, CANSparkMaxLowLevel.MotorType.kBrushless);
+    intakeArm = MotorControllerFactory.createTalonSRX(ARM_INTAKE_MOTOR, Motors.Snowblower);
+    intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
+    intakeBotRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
     intakeArm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     if (!SmartDashboard.containsKey("IntakePosition")) {
-      SmartDashboard.putBoolean("IntakePosition", SmartDashboard.getBoolean("IntakePosition", intakePosition));
+      SmartDashboard.putBoolean("IntakePosition", intakePosition);;;;;;;;;;;;;;
     }
     intakeArm.setSelectedSensorPosition(0);
   }
