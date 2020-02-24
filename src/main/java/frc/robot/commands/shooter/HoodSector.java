@@ -9,7 +9,7 @@ public class HoodSector extends SequentialCommandGroup {
   public HoodSector() {
     // TODO: Add your sequential commands in the super() call, e.g.
     //           super(new FooCommand(), new BarCommand());
-    super(new HoodedSetPoint(new Flywheel(), 25 ),new InstantCommand(
+    super(new HoodedSetPoint(Flywheel.getInstance(), 25 ),new InstantCommand(
         () -> {
           SmartDashboard.putString("HoodToggle", "HoodSector");
         }));

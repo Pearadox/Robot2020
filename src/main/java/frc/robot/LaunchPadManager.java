@@ -1,10 +1,17 @@
 package frc.robot;
 
+import java.sql.Driver;
+
 import edu.wpi.first.networktables.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.shooter.*;
+import frc.robot.commands.climber.*;
+import frc.robot.commands.intake.*;
+import frc.robot.commands.transportsystem.*;
 import frc.robot.subsystems.*;
 
 public class LaunchPadManager {
@@ -27,7 +34,9 @@ public class LaunchPadManager {
     double setSpeed = 0.4;
     double setVoltage = 0.4 * 12;
 
-    public LaunchPadManager() {
+    private static LaunchPadManager INSTANCE = new LaunchPadManager();
+
+    LaunchPadManager() {
         nt = NetworkTableInstance.getDefault();
         table = nt.getTable(tableName);
         pingEntryRio = table.getEntry("pingValueRio");
@@ -70,62 +79,89 @@ public class LaunchPadManager {
         else SmartDashboard.putBoolean("Launchpad Button Test", false);
     }
 
-    public void disabledLoop() {
-        
+    public void disabledLoop() {        
     }
 
     public void teleopLoop() {
+        DriverStation.reportWarning("teleopLoop - begin",true);
+        /*
+        if (btns[0][0]) new InstantCommand(() -> {Drivetrain.getInstance().zeroGyro(); Drivetrain.getInstance().zeroEncoders();}, Drivetrain.getInstance()); //Reset Drivetrain
 
+        if (btns[0][1]) new InstantCommand(() -> {Flywheel.getInstance().resetFlywheel();}, Flywheel.getInstance());// Reset Flywheel
 
-        if (btns[7][0]) new RunCommand(() -> {new Drivetrain().leftFrontDrive(setSpeed);}, new Drivetrain());// front left motor
-        else if (!btns[7][0]) new InstantCommand(() -> {new Drivetrain().leftFrontDrive(0);}, new Drivetrain());// stop left right motor
+        if (btns[0][2]) new InstantCommand(() -> {Intake.getInstance().zeroIntakePosition();}, Intake.getInstance()); // Reset Intake Encoder
 
-        if (btns[7][1]) new RunCommand(() -> {new Drivetrain().leftBackDrive(setSpeed);}, new Drivetrain());// back left motor
-        else if(!btns[7][1]) new InstantCommand(() -> {new Drivetrain().leftBackDrive(0);}, new Drivetrain());// stop back left motor
+        if (btns[1][0]) new IntakeHome(Intake.getInstance());// front left motor
+        else if (!btns[1][0])  new InstantCommand(() -> { Intake.getInstance().setIntakeArm(0);}, Intake.getInstance());//
+
+        if (btns[1][1]) new InstantCommand(() -> {Intake.getInstance().setIntakeArm(0);}, Intake.getInstance()); //Hard Stop Intake
+
+        if (btns[1][2]) new InstantCommand(() -> {Flywheel.getInstance().setHoodFlyMotor(0);}, Flywheel.getInstance()); //Hard Stop Flywheel
+        */
+        try {
+            if (btns[7][0]) new RunCommand(() -> {Drivetrain.getInstance().frontLeftDrive(setSpeed);}, Drivetrain.getInstance());// front left motor
+            else if (!btns[7][0]) new InstantCommand(() -> {Drivetrain.getInstance().frontLeftDrive(0);}, Drivetrain.getInstance());// stop left right motor
+        } catch (Exception e) {
+            DriverStation.reportWarning("teleopLoop - 1",true);
+        }
+
+        if (btns[7][1]) new RunCommand(() -> {Drivetrain.getInstance().frontRightDrive(setSpeed);}, Drivetrain.getInstance());// back left motor
+        else if(!btns[7][1]) new InstantCommand(() -> {Drivetrain.getInstance().frontRightDrive(0);}, Drivetrain.getInstance());// stop back left motor
+        DriverStation.reportWarning("teleopLoop - 2",true);
         
-        if (btns[7][2]) new RunCommand(() -> {new Drivetrain().rightFrontDrive(setSpeed);}, new Drivetrain());// front right motor
-        else if(!btns[7][2]) new InstantCommand(() -> {new Drivetrain().rightBackDrive(0);}, new Drivetrain());// stop front right motor
+        if (btns[7][4]) new RunCommand(() -> {Flywheel.getInstance().leftFlyDrive(setVoltage);}, Flywheel.getInstance());// left Flywheel motor
+        else if(!btns[7][4]) new InstantCommand(() -> {Flywheel.getInstance().leftFlyDrive(0);}, Flywheel.getInstance());// stop left Flywheel motor
+        DriverStation.reportWarning("teleopLoop - 3",true);
         
-        if (btns[7][3]) new RunCommand(() -> {new Drivetrain().rightBackDrive(setSpeed);}, new Drivetrain());// back right motor
-        else if(!btns[7][3]) new InstantCommand(() -> {new Drivetrain().rightBackDrive(0);}, new Drivetrain());// stop back right motor
+        if (btns[7][5]) new RunCommand(() -> {Flywheel.getInstance().rightFlyDrive(setVoltage);}, Flywheel.getInstance());// right Flywheel motor
+        else if(!btns[7][5]) new InstantCommand(() -> {Flywheel.getInstance().rightFlyDrive(0);}, Flywheel.getInstance());// stop right Flywheel motor
+        DriverStation.reportWarning("teleopLoop - 4",true);
         
-        if (btns[7][4]) new RunCommand(() -> {new Flywheel().leftFlyDrive(setVoltage);}, new Flywheel());// left Flywheel motor
-        else if(!btns[7][4]) new InstantCommand(() -> {new Flywheel().leftFlyDrive(0);}, new Flywheel());// stop left Flywheel motor
-        
-        if (btns[7][5]) new RunCommand(() -> {new Flywheel().rightFlyDrive(setVoltage);}, new Flywheel());// right Flywheel motor
-        else if(!btns[7][5]) new InstantCommand(() -> {new Flywheel().rightFlyDrive(0);}, new Flywheel());// stop right Flywheel motor
-        
-        if (btns[7][6]) new RunCommand(() -> {new Flywheel().setHoodFlyMotor(setSpeed);}, new Flywheel());// hood Flywheel motor
-        else if(!btns[7][6]) new InstantCommand(() -> {new Flywheel().setHoodFlyMotor(0);}, new Flywheel());// stop hood Flywheel motor
-        
-        if (btns[7][7]) new RunCommand(() -> {new BallTower().setTowerMotor(setSpeed);}, new BallTower());// Ball Tower motor
-        else if(!btns[7][7]) new InstantCommand(() -> {new BallTower().setTowerMotor(0);}, new BallTower());// stop Ball Tower motor
+        if (btns[7][6]) new RunCommand(() -> {Flywheel.getInstance().setHoodFlyMotor(setSpeed);}, Flywheel.getInstance());// hood Flywheel motor
+        else if(!btns[7][6]) new InstantCommand(() -> {Flywheel.getInstance().setHoodFlyMotor(0);}, Flywheel.getInstance());// stop hood Flywheel motor
+        DriverStation.reportWarning("teleopLoop - 5",true);
+
+        if (btns[7][7]) new RunCommand(() -> {BallTower.getInstance().setTowerMotor(setSpeed);}, BallTower.getInstance());// Ball Tower motor
+        else if(!btns[7][7]) new InstantCommand(() -> {BallTower.getInstance().setTowerMotor(0);}, BallTower.getInstance());// stop Ball Tower motor
         
         if (btns[8][0]) new RunCommand(() -> {
           BallHopper.getInstance().setTransportMotor(setSpeed);}, BallHopper.getInstance());// tower motor
         else if(!btns[8][0]) new InstantCommand(() -> {
           BallHopper.getInstance().setTransportMotor(0);}, BallHopper.getInstance());// stop tower motor
-        
+          DriverStation.reportWarning("teleopLoop - 6",true);
+
         if (btns[8][1]) new RunCommand(() -> {Intake.getInstance().topIntakeRoller(setSpeed);}, Intake.getInstance());// top Intake motor
         else if(!btns[8][1]) new InstantCommand(() -> {Intake.getInstance().topIntakeRoller(0);}, Intake.getInstance());// stop top Intake motor
         
+        DriverStation.reportWarning("teleopLoop - 7",true);
         if (btns[8][2]) new RunCommand(() -> {Intake.getInstance().botIntakeRoller(setSpeed);}, Intake.getInstance());// bot Intake motor
         else if(!btns[8][2]) new InstantCommand(() -> {Intake.getInstance().botIntakeRoller(0);}, Intake.getInstance());// stop bot Intake motor
         
+        DriverStation.reportWarning("teleopLoop - 8",true);
         if (btns[8][3]) new RunCommand(() -> {Intake.getInstance().setIntakeArm(setSpeed);}, Intake.getInstance());// arm intake motor
         else if(!btns[8][3]) new InstantCommand(() -> {Intake.getInstance().setIntakeArm(0);}, Intake.getInstance());// stop arm intake motor
 
+        DriverStation.reportWarning("teleopLoop - 8a",true);
         if (btns[8][4]) new RunCommand(() -> {Climber.getInstance().setClimbMotor(setSpeed);}, Climber.getInstance());// climber motor
         else if(!btns[8][4]) new InstantCommand(() -> {Climber.getInstance().setClimbMotor(0);}, Climber.getInstance());// stop climber motor
 
+        DriverStation.reportWarning("teleopLoop - 9",true);
         if (btns[8][5]) new RunCommand(() -> {Climber.getInstance().setTransverseMotor(setSpeed);}, Climber.getInstance());// transverse climber motor
         else if(!btns[8][5]) new InstantCommand(() -> {Climber.getInstance().setTransverseMotor(0);}, Climber.getInstance());// stop transverse climber motor
+
+        // try {
+            if (btns[8][8]) {
+                DriverStation.reportWarning("Launchpad Button Works",true);
+            }
+        // } catch (Exception e) {
+        //     DriverStation.reportError("", printTrace);
+        // }
     }
 
     /*
     Mappings:
     0:0   --  while
-    0:1 climber close override  --  while
+    0:1   --  while
     0:2 arm reset zero  --  while
     0:4 cancel auto  --  function
     0:6 arm down group  --  when
@@ -164,5 +200,5 @@ public class LaunchPadManager {
     8:5 transversal motor
     */
 
-    // commands
+    public static LaunchPadManager getInstance() {return INSTANCE;}
 }

@@ -67,19 +67,19 @@ public class HoodedSetPoint extends CommandBase
       if (degrees < targetDegree - DEADBAND|| degrees > targetDegree+ DEADBAND) {
         if (degrees <= targetDegree) {
           if (degrees <= (targetDegree - 2.5)) {
-            flywheel.setHoodFlyMotor(-1);
+            flywheel.setHoodFlyMotor(1);
           }
           else {
-            flywheel.setHoodFlyMotor(-0.25);
+            flywheel.setHoodFlyMotor(0.25);
           }
         }
           
         else if (degrees >= targetDegree) {
           if (degrees >= (targetDegree + 2.5)) {
-            flywheel.setHoodFlyMotor(1);;
+            flywheel.setHoodFlyMotor(-1);
           }
           else {
-            flywheel.setHoodFlyMotor(0.25);
+            flywheel.setHoodFlyMotor(-0.25);
           }
         }
       }

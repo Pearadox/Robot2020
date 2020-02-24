@@ -9,7 +9,7 @@ public class Bag extends MotorConfiguration{
   }
 
   Bag(boolean coast, boolean inverted, SpeedController master, FeedbackSensor feedbackDevice) {
-    brushed = false;
+    brushed = true;
     stallLimit = 30;
     freeLimit = 45;
     stallThreshold = 30;

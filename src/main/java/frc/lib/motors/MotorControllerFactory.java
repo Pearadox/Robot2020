@@ -30,14 +30,17 @@ public class MotorControllerFactory {
                 throw new IllegalArgumentException("Master must be another Spark MAX");
             }
             motor.follow((CANSparkMax) config.master);
-            if (config.feedbackDevice.device == FeedbackDevice.IntegratedSensor) {
-                if (config.brushed) {
-                    throw new IllegalArgumentException("Only Neos can have integrated sensors");
+            if (config.feedbackDevice != null) {
+                if (config.feedbackDevice.device == FeedbackDevice.IntegratedSensor) {
+                    if (config.brushed) {
+                        throw new IllegalArgumentException("Only Neos can have integrated sensors");
+                    }
+                    return motor;
+                } else if (config.feedbackDevice.device == FeedbackDevice.QuadEncoder) {
+                    return motor;
                 }
-                return motor;
-            } else if (config.feedbackDevice.device == FeedbackDevice.QuadEncoder) {
-                return motor;
             }
+
             throw new IllegalArgumentException("Only the built-in hall sensor and external quadrature encoders are allowed");
         }
         return motor;
@@ -47,8 +50,11 @@ public class MotorControllerFactory {
         if (!config.brushed) { throw new IllegalArgumentException("Cannot run brushless motors off a Talon SRX"); }
         var motor = new WPI_TalonSRX(canID);
         motor.setNeutralMode(config.coast ? NeutralMode.Coast : NeutralMode.Brake);
-        motor.configSelectedFeedbackSensor(config.feedbackDevice.device);
-        motor.configSelectedFeedbackCoefficient(1.0 / config.feedbackDevice.CPR);
+        if (config.feedbackDevice != null) {
+            motor.configSelectedFeedbackSensor(config.feedbackDevice.device);
+            motor.configSelectedFeedbackCoefficient(1.0 / config.feedbackDevice.CPR);
+        }
+
         if (config.master != null) {
             if (!(config.master instanceof IMotorController)) {
                 throw new IllegalArgumentException("Master must be a CTRE Motor Controller");
@@ -62,8 +68,11 @@ public class MotorControllerFactory {
         if (!config.brushed) { throw new IllegalArgumentException("Cannot run brushless motors off a Victor SPX"); }
         var motor = new WPI_VictorSPX(canID);
         motor.setNeutralMode(config.coast ? NeutralMode.Coast : NeutralMode.Brake);
-        motor.configSelectedFeedbackSensor(config.feedbackDevice.device);
-        motor.configSelectedFeedbackCoefficient(1.0 / config.feedbackDevice.CPR);
+        if (config.feedbackDevice != null) {
+            motor.configSelectedFeedbackSensor(config.feedbackDevice.device);
+            motor.configSelectedFeedbackCoefficient(1.0 / config.feedbackDevice.CPR);
+        }
+
         if (config.master != null) {
             if (!(config.master instanceof IMotorController)) {
                 throw new IllegalArgumentException("Master must be a CTRE Motor Controller");

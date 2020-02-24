@@ -1,6 +1,10 @@
 package frc.robot.subsystems;
 
-
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -22,7 +26,7 @@ public class Climber extends SubsystemBase {
    * use the {@link #getInstance()} method to get the instance.
    */
 
-  private CANSparkMax climbMotor;
+  private WPI_TalonSRX climbMotor;
   private CANSparkMax transverseMotor;
   private final static Climber INSTANCE = new Climber();
 
@@ -36,12 +40,12 @@ public class Climber extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    climbMotor = MotorControllerFactory.createSparkMax(CLIMB_MOTOR, Motors.Bag);
+    climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.Bag);
     transverseMotor = MotorControllerFactory.createSparkMax(TRANSVERSE_CLIMB_MOTOR, Motors.Neo550);
   }
 
   public void setClimbMotor(double setSpeed) {
-    climbMotor.set(setSpeed);
+    climbMotor.set(ControlMode.PercentOutput, setSpeed);
   }
 
   public void setTransverseMotor(double setSpeed) {

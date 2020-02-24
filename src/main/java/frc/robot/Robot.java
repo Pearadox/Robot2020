@@ -7,7 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Sendable;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.LaunchPadManager;
@@ -22,7 +25,8 @@ public class Robot extends TimedRobot {
   private Command autonomousCommand;
 
   private RobotContainer robotContainer;
-  private LaunchPadManager launchpad;
+  private SendableChooser<Command> autoChooser;
+  LaunchPadManager launchpad;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -33,6 +37,7 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
+    autoChooser = new SendableChooser<>();
     launchpad = new LaunchPadManager();
   }
 
@@ -49,8 +54,8 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+   // launchpad.periodicLoop();
     CommandScheduler.getInstance().run();
-    launchpad.teleopLoop();
   }
 
   /**
@@ -100,6 +105,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    //launchpad.teleopLoop();
   }
 
   @Override
@@ -111,6 +117,7 @@ public class Robot extends TimedRobot {
   /**
    * This function is called periodically during test mode.
    */
+
   @Override
   public void testPeriodic() {
   }

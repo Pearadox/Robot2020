@@ -9,6 +9,6 @@ public class TransportLoadInSystem extends ParallelCommandGroup {
   public TransportLoadInSystem() {
     // TODO: Add your sequential commands in the super() call, e.g.
     //           super(new FooCommand(), new BarCommand());
-    super(new TowerLoadIn(new BallTower()), new HopperIn(BallHopper.getInstance()));
+    super(new TowerLoadIn(BallTower.getInstance()), new HopperIn(BallHopper.getInstance()));
   }
 }

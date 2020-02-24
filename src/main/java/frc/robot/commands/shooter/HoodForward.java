@@ -40,11 +40,16 @@ public class HoodForward extends CommandBase
         degrees = flywheel.getHoodAngle();
         SmartDashboard.putNumber("HoodDegree", degrees);
         if (degrees >= maxAngle -1) {
-            flywheel.setHoodFlyMotor(-0.5);
+            flywheel.setHoodFlyMotor(0.5);
         }
         else {
-            flywheel.setHoodFlyMotor(-1);
+            flywheel.setHoodFlyMotor(1);
         }
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+      flywheel.setHoodFlyMotor(0);
     }
 
     @Override

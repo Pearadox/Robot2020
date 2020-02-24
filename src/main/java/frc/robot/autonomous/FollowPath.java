@@ -37,10 +37,9 @@ public class FollowPath extends CommandBase {
   double kH = DEFAULT_KH;
   private double lastTime = 0.0d;
 
-  public FollowPath(Drivetrain drivetrain) throws IOException {
+  public FollowPath(Drivetrain drivetrain, String fileName) throws IOException {
     this.drivetrain = drivetrain;
     addRequirements(drivetrain);
-    String fileName = "asd";
     MPTrajectory trajectory = new MPTrajectory(fileName);
     leftTrajectory = trajectory.leftTrajectory;
     rightTrajectory = trajectory.rightTrajectory;

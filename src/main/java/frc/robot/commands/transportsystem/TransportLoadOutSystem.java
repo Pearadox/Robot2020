@@ -8,6 +8,6 @@ public class TransportLoadOutSystem extends ParallelCommandGroup {
   public TransportLoadOutSystem() {
     // TODO: Add your sequential commands in the super() call, e.g.
     //           super(new FooCommand(), new BarCommand());
-    super(new TowerLoadOut(new BallTower()), new HopperOut(BallHopper.getInstance()));
+    super(new TowerLoadOut(BallTower.getInstance()), new HopperOut(BallHopper.getInstance()));
   }
 }

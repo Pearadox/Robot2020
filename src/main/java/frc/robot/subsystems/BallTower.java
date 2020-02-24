@@ -22,7 +22,7 @@ public class BallTower extends SubsystemBase {
   private DigitalInput levelThree;
   private int towerLevel;
 
-  public BallTower() {
+  private BallTower() {
     // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
@@ -81,5 +81,10 @@ public class BallTower extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     autoSetTowerLevel();
+  }
+
+  private static BallTower INSTANCE = new BallTower();
+  public static BallTower getInstance() {
+    return INSTANCE;
   }
 }

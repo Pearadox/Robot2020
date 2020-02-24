@@ -9,7 +9,7 @@ public class HoodTrench extends SequentialCommandGroup {
   public HoodTrench() {
     // TODO: Add your sequential commands in the super() call, e.g.
     //           super(new FooCommand(), new BarCommand());
-    super(new HoodedSetPoint(new Flywheel(), 50),new InstantCommand(
+    super(new HoodedSetPoint(Flywheel.getInstance(), 50),new InstantCommand(
         () -> {
           SmartDashboard.putString("HoodToggle", "HoodTench");
         }

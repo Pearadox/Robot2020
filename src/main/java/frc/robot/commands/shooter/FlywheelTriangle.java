@@ -8,6 +8,6 @@ public class FlywheelTriangle extends SequentialCommandGroup {
   public FlywheelTriangle() {
     // TODO: Add your sequential commands in the super() call, e.g.
     //           super(new FooCommand(), new BarCommand());
-    super(new FlywheelPID(new Flywheel(), 2500));
+    super(new FlywheelPID(Flywheel.getInstance(), 2500));
   }
 }

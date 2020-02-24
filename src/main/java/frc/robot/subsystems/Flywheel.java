@@ -35,8 +35,9 @@ public class Flywheel extends SubsystemBase {
   CANEncoder rightFlyEncoder;
 
   public double targetFlyRPM = 0;
+  private static Flywheel INSTANCE = new Flywheel();
 
-  public Flywheel() {
+  private Flywheel() {
     leftFlyMotor = MotorControllerFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.Neo.setIdleMode(true));
     rightFlyMotor = MotorControllerFactory.createSparkMax(RIGHT_FLY_MOTOR, Motors.Neo.setIdleMode(true).setInverted(true));
     hoodFlyMotor = MotorControllerFactory.createTalonSRX(
@@ -52,7 +53,7 @@ public class Flywheel extends SubsystemBase {
     hoodFlyMotor.setSelectedSensorPosition(0);
     
     if (!SmartDashboard.containsKey("FlywheelRPM")) {
-      SmartDashboard.putNumber("FlywheelRPM", getFlyTargetRPM());
+      SmartDashboard.putNumber("FlywheelRPM", getFlywheelRPM());
     }
   }
 
@@ -77,14 +78,6 @@ public class Flywheel extends SubsystemBase {
   //  public  void setAccelFlyMotor (double setPercent) { accelFlyMotor.set(setPercent);}
 
   // Flywheel PID methods
-  public void setFlyTargetRPM(double targetFlyRPM) {
-    this.targetFlyRPM = targetFlyRPM;
-  }
-
-  public double getFlyTargetRPM() {
-    return this.targetFlyRPM;
-  }
-
   public double getFlywheelRPM() {
     return (leftFlyEncoder.getVelocity() + rightFlyEncoder.getVelocity()) / 2;
   }
@@ -122,6 +115,9 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("FlywheelRPM", getFlyTargetRPM());
+    SmartDashboard.putNumber("FlywheelRPM", getFlywheelRPM());
   }
+
+
+  public static Flywheel getInstance() {return INSTANCE;}
 }

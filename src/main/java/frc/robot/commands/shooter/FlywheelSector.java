@@ -9,6 +9,6 @@ public class FlywheelSector extends SequentialCommandGroup {
   public FlywheelSector() {
     // TODO: Add your sequential commands in the super() call, e.g.
     //           super(new FooCommand(), new BarCommand());
-    super(new FlywheelPID(new Flywheel(), 1700));
+    super(new FlywheelPID(Flywheel.getInstance(), 2500));
   }
 }

@@ -29,6 +29,7 @@ public class TowerLoadOut extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    ballTower.setTowerMotor(0);
 
   }
 }

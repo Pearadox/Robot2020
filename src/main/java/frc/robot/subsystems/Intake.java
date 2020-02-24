@@ -70,9 +70,11 @@ public class Intake extends SubsystemBase {
     return intakeArm.getSelectedSensorPosition() / 8618.5;
   }
 
-  public void setIntakePosition(boolean intakePosition) {
+  public void setIntakePosition (boolean intakePosition) {
     this.intakePosition = intakePosition;
   }
+
+  public void zeroIntakePosition () {intakeArm.setSelectedSensorPosition(0); }
 
   public boolean getIntakePosition() {
     return intakePosition;
@@ -86,9 +88,8 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    intakePosition = getIntakeRotation() > 1.5;
+    intakePosition = getIntakeRotation() >= -1.5;
     SmartDashboard.putBoolean("IntakePosition", intakePosition);
-
   }
 
   public static Intake getInstance() {

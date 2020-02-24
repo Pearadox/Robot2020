@@ -29,10 +29,10 @@ public class Drivetrain extends SubsystemBase {
    * Creates a new Drivetrain.
    */ 
    
-  private final CANSparkMax frontLeftMotor;
-  private final CANSparkMax backLeftMotor;
-  private final CANSparkMax frontRightMotor;
-  private final CANSparkMax backRightMotor;
+  public final CANSparkMax frontLeftMotor;
+  public final CANSparkMax backLeftMotor;
+  public final CANSparkMax frontRightMotor;
+  public final CANSparkMax backRightMotor;
 
   private final CANEncoder frontLeftEncoder;
   private final CANEncoder backLeftEncoder;
@@ -47,11 +47,13 @@ public class Drivetrain extends SubsystemBase {
   /**
    * Creates a new drivetrain.
    */
-  public Drivetrain() {
-    frontLeftMotor = MotorControllerFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.Neo);
+  private static Drivetrain INSTANCE = new Drivetrain();
+
+  private Drivetrain() {
+    frontLeftMotor = MotorControllerFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.Neo.setInverted(true));
     backLeftMotor = MotorControllerFactory.createSparkMax(BACK_LEFT_MOTOR, Motors.Neo.withMaster(frontLeftMotor));
 
-    frontRightMotor = MotorControllerFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo);
+    frontRightMotor = MotorControllerFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo.setInverted(false));
     backRightMotor = MotorControllerFactory.createSparkMax(BACK_RIGHT_MOTOR, Motors.Neo.withMaster(frontRightMotor));
     
     frontLeftEncoder = new CANEncoder(frontLeftMotor);
@@ -77,20 +79,12 @@ public class Drivetrain extends SubsystemBase {
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
   }
 
-  public void leftFrontDrive(double setSpeed) {
+  public void frontLeftDrive(double setSpeed) {
     frontLeftMotor.set(setSpeed);
   }
-
-  public void leftBackDrive(double setSpeed) {
-    backLeftMotor.set(setSpeed);
-  }
   
-  public void rightFrontDrive(double setSpeed) {
+  public void frontRightDrive(double setSpeed) {
     frontRightMotor.set(setSpeed);
-  }
-
-  public void rightBackDrive(double setSpeed) {
-    backRightMotor.set(setSpeed);
   }
 
   /**
@@ -106,19 +100,20 @@ public class Drivetrain extends SubsystemBase {
       twist = Math.copySign(twist * twist, twist);
     }
 
-    throttle = throttle < THROTTLE_DEADBAND ? 0 : throttle;
-    twist = twist < TWIST_DEADBAND ? 0 : twist;
+    throttle = Math.abs(throttle) < THROTTLE_DEADBAND ? 0 : throttle;
+    twist = Math.abs(twist) < TWIST_DEADBAND ? 0 : twist;
 
     double leftOutput = throttle + twist;
     double rightOutput = throttle - twist;
 
+    
     leftOutput = Math.abs(leftOutput) > MAX_OUTPUT 
       ? Math.copySign(MAX_OUTPUT, leftOutput) : leftOutput;
     rightOutput = Math.abs(rightOutput) > MAX_OUTPUT 
       ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
 
-    frontLeftMotor.set(leftOutput);
-    frontRightMotor.set(rightOutput);
+    frontLeftMotor.set(leftOutput * 0.75);
+    frontRightMotor.set(rightOutput * 0.75);
   }
 
   public void tankDrive(double leftOutput, double rightOutput) {
@@ -200,4 +195,6 @@ public class Drivetrain extends SubsystemBase {
     // This method will be called once per scheduler run
     odometry.update(getGyroAngle(), getLeftEncoders(), getRightEncoders());
   }
+
+  public static Drivetrain getInstance() {return INSTANCE;}
 }

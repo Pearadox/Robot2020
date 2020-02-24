@@ -7,6 +7,6 @@ public class FlywheelTrench extends SequentialCommandGroup {
   public FlywheelTrench() {
     // TODO: Add your sequential commands in the super() call, e.g.
     //           super(new FooCommand(), new BarCommand());
-    super(new FlywheelPID(new Flywheel(), 5700));
+    super(new FlywheelPID(Flywheel.getInstance(), 5700));
   }
 }

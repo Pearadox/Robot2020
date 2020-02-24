@@ -24,7 +24,7 @@ public class FlywheelPID extends CommandBase {
     addRequirements(flywheelSubsystem);
     this.targetRPM = targetRPM;
     if (!SmartDashboard.containsKey("flywheelRPM")) {
-      SmartDashboard.putNumber("flywheelRPM", 0);
+      SmartDashboard.putNumber("flywheelRPM", targetRPM);
     }
     if (!SmartDashboard.containsKey("HoodToggle")) {
       SmartDashboard.putString("HoodToggle", "HoodTriangle");
@@ -35,7 +35,7 @@ public class FlywheelPID extends CommandBase {
   public void initialize() {
     kP = flykP;
     kD = flykD;
-    targetRPM = flywheelSubsystem.getFlyTargetRPM();
+    errorRPM = 0;
   }
 
   @Override
