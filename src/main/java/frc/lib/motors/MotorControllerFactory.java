@@ -21,7 +21,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class MotorControllerFactory {
     public static CANSparkMax createSparkMax(int canID, MotorConfiguration config) {
-        var motor = new CANSparkMax(canID, config.brushed ? MotorType.kBrushed : MotorType.kBrushless);
+        var motor = new CANSparkMax(canID, MotorType.kBrushless);
         motor.setIdleMode(config.coast ? IdleMode.kCoast : IdleMode.kBrake);
         motor.setInverted(config.inverted);
         motor.setSmartCurrentLimit(config.stallLimit, config.freeLimit, config.stallThreshold);

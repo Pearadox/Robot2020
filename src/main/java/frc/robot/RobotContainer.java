@@ -210,7 +210,7 @@ public class RobotContainer {
     }, intake));
 
     opbtn12.whenPressed(new RunCommand(() -> {
-      intake.setIntakeArm(-0.5);
+      intake.setIntakeArm(-1);
     }, intake)).whenReleased(new InstantCommand(() -> {
       intake.setIntakeArm(0);
     }, intake));
