@@ -40,7 +40,7 @@ public class Climber extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.Bag);
+    climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.MiniCIM);
     transverseMotor = MotorControllerFactory.createSparkMax(TRANSVERSE_CLIMB_MOTOR, Motors.Neo550);
   }
 
@@ -53,6 +53,7 @@ public class Climber extends SubsystemBase {
   }
 
   /**
+
    * Returns the Singleton instance of this ClimberSubsystem. This static method
    * should be used -- {@code ClimberSubsystem.getInstance();} -- by external
    * classes, rather than the constructor to get the instance of this class.

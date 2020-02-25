@@ -29,7 +29,7 @@ public class TransverseRight extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setTransverseMotor(0.5);
+    climber.setTransverseMotor(1);
   }
 
   // Called once the command ends or is interrupted.

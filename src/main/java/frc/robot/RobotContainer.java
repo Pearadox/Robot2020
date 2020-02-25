@@ -125,17 +125,17 @@ public class RobotContainer {
       drivetrain.frontLeftDrive(0);
     }, drivetrain));
 
-    btn9.whenPressed(new RunCommand(() -> {
-      flywheel.leftFlyDrive(0.25 * 12);
-    }, flywheel)).whenReleased(new InstantCommand(() -> {
-      flywheel.leftFlyDrive(0);
-    }, flywheel));
+    // btn9.whenPressed(new RunCommand(() -> {
+    //   flywheel.leftFlyDrive(0.25 * 12);
+    // }, flywheel)).whenReleased(new InstantCommand(() -> {
+    //   flywheel.leftFlyDrive(0);
+    // }, flywheel));
 
-    btn10.whenPressed(new RunCommand(() -> {
-      flywheel.rightFlyDrive(0.25 * 12);
-    }, flywheel)).whenReleased(new InstantCommand(() -> {
-      flywheel.rightFlyDrive(0);
-    }, flywheel));
+    // btn10.whenPressed(new RunCommand(() -> {
+    //   flywheel.rightFlyDrive(0.25 * 12);
+    // }, flywheel)).whenReleased(new InstantCommand(() -> {
+    //   flywheel.rightFlyDrive(0);
+    // }, flywheel));
 
     btn11.whenPressed(new RunCommand(() -> {
       intake.setIntakeRoller(0.5, 0.5);
@@ -229,8 +229,17 @@ public class RobotContainer {
       11: Intake Rollers Motors
       12: Intake Arm Motor
     */
-     btn9.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelPID(flywheel, 2500)));
-     //btn9.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelSector()));
+     //btn9.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelPID(flywheel, 1000).alongWith(new HoodedSetPoint(flywheel, 55))));
+     btn9.whenPressed(new HopperIn(ballTransport).alongWith(new TowerLoadIn(ballTower).alongWith(new FlywheelSector())));
+     /*btn9.whenPressed(new RunCommand(() -> {
+       transport.TransportLoadInSystem(0.6);
+     }, transport)).whenReleased(new InstantCommand(() -> {
+       transport.TransportLoadInSystem(0);
+     }, transport));
+     */
+
+
+     btn10.whileHeld(new HoodedSetPoint(flywheel, 25));
 
     /*
      btn6.whenPressed(new IntakeToggle(intake)); 
