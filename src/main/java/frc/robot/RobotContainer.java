@@ -85,7 +85,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Basic Run functionality
     btn2.whenPressed(new RunCommand(() -> {
-      climber.setClimbMotor(0.25);
+      climber.setClimbMotor(1);
     }, climber)).whenReleased(new InstantCommand(() -> {
       climber.setClimbMotor(0);
     }, climber));
