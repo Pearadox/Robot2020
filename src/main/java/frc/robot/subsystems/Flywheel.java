@@ -18,6 +18,10 @@ import frc.lib.motors.MotorControllerFactory;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.FlywheelConstants.*;
@@ -34,12 +38,20 @@ public class Flywheel extends SubsystemBase {
   CANEncoder leftFlyEncoder;
   CANEncoder rightFlyEncoder;
 
-  public double targetFlyRPM = 0;
   private static Flywheel INSTANCE = new Flywheel();
 
   private Flywheel() {
-    leftFlyMotor = MotorControllerFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.Neo.setIdleMode(true));
-    rightFlyMotor = MotorControllerFactory.createSparkMax(RIGHT_FLY_MOTOR, Motors.Neo.setIdleMode(true).setInverted(true));
+    // leftFlyMotor = MotorControllerFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.Neo.setIdleMode(true));
+    // rightFlyMotor = MotorControllerFactory.createSparkMax(RIGHT_FLY_MOTOR, Motors.Neo.setIdleMode(true).setInverted(true));
+
+    leftFlyMotor = new CANSparkMax(LEFT_FLY_MOTOR, MotorType.kBrushless);
+    rightFlyMotor = new CANSparkMax(RIGHT_FLY_MOTOR, MotorType.kBrushless);
+    leftFlyMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    rightFlyMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    leftFlyMotor.setInverted(false);
+    rightFlyMotor.setInverted(true);
+    leftFlyMotor.setSmartCurrentLimit(80,5700,6000);
+    rightFlyMotor.setSmartCurrentLimit(80,5700,6000);
 
     hoodFlyMotor = MotorControllerFactory.createTalonSRX(
         HOOD_FLY_MOTOR, Motors.Snowblower.withFeedbackDevice(new MotorConfiguration.FeedbackSensor(
@@ -86,7 +98,6 @@ public class Flywheel extends SubsystemBase {
   //  public  void setAccelFlyMotor (double setPercent) { accelFlyMotor.set(setPercent);}
 
   // Flywheel PID methods
-
   public double getFlywheelRPM() {
     return (leftFlyEncoder.getVelocity() + rightFlyEncoder.getVelocity()) / 2;
   }

@@ -98,12 +98,8 @@ public class LaunchPadManager {
 
         if (btns[1][2]) new InstantCommand(() -> {Flywheel.getInstance().setHoodFlyMotor(0);}, Flywheel.getInstance()); //Hard Stop Flywheel
         */
-        try {
-            if (btns[7][0]) new RunCommand(() -> {Drivetrain.getInstance().frontLeftDrive(setSpeed);}, Drivetrain.getInstance());// front left motor
-            else if (!btns[7][0]) new InstantCommand(() -> {Drivetrain.getInstance().frontLeftDrive(0);}, Drivetrain.getInstance());// stop left right motor
-        } catch (Exception e) {
-            DriverStation.reportWarning("teleopLoop - 1",true);
-        }
+        if (btns[7][0]) new RunCommand(() -> {Drivetrain.getInstance().frontLeftDrive(setSpeed);}, Drivetrain.getInstance());// front left motor
+        else if (!btns[7][0]) new InstantCommand(() -> {Drivetrain.getInstance().frontLeftDrive(0);}, Drivetrain.getInstance());// stop left right motor
 
         if (btns[7][1]) new RunCommand(() -> {Drivetrain.getInstance().frontRightDrive(setSpeed);}, Drivetrain.getInstance());// back left motor
         else if(!btns[7][1]) new InstantCommand(() -> {Drivetrain.getInstance().frontRightDrive(0);}, Drivetrain.getInstance());// stop back left motor
