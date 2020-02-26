@@ -40,11 +40,11 @@ public class Flywheel extends SubsystemBase {
   private Flywheel() {
     leftFlyMotor = MotorControllerFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.Neo.setIdleMode(true));
     rightFlyMotor = MotorControllerFactory.createSparkMax(RIGHT_FLY_MOTOR, Motors.Neo.setIdleMode(true).setInverted(true));
+
     hoodFlyMotor = MotorControllerFactory.createTalonSRX(
         HOOD_FLY_MOTOR, Motors.Snowblower.withFeedbackDevice(new MotorConfiguration.FeedbackSensor(
-            FeedbackDevice.QuadEncoder, 8192)));
-    // accelFlyMotor = CANSparkMax(ACCEL_FLY_MOTOR, MotorType.kBrushless);
-
+            FeedbackDevice.QuadEncoder, 1)));
+    
     leftFlyEncoder = new CANEncoder(leftFlyMotor);
     rightFlyEncoder = new CANEncoder(rightFlyMotor);
     leftFlyEncoder.setVelocityConversionFactor(-1);
@@ -54,6 +54,14 @@ public class Flywheel extends SubsystemBase {
     
     if (!SmartDashboard.containsKey("FlywheelRPM")) {
       SmartDashboard.putNumber("FlywheelRPM", getFlywheelRPM());
+    }
+    
+    if (!SmartDashboard.containsKey("HoodTarget")) {
+      SmartDashboard.putNumber("HoodTarget", 0);
+    }
+
+    if (!SmartDashboard.containsKey("HoodDegree")) {
+      SmartDashboard.putNumber("HoodDegree", 0);
     }
   }
 
@@ -78,6 +86,7 @@ public class Flywheel extends SubsystemBase {
   //  public  void setAccelFlyMotor (double setPercent) { accelFlyMotor.set(setPercent);}
 
   // Flywheel PID methods
+
   public double getFlywheelRPM() {
     return (leftFlyEncoder.getVelocity() + rightFlyEncoder.getVelocity()) / 2;
   }
@@ -109,6 +118,10 @@ public class Flywheel extends SubsystemBase {
     resetHoodEncoder();
 //    resetAccel();
     resetFlywheel();
+  }
+
+  public void stopFlywheel () {
+    setFlywheelMotor(0);
   }
 
 

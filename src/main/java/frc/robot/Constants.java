@@ -36,7 +36,7 @@ public final class Constants {
         public static final int ACCEL_FLY_MOTOR = 0;
         public static final int HOOD_FLY_MOTOR = 6;
 
-        public static final double flykP = 0.018;
+        public static final double flykP = 0.0018;
         public static final double flykD = 0.004;
     }
 

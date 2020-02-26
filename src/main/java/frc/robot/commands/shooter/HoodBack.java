@@ -31,9 +31,6 @@ public class HoodBack extends CommandBase
     {
         this.flywheelSubsystem = flywheelSubsystem;
         addRequirements(flywheelSubsystem);
-        if (!SmartDashboard.containsKey("hoodDegree")) {
-            SmartDashboard.putNumber("hoodDegree", SmartDashboard.getNumber("hoodDegree", 0));
-        }
     }
 
     @Override
@@ -43,7 +40,7 @@ public class HoodBack extends CommandBase
     @Override
     public void execute() {
         degrees = flywheelSubsystem.getHoodAngle();
-        SmartDashboard.putNumber("hoodDegree", degrees);
+        SmartDashboard.putNumber("HoodDegree", degrees);
         degreeError = lastDegree - degrees;
         flywheelSubsystem.setHoodFlyMotor(-1);
         lastDegree = degrees;

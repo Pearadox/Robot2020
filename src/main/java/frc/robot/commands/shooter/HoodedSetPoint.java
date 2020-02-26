@@ -27,8 +27,6 @@ public class HoodedSetPoint extends CommandBase
      * @param flywheel The subsystem used by this command.
      */
     public double degrees = 0;
-    public double degreeError = 0;
-    public double lastDegree = 0;
     private double targetDegree;
     private final double DEADBAND = 0.05;
     private final double minAngle = 0.0;
@@ -46,7 +44,6 @@ public class HoodedSetPoint extends CommandBase
     @Override
     public void initialize() {
       targetDegree = !(targetDegree < minAngle) ? targetDegree : minAngle;
-      targetDegree = !(targetDegree > maxAngle) ? targetDegree : maxAngle;
     }
    
     @Override
@@ -64,7 +61,7 @@ public class HoodedSetPoint extends CommandBase
         SmartDashboard.putNumber("HoodDegree", degrees);
       }
 
-      if (degrees < targetDegree - DEADBAND|| degrees > targetDegree+ DEADBAND) {
+      if (degrees < targetDegree - DEADBAND || degrees > targetDegree+ DEADBAND) {
         if (degrees <= targetDegree) {
           if (degrees <= (targetDegree - 2.5)) {
             flywheel.setHoodFlyMotor(1);

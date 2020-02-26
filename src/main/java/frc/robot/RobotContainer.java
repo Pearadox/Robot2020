@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -89,7 +90,6 @@ public class RobotContainer {
     }, climber)).whenReleased(new InstantCommand(() -> {
       climber.setClimbMotor(0);
     }, climber));
-
     btn3.whenPressed(new RunCommand(() -> {
       ballTower.setTowerMotor(0.25);
     }, ballTower)).whenReleased(new InstantCommand(() -> {
@@ -228,19 +228,28 @@ public class RobotContainer {
       10: Right Flywheel Motor
       11: Intake Rollers Motors
       12: Intake Arm Motor
-    */
-     //btn9.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelPID(flywheel, 1000).alongWith(new HoodedSetPoint(flywheel, 55))));
-     btn9.whenPressed(new HopperIn(ballTransport).alongWith(new TowerLoadIn(ballTower).alongWith(new FlywheelSector())));
-     /*btn9.whenPressed(new RunCommand(() -> {
-       transport.TransportLoadInSystem(0.6);
-     }, transport)).whenReleased(new InstantCommand(() -> {
-       transport.TransportLoadInSystem(0);
-     }, transport));
-     */
+      */
+      
+      
+     btn9.whenPressed(new FlywheelPID(flywheel, SmartDashboard.getNumber("flywheelRPM", 0)).alongWith(new HopperIn(ballTransport).alongWith(new TowerLoadIn(ballTower).alongWith(new IntakeRollers(intake)))))
+        .whenReleased(new InstantCommand(
+      () -> {
+        flywheel.stopFlywheel();
+        intake.setIntakeRoller(0,0);
+        ballTower.setTowerMotor(0);
+        ballTransport.setTransportMotor(0);
+      }, flywheel, intake, ballTower, ballTransport));
+     
+
+      //btn9.whenPressed(new FlywheelPID(flywheel, SmartDashboard.getNumber("flywheelRPM", 0)));
+
+     btn10.whileHeld(new HoodedSetPoint(flywheel, SmartDashboard.getNumber("HoodTarget", 0))).whenReleased(new InstantCommand(
+      () -> {
+        flywheel.setHoodFlyMotor(0);
+      }, flywheel));
 
 
-     btn10.whileHeld(new HoodedSetPoint(flywheel, 25));
-
+      
     /*
      btn6.whenPressed(new IntakeToggle(intake)); 
      // btn7.whenPressed(new TransportInSystem()); 
