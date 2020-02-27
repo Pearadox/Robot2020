@@ -124,34 +124,31 @@ public class LaunchPadManager {
           BallHopper.getInstance().setTransportMotor(setSpeed);}, BallHopper.getInstance());// tower motor
         else if(!btns[8][0]) new InstantCommand(() -> {
           BallHopper.getInstance().setTransportMotor(0);}, BallHopper.getInstance());// stop tower motor
-          DriverStation.reportWarning("teleopLoop - 6",true);
 
         if (btns[8][1]) new RunCommand(() -> {Intake.getInstance().topIntakeRoller(setSpeed);}, Intake.getInstance());// top Intake motor
         else if(!btns[8][1]) new InstantCommand(() -> {Intake.getInstance().topIntakeRoller(0);}, Intake.getInstance());// stop top Intake motor
         
-        DriverStation.reportWarning("teleopLoop - 7",true);
         if (btns[8][2]) new RunCommand(() -> {Intake.getInstance().botIntakeRoller(setSpeed);}, Intake.getInstance());// bot Intake motor
         else if(!btns[8][2]) new InstantCommand(() -> {Intake.getInstance().botIntakeRoller(0);}, Intake.getInstance());// stop bot Intake motor
         
-        DriverStation.reportWarning("teleopLoop - 8",true);
         if (btns[8][3]) new RunCommand(() -> {Intake.getInstance().setIntakeArm(setSpeed);}, Intake.getInstance());// arm intake motor
         else if(!btns[8][3]) new InstantCommand(() -> {Intake.getInstance().setIntakeArm(0);}, Intake.getInstance());// stop arm intake motor
 
-        DriverStation.reportWarning("teleopLoop - 8a",true);
         if (btns[8][4]) new RunCommand(() -> {Climber.getInstance().setClimbMotor(setSpeed);}, Climber.getInstance());// climber motor
         else if(!btns[8][4]) new InstantCommand(() -> {Climber.getInstance().setClimbMotor(0);}, Climber.getInstance());// stop climber motor
 
         DriverStation.reportWarning("teleopLoop - 9",true);
+        
         if (btns[8][5]) new RunCommand(() -> {Climber.getInstance().setTransverseMotor(setSpeed);}, Climber.getInstance());// transverse climber motor
         else if(!btns[8][5]) new InstantCommand(() -> {Climber.getInstance().setTransverseMotor(0);}, Climber.getInstance());// stop transverse climber motor
 
-        // try {
+        try {
             if (btns[8][8]) {
                 DriverStation.reportWarning("Launchpad Button Works",true);
             }
-        // } catch (Exception e) {
-        //     DriverStation.reportError("", printTrace);
-        // }
+        } catch (Exception e) {
+            DriverStation.reportError("LaunchPad ERROR", true);
+        }
     }
 
     /*

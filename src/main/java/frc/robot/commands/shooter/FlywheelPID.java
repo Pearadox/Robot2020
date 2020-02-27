@@ -19,6 +19,8 @@ public class FlywheelPID extends CommandBase {
   private double feedForward = 0.0023;
   // private double accelPercent = 0.7;
 
+public Runnable alongWith;
+
   public FlywheelPID(Flywheel flywheelSubsystem, double targetRPM) {
     this.flywheelSubsystem = flywheelSubsystem;
     addRequirements(flywheelSubsystem);
@@ -50,5 +52,6 @@ public class FlywheelPID extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
+    flywheelSubsystem.stopFlywheel();
   }
 }

@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     autoChooser = new SendableChooser<>();
-    launchpad = new LaunchPadManager();
+    // launchpad = new LaunchPadManager();
   }
 
   /**
