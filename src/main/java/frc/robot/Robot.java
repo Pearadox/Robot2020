@@ -38,7 +38,8 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     robotContainer = new RobotContainer();
     autoChooser = new SendableChooser<>();
-    // launchpad = new LaunchPadManager();
+
+    launchpad = new LaunchPadManager(robotContainer);
   }
 
   /**
@@ -54,7 +55,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-   // launchpad.periodicLoop();
+    launchpad.periodicLoop();
     CommandScheduler.getInstance().run();
   }
 
@@ -105,7 +106,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    //launchpad.teleopLoop();
+    launchpad.teleopLoop();
   }
 
   @Override

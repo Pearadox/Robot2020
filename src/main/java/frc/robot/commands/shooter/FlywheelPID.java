@@ -8,7 +8,7 @@ import static frc.robot.Constants.FlywheelConstants.*;
 
 
 public class FlywheelPID extends CommandBase {
-  private final Flywheel flywheelSubsystem;
+  private final Flywheel flywheel;
 
   private double currentRPM;
   private double lastRPM = 0;
@@ -21,9 +21,9 @@ public class FlywheelPID extends CommandBase {
 
 public Runnable alongWith;
 
-  public FlywheelPID(Flywheel flywheelSubsystem, double targetRPM) {
-    this.flywheelSubsystem = flywheelSubsystem;
-    addRequirements(flywheelSubsystem);
+  public FlywheelPID(Flywheel flywheel, double targetRPM) {
+    this.flywheel = flywheel;
+    addRequirements(flywheel);
     this.targetRPM = targetRPM;
   }
 
@@ -36,11 +36,11 @@ public Runnable alongWith;
 
   @Override
   public void execute() {
-    currentRPM = flywheelSubsystem.getFlywheelRPM();
+    currentRPM = flywheel.getFlywheelRPM();
     errorRPM = currentRPM - lastRPM;
     double setVoltage = feedForward * targetRPM + kP * (targetRPM - currentRPM) + kD * errorRPM;
 //    flywheelSubsystem.setAccelMotor(12.0 * accelPercent);
-    flywheelSubsystem.setFlywheelMotor(setVoltage);
+    flywheel.setFlywheelMotor(setVoltage);
     lastRPM = currentRPM;
   }
 
@@ -52,6 +52,6 @@ public Runnable alongWith;
 
   @Override
   public void end(boolean interrupted) {
-    flywheelSubsystem.stopFlywheel();
+    flywheel.stopFlywheel();
   }
 }

@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.lib.motors.MotorConfiguration;
@@ -18,8 +17,6 @@ import frc.lib.motors.MotorControllerFactory;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -68,6 +65,10 @@ public class Flywheel extends SubsystemBase {
       SmartDashboard.putNumber("FlywheelRPM", getFlywheelRPM());
     }
     
+    if (!SmartDashboard.containsKey("TargetRPM")) {
+      SmartDashboard.putNumber("TargetRPM", 0);
+    }
+
     if (!SmartDashboard.containsKey("HoodTarget")) {
       SmartDashboard.putNumber("HoodTarget", 0);
     }

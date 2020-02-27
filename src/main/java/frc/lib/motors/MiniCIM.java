@@ -9,7 +9,7 @@ public class MiniCIM extends MotorConfiguration {
   MiniCIM(boolean coast, boolean inverted, SpeedController master, FeedbackSensor feedbackDevice) {
     brushed = true;
     stallLimit = 89;
-    freeLimit = 3;
+    freeLimit = 89;
     stallThreshold = 89;
     peakCurrentTime = 1000;
     this.coast = coast;

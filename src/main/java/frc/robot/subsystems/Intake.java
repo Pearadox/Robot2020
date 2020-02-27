@@ -7,7 +7,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.motors.MotorControllerFactory;
@@ -41,7 +40,7 @@ public class Intake extends SubsystemBase {
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     intakeArm = MotorControllerFactory.createTalonSRX(ARM_INTAKE_MOTOR, Motors.Snowblower);
     intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
-    intakeBotRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
+    intakeBotRoller = MotorControllerFactory.createSparkMax(BOT_INTAKE_MOTOR, Motors.Neo550);
     intakeArm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     if (!SmartDashboard.containsKey("IntakePosition")) {
       SmartDashboard.putBoolean("IntakePosition", intakePosition);;;;;;;;;;;;;;

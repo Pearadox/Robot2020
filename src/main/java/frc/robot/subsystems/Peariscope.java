@@ -8,7 +8,6 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,12 +20,15 @@ public class Peariscope extends SubsystemBase {
   private Drivetrain drivetrain;
   private NetworkTable peariscope;
 
-  private double currentHeading;
-  private double lastHeading;
-  private double errorHeading;
+  // private double currentHeading;
+  // private double lastHeading;
+  // private double errorHeading;
   private double currentXPct;
-  private double currentYPct;
+  // private double currentYPct;
   private double[] empty =  new double[] {0};
+  private double kP = 0.05;
+  private double MIN_PCT_DEADZONE = 2.5;
+  private double MAX_PCT_DEADZONE = 80.0;
 
   public Peariscope(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
@@ -43,21 +45,21 @@ public class Peariscope extends SubsystemBase {
   public void runBangBangPeariscope() {
     double[] x_list_pct = getXListPercent();
     if (x_list_pct.length == 1) {
-      double x = x_list_pct[0]; 
-      if (x > 15 & x < 80) {
+      double currentXPct = x_list_pct[0]; 
+      if (currentXPct >= MIN_PCT_DEADZONE & currentXPct <= MAX_PCT_DEADZONE) {
         //We need to turn left
         SmartDashboard.putBoolean("TurnRight", true);
-        drivetrain.arcadeDrive(0, -0.25, false);
+        double twist = 0.1 + currentXPct * kP;
+        drivetrain.arcadeDrive(0, -twist, false);
       }
-      else if (x < -15 & x > -80) {
+      else if (currentXPct < -MIN_PCT_DEADZONE & currentXPct > -MAX_PCT_DEADZONE) {
         //We need to turn right
         SmartDashboard.putBoolean("TurnLeft", true);
-        drivetrain.arcadeDrive(0, 0.25, false);
+        double twist = 0.1 + currentXPct * kP;
+        drivetrain.arcadeDrive(0, twist, false);
       }
       else {
         //Do nothing
-        
-
         SmartDashboard.putBoolean("TurnLeft", false);
         SmartDashboard.putBoolean("TurnRight", false);
       }
