@@ -34,11 +34,12 @@ public class LaunchPadManager {
     double setSpeed = 0.4;
     double setVoltage = 0.4 * 12;
 
-    private static LaunchPadManager INSTANCE = new LaunchPadManager();
+    private RobotContainer robotContainer;
 
-    LaunchPadManager() {
+    public LaunchPadManager(RobotContainer robotContainer) {
         nt = NetworkTableInstance.getDefault();
         table = nt.getTable(tableName);
+        this.robotContainer = robotContainer;
         pingEntryRio = table.getEntry("pingValueRio");
         pingEntryLaunchpad = table.getEntry("pingValueLaunchpad");
     }
@@ -98,52 +99,51 @@ public class LaunchPadManager {
 
         if (btns[1][2]) new InstantCommand(() -> {Flywheel.getInstance().setHoodFlyMotor(0);}, Flywheel.getInstance()); //Hard Stop Flywheel
         */
-        if (btns[7][0]) new RunCommand(() -> {Drivetrain.getInstance().frontLeftDrive(setSpeed);}, Drivetrain.getInstance());// front left motor
-        else if (!btns[7][0]) new InstantCommand(() -> {Drivetrain.getInstance().frontLeftDrive(0);}, Drivetrain.getInstance());// stop left right motor
+        if (btns[7][0]) new RunCommand(() -> {robotContainer.drivetrain.frontLeftDrive(setSpeed);}, robotContainer.drivetrain);// front left motor
+        else if (!btns[7][0]) new InstantCommand(() -> {robotContainer.drivetrain.frontLeftDrive(0);}, robotContainer.drivetrain);// stop left right motor
 
-        if (btns[7][1]) new RunCommand(() -> {Drivetrain.getInstance().frontRightDrive(setSpeed);}, Drivetrain.getInstance());// back left motor
-        else if(!btns[7][1]) new InstantCommand(() -> {Drivetrain.getInstance().frontRightDrive(0);}, Drivetrain.getInstance());// stop back left motor
+        if (btns[7][1]) new RunCommand(() -> {robotContainer.drivetrain.frontRightDrive(setSpeed);}, robotContainer.drivetrain);// back left motor
+        else if(!btns[7][1]) new InstantCommand(() -> {robotContainer.drivetrain.frontRightDrive(0);}, robotContainer.drivetrain);// stop back left motor
         DriverStation.reportWarning("teleopLoop - 2",true);
         
-        if (btns[7][4]) new RunCommand(() -> {Flywheel.getInstance().leftFlyDrive(setVoltage);}, Flywheel.getInstance());// left Flywheel motor
-        else if(!btns[7][4]) new InstantCommand(() -> {Flywheel.getInstance().leftFlyDrive(0);}, Flywheel.getInstance());// stop left Flywheel motor
+        if (btns[7][4]) new RunCommand(() -> {robotContainer.flywheel.leftFlyDrive(setVoltage);}, robotContainer.flywheel);// left Flywheel motor
+        else if(!btns[7][4]) new InstantCommand(() -> {robotContainer.flywheel.leftFlyDrive(0);}, robotContainer.flywheel);// stop left Flywheel motor
         DriverStation.reportWarning("teleopLoop - 3",true);
         
-        if (btns[7][5]) new RunCommand(() -> {Flywheel.getInstance().rightFlyDrive(setVoltage);}, Flywheel.getInstance());// right Flywheel motor
-        else if(!btns[7][5]) new InstantCommand(() -> {Flywheel.getInstance().rightFlyDrive(0);}, Flywheel.getInstance());// stop right Flywheel motor
+        if (btns[7][5]) new RunCommand(() -> {robotContainer.flywheel.rightFlyDrive(setVoltage);}, robotContainer.flywheel);// right Flywheel motor
+        else if(!btns[7][5]) new InstantCommand(() -> {robotContainer.flywheel.rightFlyDrive(0);}, robotContainer.flywheel);// stop right Flywheel motor
         DriverStation.reportWarning("teleopLoop - 4",true);
         
-        if (btns[7][6]) new RunCommand(() -> {Flywheel.getInstance().setHoodFlyMotor(setSpeed);}, Flywheel.getInstance());// hood Flywheel motor
-        else if(!btns[7][6]) new InstantCommand(() -> {Flywheel.getInstance().setHoodFlyMotor(0);}, Flywheel.getInstance());// stop hood Flywheel motor
+        if (btns[7][6]) new RunCommand(() -> {robotContainer.flywheel.setHoodFlyMotor(setSpeed);}, robotContainer.flywheel);// hood Flywheel motor
+        else if(!btns[7][6]) new InstantCommand(() -> {robotContainer.flywheel.setHoodFlyMotor(0);}, robotContainer.flywheel);// stop hood Flywheel motor
         DriverStation.reportWarning("teleopLoop - 5",true);
 
-        if (btns[7][7]) new RunCommand(() -> {BallTower.getInstance().setTowerMotor(setSpeed);}, BallTower.getInstance());// Ball Tower motor
-        else if(!btns[7][7]) new InstantCommand(() -> {BallTower.getInstance().setTowerMotor(0);}, BallTower.getInstance());// stop Ball Tower motor
+        if (btns[7][7]) new RunCommand(() -> {robotContainer.ballTower.setTowerMotor(setSpeed);}, robotContainer.ballTower);// Ball Tower motor
+        else if(!btns[7][7]) new InstantCommand(() -> {robotContainer.ballTower.setTowerMotor(0);}, robotContainer.ballTower);// stop Ball Tower motor
         
-        if (btns[8][0]) new RunCommand(() -> {
-          BallHopper.getInstance().setTransportMotor(setSpeed);}, BallHopper.getInstance());// tower motor
+        if (btns[8][0]) new RunCommand(() -> {robotContainer.ballTransport.setTransportMotor(setSpeed);}, robotContainer.ballTransport);// tower motor
         else if(!btns[8][0]) new InstantCommand(() -> {
-          BallHopper.getInstance().setTransportMotor(0);}, BallHopper.getInstance());// stop tower motor
+          robotContainer.ballTransport.setTransportMotor(0);}, robotContainer.ballTransport);// stop tower motor
           DriverStation.reportWarning("teleopLoop - 6",true);
 
-        if (btns[8][1]) new RunCommand(() -> {Intake.getInstance().topIntakeRoller(setSpeed);}, Intake.getInstance());// top Intake motor
-        else if(!btns[8][1]) new InstantCommand(() -> {Intake.getInstance().topIntakeRoller(0);}, Intake.getInstance());// stop top Intake motor
+        if (btns[8][1]) new RunCommand(() -> {robotContainer.intake.topIntakeRoller(setSpeed);}, robotContainer.intake);// top Intake motor
+        else if(!btns[8][1]) new InstantCommand(() -> {robotContainer.intake.topIntakeRoller(0);}, robotContainer.intake);// stop top Intake motor
         
         DriverStation.reportWarning("teleopLoop - 7",true);
-        if (btns[8][2]) new RunCommand(() -> {Intake.getInstance().botIntakeRoller(setSpeed);}, Intake.getInstance());// bot Intake motor
-        else if(!btns[8][2]) new InstantCommand(() -> {Intake.getInstance().botIntakeRoller(0);}, Intake.getInstance());// stop bot Intake motor
+        if (btns[8][2]) new RunCommand(() -> {robotContainer.intake.botIntakeRoller(setSpeed);}, robotContainer.intake);// bot Intake motor
+        else if(!btns[8][2]) new InstantCommand(() -> {robotContainer.intake.botIntakeRoller(0);}, robotContainer.intake);// stop bot Intake motor
         
         DriverStation.reportWarning("teleopLoop - 8",true);
-        if (btns[8][3]) new RunCommand(() -> {Intake.getInstance().setIntakeArm(setSpeed);}, Intake.getInstance());// arm intake motor
-        else if(!btns[8][3]) new InstantCommand(() -> {Intake.getInstance().setIntakeArm(0);}, Intake.getInstance());// stop arm intake motor
+        if (btns[8][3]) new RunCommand(() -> {robotContainer.intake.setIntakeArm(setSpeed);}, robotContainer.intake);// arm intake motor
+        else if(!btns[8][3]) new InstantCommand(() -> {robotContainer.intake.setIntakeArm(0);}, robotContainer.intake);// stop arm intake motor
 
         DriverStation.reportWarning("teleopLoop - 8a",true);
-        if (btns[8][4]) new RunCommand(() -> {Climber.getInstance().setClimbMotor(setSpeed);}, Climber.getInstance());// climber motor
-        else if(!btns[8][4]) new InstantCommand(() -> {Climber.getInstance().setClimbMotor(0);}, Climber.getInstance());// stop climber motor
+        if (btns[8][4]) new RunCommand(() -> {robotContainer.climber.setClimbMotor(setSpeed);}, robotContainer.climber);// climber motor
+        else if(!btns[8][4]) new InstantCommand(() -> {robotContainer.climber.setClimbMotor(0);}, robotContainer.climber);// stop climber motor
 
         DriverStation.reportWarning("teleopLoop - 9",true);
-        if (btns[8][5]) new RunCommand(() -> {Climber.getInstance().setTransverseMotor(setSpeed);}, Climber.getInstance());// transverse climber motor
-        else if(!btns[8][5]) new InstantCommand(() -> {Climber.getInstance().setTransverseMotor(0);}, Climber.getInstance());// stop transverse climber motor
+        if (btns[8][5]) new RunCommand(() -> {robotContainer.climber.setTransverseMotor(setSpeed);}, robotContainer.climber);// transverse climber motor
+        else if(!btns[8][5]) new InstantCommand(() -> {robotContainer.climber.setTransverseMotor(0);}, robotContainer.climber);// stop transverse climber motor
 
         // try {
             if (btns[8][8]) {
@@ -195,6 +195,4 @@ public class LaunchPadManager {
     8:4 climber motor
     8:5 transversal motor
     */
-
-    public static LaunchPadManager getInstance() {return INSTANCE;}
 }
