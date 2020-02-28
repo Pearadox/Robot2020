@@ -26,9 +26,6 @@ public class HoodForward extends CommandBase
     {
         this.flywheel = flywheel;
         addRequirements(flywheel);
-        if (!SmartDashboard.containsKey("HoodDegree")) {
-            SmartDashboard.putNumber("HoodDegree", SmartDashboard.getNumber("HoodDegree", 0));
-        }
     }
 
     @Override

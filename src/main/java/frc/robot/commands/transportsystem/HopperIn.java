@@ -18,7 +18,7 @@ public class HopperIn extends CommandBase {
 
   @Override
   public void execute() {
-    ballTransport.setTransportMotor(0.5);
+    ballTransport.setHopperMotor(0.5);
   }
 
   @Override
@@ -29,6 +29,6 @@ public class HopperIn extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    ballTransport.setTransportMotor(0);
+    ballTransport.setHopperMotor(0);
   }
 }

@@ -7,6 +7,7 @@ import frc.robot.subsystems.Intake;
 public class IntakeHome extends CommandBase {
   private final Intake intake;
   private double intakeRotation;
+  private double minRotation = 0.5;
 
   public IntakeHome(Intake intake) {
     this.intake = intake;
@@ -20,13 +21,13 @@ public class IntakeHome extends CommandBase {
   @Override
   public void execute() {
     intakeRotation = intake.getIntakeRotation();
-    intake.setIntakeArm(0.5);
+    intake.setIntakeArm(-0.5);
   }
 
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    if (intakeRotation < 0.5) {
+    if (intakeRotation < minRotation) {
       return true;
     }
     else {

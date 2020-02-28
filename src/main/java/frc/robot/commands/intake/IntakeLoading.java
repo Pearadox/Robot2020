@@ -7,6 +7,7 @@ import frc.robot.subsystems.Intake;
 public class IntakeLoading extends CommandBase {
   private final Intake intake;
   private double intakeRotation;
+  private double maxRotations = 2.0;
 
   public IntakeLoading(Intake intake) {
     this.intake = intake;
@@ -20,7 +21,7 @@ public class IntakeLoading extends CommandBase {
   @Override
   public void execute() {
     intakeRotation = intake.getIntakeRotation();
-    if (intakeRotation >= -2.0) {
+    if (intakeRotation >= maxRotations) {
       intake.setIntakeArm(-0.5);
     }
     else {
@@ -31,7 +32,7 @@ public class IntakeLoading extends CommandBase {
   @Override
   public boolean isFinished() {
     // TODO: Make this return true when this Command no longer needs to run execute()
-    if (intakeRotation >= -1.55 && intakeRotation <= -1.45) {
+    if (intakeRotation >= (maxRotations/2) - 0.5 && intakeRotation <= (maxRotations/2) + 0.5) {
       return true;
     }
     else {

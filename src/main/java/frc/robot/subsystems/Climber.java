@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,6 +23,7 @@ public class Climber extends SubsystemBase {
 
   private WPI_TalonSRX climbMotor;
   private CANSparkMax transverseMotor;
+  private CANEncoder transverseEncoder;
   private final static Climber INSTANCE = new Climber();
 
   /**
@@ -36,6 +38,8 @@ public class Climber extends SubsystemBase {
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.MiniCIM);
     transverseMotor = MotorControllerFactory.createSparkMax(TRANSVERSE_CLIMB_MOTOR, Motors.Neo550);
+    transverseEncoder = new CANEncoder(transverseMotor);
+    transverseEncoder.setPositionConversionFactor(42);
   }
 
   public void setClimbMotor(double setSpeed) {
@@ -46,8 +50,13 @@ public class Climber extends SubsystemBase {
     transverseMotor.set(setSpeed);
   }
 
-  /**
+  public double getTransverseRaw() { return transverseEncoder.getPosition();}
 
+  public void stopClimbMotor() { setClimbMotor(0);}
+
+  public void stopTransverseMotor() { setTransverseMotor(0);}
+
+  /**
    * Returns the Singleton instance of this ClimberSubsystem. This static method
    * should be used -- {@code ClimberSubsystem.getInstance();} -- by external
    * classes, rather than the constructor to get the instance of this class.

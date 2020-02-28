@@ -25,8 +25,6 @@ public class HoodBackward extends CommandBase
      * @param flywheelSubsystem The subsystem used by this command.
      */
     public double degrees;
-    public double lastDegree = 0;
-    public double degreeError;
     private double minAngle = 0;
     public HoodBackward(Flywheel flywheel)
     {

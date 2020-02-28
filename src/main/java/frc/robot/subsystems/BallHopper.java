@@ -25,27 +25,30 @@ public class BallHopper extends SubsystemBase {
    * This constructor is private since this class is a Singleton. External classes
    * should use the {@link #getInstance()} method to get the instance.
    */
-  private VictorSPX transportMotor;
+  private VictorSPX hopperMotor;
 
   private BallHopper() {
     // TODO: Set the default command, if any, for this subsystem by calling setDefaultCommand(command)
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    transportMotor = MotorControllerFactory.createVictorSPX(HOPPER_MOTOR, Motors.Bag);
+    hopperMotor = MotorControllerFactory.createVictorSPX(HOPPER_MOTOR, Motors.Bag);
   }
   
-  public void setTransportMotor(double setSpeed) {
-    transportMotor.set(ControlMode.PercentOutput, setSpeed);
+  public void setHopperMotor(double setSpeed) {
+    hopperMotor.set(ControlMode.PercentOutput, setSpeed);
   }
 
-  public void inTransport(double setSpeed) {
-    setTransportMotor(setSpeed);
+  public void inHopper(double setSpeed) {
+    setHopperMotor(setSpeed);
   }
 
-  public void outTransport(double setSpeed) {
-    setTransportMotor(-setSpeed);
+  public void outHopper(double setSpeed) {
+    setHopperMotor(-setSpeed);
   }
+
+  public void stopHopperMotor() { setHopperMotor(0);}
+
   /**
    * Returns the Singleton instance of this BallTransportSubsystem. This static method
    * should be used -- {@code BallTransportSubsystem.getInstance();} -- by external

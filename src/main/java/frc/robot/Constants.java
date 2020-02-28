@@ -33,7 +33,6 @@ public final class Constants {
     public static final class FlywheelConstants {
         public static final int LEFT_FLY_MOTOR = 7;
         public static final int RIGHT_FLY_MOTOR = 8;
-        public static final int ACCEL_FLY_MOTOR = 0;
         public static final int HOOD_FLY_MOTOR = 6;
 
         public static final double flykP = 0.0018;

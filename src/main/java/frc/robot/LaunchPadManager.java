@@ -1,18 +1,11 @@
 package frc.robot;
 
-import java.sql.Driver;
-
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.commands.shooter.*;
-import frc.robot.commands.climber.*;
-import frc.robot.commands.intake.*;
-import frc.robot.commands.transportsystem.*;
-import frc.robot.subsystems.*;
 
 public class LaunchPadManager {
 
@@ -117,9 +110,9 @@ public class LaunchPadManager {
         if (btns[7][7]) new RunCommand(() -> {robotContainer.ballTower.setTowerMotor(setSpeed);}, robotContainer.ballTower);// Ball Tower motor
         else if(!btns[7][7]) new InstantCommand(() -> {robotContainer.ballTower.setTowerMotor(0);}, robotContainer.ballTower);// stop Ball Tower motor
         
-        if (btns[8][0]) new RunCommand(() -> {robotContainer.ballHopper.setTransportMotor(setSpeed);}, robotContainer.ballHopper);// tower motor
+        if (btns[8][0]) new RunCommand(() -> {robotContainer.ballHopper.setHopperMotor(setSpeed);}, robotContainer.ballHopper);// tower motor
         else if(!btns[8][0]) new InstantCommand(() -> {
-          robotContainer.ballHopper.setTransportMotor(0);}, robotContainer.ballHopper);// stop tower motor
+          robotContainer.ballHopper.setHopperMotor(0);}, robotContainer.ballHopper);// stop tower motor
 
         if (btns[8][1]) new RunCommand(() -> {robotContainer.intake.topIntakeRoller(setSpeed);}, robotContainer.intake);// top Intake motor
         else if(!btns[8][1]) new InstantCommand(() -> {robotContainer.intake.topIntakeRoller(0);}, robotContainer.intake);// stop top Intake motor

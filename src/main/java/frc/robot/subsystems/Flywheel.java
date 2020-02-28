@@ -83,20 +83,15 @@ public class Flywheel extends SubsystemBase {
     leftFlyMotor.setVoltage(setVoltage);
     rightFlyMotor.setVoltage(setVoltage);
   }
-
   public void leftFlyDrive(double setVoltage) {
     leftFlyMotor.setVoltage(setVoltage);
   }
-
   public void rightFlyDrive(double setVoltage) {
     rightFlyMotor.setVoltage(setVoltage);
   }
-
   public void setHoodFlyMotor(double setPercent) {
     hoodFlyMotor.set(ControlMode.PercentOutput, setPercent);
   }
-
-  //  public  void setAccelFlyMotor (double setPercent) { accelFlyMotor.set(setPercent);}
 
   // Flywheel PID methods
   public double getFlywheelRPM() {
@@ -107,35 +102,28 @@ public class Flywheel extends SubsystemBase {
   public double getRawHoodAngle() {
     return hoodFlyMotor.getSelectedSensorPosition() / 8618.5;
   }
-
   public double getHoodAngle() {
     return getRawHoodAngle() * 404/20; 
   } // total teeth/pinion teeth
 
   // reset methods Encoder
-  public void resetFlywheel () {
+  public void zeroFlywheel() {
     leftFlyEncoder.setPosition(0);
     rightFlyEncoder.setPosition(0);
   }
-
-//  public void resetAccel () {
-//    accelFlyEncoder.setPosition(0);
-//  }
-
-  public void resetHoodEncoder () {
+  public void zeroHoodEncoder () {
     hoodFlyMotor.setSelectedSensorPosition(0);
   }
-
-  public void resetFlywheelSubsystem () {
-    resetHoodEncoder();
-//    resetAccel();
-    resetFlywheel();
+  public void zeroFlywheelSubsystem() {
+    zeroHoodEncoder();
+    zeroFlywheel();
   }
 
+  // Stop Methods
   public void stopFlywheel () {
     setFlywheelMotor(0);
   }
-
+  public void stopHood () { setHoodFlyMotor(0);}
 
   @Override
   public void periodic() {

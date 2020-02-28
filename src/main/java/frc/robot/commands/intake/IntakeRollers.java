@@ -15,6 +15,8 @@ public class IntakeRollers extends CommandBase {
    * Creates a new IntakeRollers.
    */
   Intake intake;
+  private double maxRotations = 1.5;
+  private double minRotations = 0.0;
   public IntakeRollers(Intake intake) {
     this.intake = intake;
     addRequirements(intake);
@@ -29,13 +31,13 @@ public class IntakeRollers extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (intake.getIntakeRotation() >= 0) {
+    if (intake.getIntakeRotation() >= minRotations) {
       intake.setIntakeRoller(0.0, 0.0);
     }
-    else if (intake.getIntakeRotation() >= 1 && intake.getIntakeRotation() <= 1.5) {
+    else if (intake.getIntakeRotation() >= minRotations + 0.5 && intake.getIntakeRotation() <= maxRotations - 1) {
       intake.setIntakeRoller(0.75, 0.75);
     }
-    else if (intake.getIntakeRotation() >= 1.5) {
+    else if (intake.getIntakeRotation() >= maxRotations) {
       intake.setIntakeRoller(0.75, 0.75);
     }
   }

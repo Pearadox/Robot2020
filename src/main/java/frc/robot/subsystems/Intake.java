@@ -41,40 +41,46 @@ public class Intake extends SubsystemBase {
     intakeArm = MotorControllerFactory.createTalonSRX(ARM_INTAKE_MOTOR, Motors.Snowblower);
     intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
     intakeBotRoller = MotorControllerFactory.createSparkMax(BOT_INTAKE_MOTOR, Motors.Neo550);
+
     intakeArm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    if (!SmartDashboard.containsKey("IntakePosition")) {
-      SmartDashboard.putBoolean("IntakePosition", intakePosition);;;;;;;;;;;;;;
-    }
     intakeArm.setSelectedSensorPosition(0);
+
+    if (!SmartDashboard.containsKey("IntakePosition")) {
+      SmartDashboard.putBoolean("IntakePosition", intakePosition);
+    }
   }
 
+  /**
+   * SetSpeed Methods
+   */
   public void setIntakeArm(double setSpeed) {
     intakeArm.set(ControlMode.PercentOutput, setSpeed);
   }
-
   public void setIntakeRoller(double topSpeed, double botSpeed) {
     intakeTopRoller.set(topSpeed);
     intakeBotRoller.set(botSpeed);
   }
-
   public void topIntakeRoller (double setSpeed) {
     intakeTopRoller.set(setSpeed);
   }
-
   public void botIntakeRoller (double setSpeed) {
     intakeBotRoller.set(setSpeed);
   }
 
+  /**
+   * Encoder Methods
+   */
   public double getIntakeRotation() {
     return intakeArm.getSelectedSensorPosition() / 8618.5;
   }
 
+  /**
+   * Intake Position Methods
+   */
   public void setIntakePosition (boolean intakePosition) {
     this.intakePosition = intakePosition;
   }
-
   public void zeroIntakePosition () {intakeArm.setSelectedSensorPosition(0); }
-
   public boolean getIntakePosition() {
     return intakePosition;
   }

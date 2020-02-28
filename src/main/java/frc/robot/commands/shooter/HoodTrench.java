@@ -12,7 +12,6 @@ public class HoodTrench extends SequentialCommandGroup {
     super(new HoodedSetPoint(Flywheel.getInstance(), 50),new InstantCommand(
         () -> {
           SmartDashboard.putString("HoodToggle", "HoodTench");
-        }
-    ));
+        }));
   }
 }

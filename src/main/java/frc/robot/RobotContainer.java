@@ -97,9 +97,9 @@ public class RobotContainer {
     }, ballTower));
 
     btn4.whenPressed(new RunCommand(() -> {
-      ballHopper.setTransportMotor(0.75);
+      ballHopper.setHopperMotor(0.75);
     }, ballHopper)).whenReleased(new InstantCommand(() -> {
-      ballHopper.setTransportMotor(0);
+      ballHopper.setHopperMotor(0);
     }, ballHopper));
 
     btn5.whenPressed(new RunCommand(() -> {
@@ -148,7 +148,9 @@ public class RobotContainer {
       intake.setIntakeArm(0);
     }, intake));
 
+    // /*
     // Reverse Buttons
+    // */
     opbtn2.whenPressed(new RunCommand(() -> {
       climber.setClimbMotor(-0.25);
     }, climber)).whenReleased(new InstantCommand(() -> {
@@ -162,9 +164,9 @@ public class RobotContainer {
     }, ballTower));
 
     opbtn4.whenPressed(new RunCommand(() -> {
-      ballHopper.setTransportMotor(-0.25);
+      ballHopper.setHopperMotor(-0.25);
     }, ballHopper)).whenReleased(new InstantCommand(() -> {
-      ballHopper.setTransportMotor(0);
+      ballHopper.setHopperMotor(0);
     }, ballHopper));
 
     opbtn5.whenPressed(new RunCommand(() -> {
@@ -248,7 +250,9 @@ public class RobotContainer {
           flywheel.setHoodFlyMotor(0);
         }, flywheel));
 
-    // Competition Button Testing
+    // /*
+    // Competition Buttons
+    // */
     /*
      * btn6.whenPressed(new IntakeToggle(intake)); btn7.whenPressed(new
      * TransportInSystem()); btn7.whenPressed(new RunCommand( () -> {
@@ -287,6 +291,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
+
   public Command getAutonomousCommand() {
 
     return null;

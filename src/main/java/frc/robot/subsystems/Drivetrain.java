@@ -78,11 +78,10 @@ public class Drivetrain extends SubsystemBase {
     
     odometry = new DifferentialDriveOdometry(new Rotation2d(0));
   }
-
+  //Set Speeds
   public void frontLeftDrive(double setSpeed) {
     frontLeftMotor.set(setSpeed);
   }
-  
   public void frontRightDrive(double setSpeed) {
     frontRightMotor.set(setSpeed);
   }
@@ -93,7 +92,7 @@ public class Drivetrain extends SubsystemBase {
    * @param twist twist (clockwise positive)
    * @param squareInputs square inputs
    */
-
+  // Arcade Drive command
   public void arcadeDrive(double throttle, double twist, boolean squareInputs) {
     if (squareInputs) {
       throttle = Math.copySign(throttle * throttle, throttle);
@@ -115,7 +114,7 @@ public class Drivetrain extends SubsystemBase {
     frontLeftMotor.set(leftOutput * 0.75);
     frontRightMotor.set(rightOutput * 0.75);
   }
-
+  // Tank Drive command
   public void tankDrive(double leftOutput, double rightOutput) {
     leftOutput = Math.abs(leftOutput) < THROTTLE_DEADBAND ? 0.0d : leftOutput;
     rightOutput = Math.abs(rightOutput) < THROTTLE_DEADBAND ? 0.0d : rightOutput;
@@ -154,7 +153,7 @@ public class Drivetrain extends SubsystemBase {
     return new Rotation2d(Math.toRadians(-gyro.getYaw()));
   }
 
-  public Pose2d getPosition() { 
+  public Pose2d getPosition() {
     return odometry.getPoseMeters();
   }
 

@@ -32,26 +32,26 @@ public class BallTower extends SubsystemBase {
     levelTwo = new DigitalInput(LEVEL_TWO);
     levelThree = new DigitalInput(LEVEL_THREE);
   }
-
+  /**
+   * Tower Motors
+   */
   public void setTowerMotor(double setSpeed) {
     towerMotor.set(ControlMode.PercentOutput, setSpeed);
   }
-
   public void inTower(double setSpeed) {
     setTowerMotor(setSpeed);
   }
-
   public void outTower(double setSpeed) {
     setTowerMotor(-setSpeed);
   }
 
-  public void stopTower() { setTowerMotor(0); }
-
+  /**
+   * Tower Level Settings
+   */
   public void setTowerLevel(int ballLevel) {
     SmartDashboard.putNumber("TowerLevel", ballLevel);
     towerLevel = ballLevel;
   }
-
   public void autoSetTowerLevel() {
     if (levelThree.get()) {
       setTowerLevel(3);
@@ -66,11 +66,14 @@ public class BallTower extends SubsystemBase {
       setTowerLevel(0);
     }
   }
-
   public int getTowerLevel() {
     return towerLevel;
   }
 
+    /**
+   * Tower Stop
+   */
+  public void stopTower() { setTowerMotor(0);}
   /**
    * Returns the Singleton instance of this BallTowerSubsystem. This static method
    * should be used -- {@code BallTowerSubsystem.getInstance();} -- by external
