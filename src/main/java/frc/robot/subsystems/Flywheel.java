@@ -47,8 +47,8 @@ public class Flywheel extends SubsystemBase {
     rightFlyMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
     leftFlyMotor.setInverted(false);
     rightFlyMotor.setInverted(true);
-    leftFlyMotor.setSmartCurrentLimit(80,5700,6000);
-    rightFlyMotor.setSmartCurrentLimit(80,5700,6000);
+    leftFlyMotor.setSmartCurrentLimit(80,45,6000);
+    rightFlyMotor.setSmartCurrentLimit(80,45,6000);
 
     hoodFlyMotor = MotorControllerFactory.createTalonSRX(
         HOOD_FLY_MOTOR, Motors.Snowblower.withFeedbackDevice(new MotorConfiguration.FeedbackSensor(

@@ -7,13 +7,18 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Sendable;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import static frc.robot.Constants.MPConstants;
 import frc.robot.LaunchPadManager;
+
+import java.io.IOException;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -40,6 +45,11 @@ public class Robot extends TimedRobot {
     autoChooser = new SendableChooser<>();
 
     launchpad = new LaunchPadManager(robotContainer);
+    SmartDashboard.putNumber("MPkP", MPConstants.DEFAULT_KP);
+    SmartDashboard.putNumber("MPkV", MPConstants.DEFAULT_KV);
+    SmartDashboard.putNumber("MPkA", MPConstants.DEFAULT_KA);
+    robotContainer.drivetrain.zeroEncoders();
+    robotContainer.drivetrain.zeroGyro();
   }
 
   /**
@@ -75,7 +85,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    autonomousCommand = robotContainer.getAutonomousCommand();
+    try {
+      autonomousCommand = robotContainer.getAutonomousCommand();
+    } catch (IOException e) {
+      DriverStation.reportWarning("Autonomous Missing", true);
+    }
 
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {

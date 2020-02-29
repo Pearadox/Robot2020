@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -36,6 +37,7 @@ public class FollowPath extends CommandBase {
   double kA = DEFAULT_KA;
   double kH = DEFAULT_KH;
   private double lastTime = 0.0d;
+  int trajIndex;
 
   public FollowPath(Drivetrain drivetrain, String fileName) throws IOException {
     this.drivetrain = drivetrain;
@@ -53,13 +55,16 @@ public class FollowPath extends CommandBase {
     drivetrain.zeroGyro();
     startTime = Timer.getFPGATimestamp();
     lastError = 0;
+    kP = SmartDashboard.getNumber("MPkP", kP);
+    kV = SmartDashboard.getNumber("MPkV", kV);
+    kA = SmartDashboard.getNumber("MPkA", kA);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     currentTime = Timer.getFPGATimestamp();
-    int trajIndex = (int) Math.round((currentTime - startTime) / 0.02);
+    trajIndex = (int) Math.round((currentTime - startTime) / 0.02);
     double desiredLPos = leftTrajectory.get(trajIndex).pos;
     double desiredLVel = leftTrajectory.get(trajIndex).vel;
     double desiredLAcc = leftTrajectory.get(trajIndex).acc;
@@ -68,22 +73,22 @@ public class FollowPath extends CommandBase {
     double desiredRAcc = rightTrajectory.get(trajIndex).acc;
     double desiredHea = leftTrajectory.get(trajIndex).hea;
 
-    double currentLPos = drivetrain.getLeftEncoders();
-    double currentRPos = drivetrain.getRightEncoders();
+    
+    double currentLPos = drivetrain.getLeftDistance();
+    double currentRPos = drivetrain.getRightDistance();
     double currentHea = drivetrain.getGyroAngle().getDegrees();
-
+  
     double leftOutput = kV * desiredLVel
                       + kA * desiredLAcc
                       + kH * (currentHea - desiredHea)
-                      + kP * (lastError)
-                      + kD * (((desiredLPos - currentLPos) - lastError) / (currentTime - lastTime));
-    
-                      
+                      + kP * (lastError);
+    SmartDashboard.putNumber("MPLeftOutput", leftOutput);
+
     double rightOutput = kV * desiredRVel
                       + kA * desiredRAcc
                       + kH * (currentHea - desiredHea)
-                      + kP * (lastError)
-                      + kD * (((desiredRPos - currentRPos) - lastError) / (currentTime - lastTime));
+                      + kP * (lastError);
+                      // + kD * (((desiredRPos - currentRPos) - lastError) / (currentTime - lastTime));
     
     lastError = desiredLPos - currentLPos;
     lastTime = currentTime;
@@ -99,6 +104,6 @@ public class FollowPath extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return trajIndex >= leftTrajectory.size() - 1;
   }
 }

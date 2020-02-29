@@ -50,13 +50,13 @@ public class Peariscope extends SubsystemBase {
         //We need to turn left
         SmartDashboard.putBoolean("TurnRight", true);
         double twist = 0.1 + currentXPct * kP;
-        drivetrain.arcadeDrive(0, -twist, false);
+        // drivetrain.arcadeDrive(0, -twist, false);
       }
       else if (currentXPct < -MIN_PCT_DEADZONE & currentXPct > -MAX_PCT_DEADZONE) {
         //We need to turn right
         SmartDashboard.putBoolean("TurnLeft", true);
         double twist = 0.1 + currentXPct * kP;
-        drivetrain.arcadeDrive(0, twist, false);
+        // drivetrain.arcadeDrive(0, twist, false);
       }
       else {
         //Do nothing

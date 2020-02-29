@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 
 public final class Constants {
@@ -11,19 +12,19 @@ public final class Constants {
         public static final int FRONT_LEFT_MOTOR = 4;
         public static final int BACK_LEFT_MOTOR = 5;
 
-        public static final double DRIVE_BASE_WIDTH = 0.0d; // Meters
+        public static final double DRIVE_BASE_WIDTH = Units.inchesToMeters(29.5); // Meters
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(6.0d); // Meters
 
         public static final double DISTANCE_PER_REVOLUTION = WHEEL_DIAMETER * Math.PI;
-        public static final int PULSES_PER_REVOLUTION = 1;
+        public static final double PULSES_PER_REVOLUTION = 42 * 5.6;
         public static final double DISTANCE_PER_PULSE = DISTANCE_PER_REVOLUTION / PULSES_PER_REVOLUTION;
         public static final double SECONDS_PER_MINUTE = 60.0d;
 
         public static final DifferentialDriveKinematics KINEMATICS =
             new DifferentialDriveKinematics(DRIVE_BASE_WIDTH);
 
-        public static final double THROTTLE_DEADBAND = 0.15d;
-        public static final double TWIST_DEADBAND = 0.15d;
+        public static final double THROTTLE_DEADBAND = 0.075d;
+        public static final double TWIST_DEADBAND = 0.075d;
         public static final double MAX_OUTPUT = 1.0d;
 
         public static final double MAX_SPEED = 0.0d; // Meters per second
@@ -47,10 +48,10 @@ public final class Constants {
     }
 
     public static final class MPConstants {
-        public static final double DEFAULT_KV = 0;
-        public static final double DEFAULT_KA = 0;
+        public static final double DEFAULT_KV = 0.076; // 1/13
+        public static final double DEFAULT_KA = 0.035;
         public static final double DEFAULT_KH = 0;
-        public static final double DEFAULT_KP = 0;
+        public static final double DEFAULT_KP = 0.3;
         public static final double DEFAULT_KD = 0;
     }
 

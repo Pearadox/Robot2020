@@ -85,6 +85,8 @@ public class Intake extends SubsystemBase {
     return intakePosition;
   }
 
+  public void stopIntakeArm() { setIntakeArm(0);}
+  public void stopIntakeRoller() { setIntakeRoller(0,0);}
   /**
    * Returns the Singleton instance of this Intake. This static method
    * should be used -- {@code Intake.getInstance();} -- by external

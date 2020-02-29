@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.motors.Motors;
 import frc.lib.motors.MotorControllerFactory;
@@ -62,17 +63,21 @@ public class Drivetrain extends SubsystemBase {
     frontRightEncoder = new CANEncoder(frontRightMotor);
     backRightEncoder = new CANEncoder(backRightMotor);
 
-    frontLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
-    backLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+    SmartDashboard.putNumber("rightEncoderTicks", 0 );
+    SmartDashboard.putNumber("rightbackEncoderTicks",0);
 
-    frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
-    backRightEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
 
-    frontLeftEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
-    backLeftEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    // frontLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+    // backLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
 
-    frontRightEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
-    backRightEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    // frontRightEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+    // backRightEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
+
+    // frontLeftEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    // backLeftEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+
+    // frontRightEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
+    // backRightEncoder.setVelocityConversionFactor(DISTANCE_PER_REVOLUTION / SECONDS_PER_MINUTE);
 
     gyro = new AHRS(SPI.Port.kMXP);
     
@@ -90,30 +95,23 @@ public class Drivetrain extends SubsystemBase {
    * Drives the robot using joystick or controller input.
    * @param throttle throttle (foward positive)
    * @param twist twist (clockwise positive)
-   * @param squareInputs square inputs
    */
-  // Arcade Drive command
-  public void arcadeDrive(double throttle, double twist, boolean squareInputs) {
-    if (squareInputs) {
-      throttle = Math.copySign(throttle * throttle, throttle);
-      twist = Math.copySign(twist * twist, twist);
-    }
 
-    throttle = Math.abs(throttle) < THROTTLE_DEADBAND ? 0 : throttle;
-    twist = Math.abs(twist) < TWIST_DEADBAND ? 0 : twist;
+  // Arcade Drive command
+  public void arcadeDrive(double throttle, double twist) {
 
     double leftOutput = throttle + twist;
     double rightOutput = throttle - twist;
 
-    
-    leftOutput = Math.abs(leftOutput) > MAX_OUTPUT 
-      ? Math.copySign(MAX_OUTPUT, leftOutput) : leftOutput;
-    rightOutput = Math.abs(rightOutput) > MAX_OUTPUT 
-      ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
+    leftOutput = Math.abs(leftOutput) > MAX_OUTPUT
+        ? Math.copySign(MAX_OUTPUT, leftOutput) : leftOutput;
+    rightOutput = Math.abs(rightOutput) > MAX_OUTPUT
+        ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
 
-    frontLeftMotor.set(leftOutput * 0.75);
-    frontRightMotor.set(rightOutput * 0.75);
+    frontLeftMotor.set(leftOutput);
+    frontRightMotor.set(rightOutput);
   }
+
   // Tank Drive command
   public void tankDrive(double leftOutput, double rightOutput) {
     leftOutput = Math.abs(leftOutput) < THROTTLE_DEADBAND ? 0.0d : leftOutput;
@@ -143,6 +141,14 @@ public class Drivetrain extends SubsystemBase {
   public double getRightEncoders() {
     return (frontRightEncoder.getPosition()
           + backRightEncoder.getPosition()) / 2;
+  }
+
+  public double getRightDistance() {
+    return (getRightEncoders() * 6 * Math.PI)/ (12 * 11.48); // EncoderTicks * WHEEL DIAMETER * PI / (inch/feet) * (Neo Rotations per wheel rotation)
+  }
+
+  public double getLeftDistance() {
+    return (getLeftEncoders() * 6 * Math.PI)/ (12 * 11.48); // EncoderTicks * WHEEL DIAMETER * PI / (inch/feet) * (Neo Rotations per wheel rotation)
   }
 
   /**
@@ -192,6 +198,8 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("rightEncoderTicks", frontRightEncoder.getPosition() );
+    SmartDashboard.putNumber("rightbackEncoderTicks",backRightEncoder.getPosition());
     odometry.update(getGyroAngle(), getLeftEncoders(), getRightEncoders());
   }
 
