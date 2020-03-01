@@ -120,6 +120,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    launchpad.periodicLoop();
     launchpad.teleopLoop();
   }
 

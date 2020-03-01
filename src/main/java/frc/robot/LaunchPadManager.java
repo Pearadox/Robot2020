@@ -98,15 +98,6 @@ public class LaunchPadManager {
         if (btns[7][1]) new RunCommand(() -> {robotContainer.drivetrain.frontRightDrive(setSpeed);}, robotContainer.drivetrain);// back left motor
         else if(!btns[7][1]) new InstantCommand(() -> {robotContainer.drivetrain.frontRightDrive(0);}, robotContainer.drivetrain);// stop back left motor
         
-        if (btns[7][4]) new RunCommand(() -> {robotContainer.flywheel.leftFlyDrive(setVoltage);}, robotContainer.flywheel);// left Flywheel motor
-        else if(!btns[7][4]) new InstantCommand(() -> {robotContainer.flywheel.leftFlyDrive(0);}, robotContainer.flywheel);// stop left Flywheel motor
-        
-        if (btns[7][5]) new RunCommand(() -> {robotContainer.flywheel.rightFlyDrive(setVoltage);}, robotContainer.flywheel);// right Flywheel motor
-        else if(!btns[7][5]) new InstantCommand(() -> {robotContainer.flywheel.rightFlyDrive(0);}, robotContainer.flywheel);// stop right Flywheel motor
-        
-        if (btns[7][6]) new RunCommand(() -> {robotContainer.flywheel.setHoodFlyMotor(setSpeed);}, robotContainer.flywheel);// hood Flywheel motor
-        else if(!btns[7][6]) new InstantCommand(() -> {robotContainer.flywheel.setHoodFlyMotor(0);}, robotContainer.flywheel);// stop hood Flywheel motor
-
         if (btns[7][7]) new RunCommand(() -> {robotContainer.ballTower.setTowerMotor(setSpeed);}, robotContainer.ballTower);// Ball Tower motor
         else if(!btns[7][7]) new InstantCommand(() -> {robotContainer.ballTower.setTowerMotor(0);}, robotContainer.ballTower);// stop Ball Tower motor
         

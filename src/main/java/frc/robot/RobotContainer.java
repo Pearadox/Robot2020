@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autonomous.TLine;
 import frc.robot.commands.drivetrain.JoystickDrive;
 import frc.robot.commands.intake.IntakeRollers;
-import frc.robot.commands.shooter.*;
+// import frc.robot.commands.shooter.*;
 import frc.robot.commands.transportsystem.*;
 import frc.robot.subsystems.*;
 
@@ -113,11 +113,6 @@ public class RobotContainer {
           climber.stopTransverseMotor();
         }, climber));
 
-    btn6.whenPressed(new HoodForward(flywheel)).whenReleased(new InstantCommand(
-        () -> {
-          flywheel.stopHood();
-        }, flywheel));
-
     btn7.whenPressed(new RunCommand(() -> {
       drivetrain.frontRightDrive(0.25);
     }, drivetrain)).whenReleased(new InstantCommand(() -> {
@@ -131,16 +126,8 @@ public class RobotContainer {
     }, drivetrain));
 
     // btn9.whenPressed(new RunCommand(() -> {
-    // flywheel.leftFlyDrive(0.25 * 12);
-    // }, flywheel)).whenReleased(new InstantCommand(() -> {
-    // flywheel.leftFlyDrive(0);
-    // }, flywheel));
-
-    // btn10.whenPressed(new RunCommand(() -> {
-    // flywheel.rightFlyDrive(0.25 * 12);
-    // }, flywheel)).whenReleased(new InstantCommand(() -> {
-    // flywheel.rightFlyDrive(0);
-    // }, flywheel));
+    btn9.whenPressed(() -> flywheel.enabled = true).whenReleased(() -> flywheel.enabled = false);
+    btn10.whenPressed(flywheel::hoodBack).whenReleased(flywheel::stopHood);
 
     btn11.whenPressed(new RunCommand(() -> {
       intake.setIntakeRoller(0.5, -0.5);
@@ -183,9 +170,6 @@ public class RobotContainer {
       climber.setTransverseMotor(0);
     }, climber));
 
-    opbtn6.whenPressed(new HoodBack(flywheel)).whenReleased(new InstantCommand(() -> {
-      flywheel.setHoodFlyMotor(0);
-    }, flywheel));
 
     opbtn7.whenPressed(new RunCommand(() -> {
       drivetrain.frontRightDrive(-0.25);
@@ -198,19 +182,6 @@ public class RobotContainer {
     }, drivetrain)).whenReleased(new InstantCommand(() -> {
       drivetrain.frontLeftDrive(0);
     }, drivetrain));
-
-    opbtn9.whenPressed(new RunCommand(() -> {
-      flywheel.leftFlyDrive((0.41 * 12));
-    }, flywheel)).whenReleased(new InstantCommand(() -> {
-      flywheel.leftFlyDrive(0);
-    }, flywheel));
-
-    
-    opbtn10.whenPressed(new RunCommand(() -> {
-      flywheel.rightFlyDrive((0.41 * 12));
-    }, flywheel)).whenReleased(new InstantCommand(() -> {
-      flywheel.rightFlyDrive(0);
-    }, flywheel));
 
     opbtn11.whenPressed(new RunCommand(() -> {
       intake.setIntakeRoller(0.5, 0.5);
@@ -249,15 +220,6 @@ public class RobotContainer {
     //         new IntakeRollers(intake);
     //       }
     //     }, intake, ballTower, ballHopper)));
-
-     btn9.whenPressed(new FlywheelPID(flywheel, SmartDashboard.getNumber("TargetRPM", 1000))).whenReleased(new InstantCommand(() -> {
-      flywheel.setFlywheelMotor(0);
-    }, flywheel));
-
-    btn10.whileHeld(new HoodedSetPoint(flywheel, SmartDashboard.getNumber("HoodTarget", 0)))
-        .whenReleased(new InstantCommand(() -> {
-          flywheel.setHoodFlyMotor(0);
-        }, flywheel));
 
     // /*
     // Competition Buttons
@@ -302,6 +264,23 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() throws IOException {
-    return new TLine(drivetrain);
+    return
+      new InstantCommand(() -> flywheel.setVoltage(3.5)) //4.5 SL
+        .andThen(() -> flywheel.enabled = true)
+        .andThen(() -> flywheel.setHood(30)) //41 SL
+        .andThen(new RunCommand(() -> {})
+        .withTimeout(4))
+        .andThen((new TowerLoadIn(ballTower).withTimeout(1.5))
+        .andThen((new RunCommand(ballHopper::stopHopperMotor).withTimeout(0.25))
+        .andThen(new TowerLoadIn(ballTower)))
+        .alongWith(new HopperIn(ballHopper))
+        // .alongWith(new InstantCommand(() -> intake.setIntakeRoller(.5, .5), intake))
+        .withTimeout(7))
+        // .andThen(() -> flywheel.enabled = false)
+        .andThen(new InstantCommand(intake::stopIntakeRoller))
+        .andThen(() -> {
+          flywheel.setVoltage(0);
+          flywheel.setHood(0);
+        });
   }
 }
