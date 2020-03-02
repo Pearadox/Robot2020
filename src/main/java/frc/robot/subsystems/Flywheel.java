@@ -38,7 +38,7 @@ public class Flywheel extends SubsystemBase {
   private double voltageSetpoint;
 
   private Flywheel() {
-    hoodFlyMotor.setSelectedSensorPosition(0);
+    hoodFlyMotor.setSelectedSensorPosition((int) (55.0 / (404.0/20) * 8618.5));
   }
 
   private static Flywheel INSTANCE = new Flywheel();
@@ -119,6 +119,10 @@ public class Flywheel extends SubsystemBase {
     hoodFlyMotor.setVoltage(0);
   }
 
+  public void hoodFoward() {
+    hoodFlyMotor.setVoltage(3);
+  }
+
   public void hoodBack() {
     hoodFlyMotor.setVoltage(-3);
   }
@@ -141,6 +145,6 @@ public class Flywheel extends SubsystemBase {
 
     FlywheelPIDLoop();
   
-    HoodLoop();
+    // HoodLoop();
   }
 }

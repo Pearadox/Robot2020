@@ -1,12 +1,15 @@
 package frc.robot.subsystems;
 
-
 import static frc.robot.Constants.IntakeConstants.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.EncoderType;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.motors.MotorControllerFactory;
@@ -28,9 +31,10 @@ public class Intake extends SubsystemBase {
    * This constructor is private since this class is a Singleton. External classes
    * should use the {@link #getInstance()} method to get the instance.
    */
-  private TalonSRX intakeArm;
+  private CANSparkMax intakeArm;
   private CANSparkMax intakeTopRoller;
   private CANSparkMax intakeBotRoller;
+  private CANEncoder intakeEncoder;
   private boolean intakePosition; // true = up, false = down
 
   private Intake() {
@@ -38,12 +42,11 @@ public class Intake extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    intakeArm = MotorControllerFactory.createTalonSRX(ARM_INTAKE_MOTOR, Motors.Snowblower);
+    intakeArm = MotorControllerFactory.createSparkMax(ARM_INTAKE_MOTOR, Motors.Snowblower);
     intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
     intakeBotRoller = MotorControllerFactory.createSparkMax(BOT_INTAKE_MOTOR, Motors.Neo550);
 
-    intakeArm.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    intakeArm.setSelectedSensorPosition(0);
+    intakeEncoder = intakeArm.getEncoder(EncoderType.kQuadrature, 8192);
 
     if (!SmartDashboard.containsKey("IntakePosition")) {
       SmartDashboard.putBoolean("IntakePosition", intakePosition);
@@ -54,7 +57,7 @@ public class Intake extends SubsystemBase {
    * SetSpeed Methods
    */
   public void setIntakeArm(double setSpeed) {
-    intakeArm.set(ControlMode.PercentOutput, setSpeed);
+    intakeArm.set(setSpeed);
   }
   public void setIntakeRoller(double topSpeed, double botSpeed) {
     intakeTopRoller.set(topSpeed);
@@ -71,7 +74,7 @@ public class Intake extends SubsystemBase {
    * Encoder Methods
    */
   public double getIntakeRotation() {
-    return intakeArm.getSelectedSensorPosition() / 8618.5;
+    return intakeArm.() / 8618.5;
   }
 
   /**

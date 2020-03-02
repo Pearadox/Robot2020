@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autonomous.TLine;
 import frc.robot.commands.drivetrain.JoystickDrive;
@@ -59,6 +60,7 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
 
+   JoystickButton btn1 = new JoystickButton(driverJoyStick, 1);
   JoystickButton btn2 = new JoystickButton(driverJoyStick, 2);
   JoystickButton btn3 = new JoystickButton(driverJoyStick, 3);
   JoystickButton btn4 = new JoystickButton(driverJoyStick, 4);
@@ -84,116 +86,150 @@ public class RobotContainer {
   JoystickButton opbtn12 = new JoystickButton(operatorJoystick, 12);
 
   private void configureButtonBindings() {
+    boolean xbox = false;
+    if (!xbox) {
+
+      drivetrain.setDefaultCommand(new JoystickDrive(drivetrain, true));
+      btn1.whileHeld(
+      new TowerLoadIn(ballTower).withTimeout(.5)
+        .andThen(new HopperIn(ballHopper).alongWith(new TowerLoadIn(ballTower)))
+    ).whenReleased(
+      () -> {
+        ballTower.stopTower();
+        ballHopper.stopHopperMotor();
+      }
+    );
+    }  else {
+      drivetrain.setDefaultCommand(
+        new RunCommand( () ->
+          drivetrain.arcadeDrive(
+            Math.copySign(driverJoyStick.getRawAxis(1) *driverJoyStick.getRawAxis(1), -driverJoyStick.getRawAxis(1)), 
+            Math.copySign(driverJoyStick.getRawAxis(4) *driverJoyStick.getRawAxis(4), -driverJoyStick.getRawAxis(4)))
+        , drivetrain)
+      );
+      new Button(() -> driverJoyStick.getRawAxis(3) > 0.5) {}
+      .whileHeld(
+      new TowerLoadIn(ballTower).withTimeout(.5)
+        .andThen(new HopperIn(ballHopper).alongWith(new TowerLoadIn(ballTower)))
+    ).whenReleased(
+      () -> {
+        ballTower.stopTower();
+        ballHopper.stopHopperMotor();
+      }
+    );
+    }
+    
+
     // /*
     //
     //
-    // Basic Run functionality
-    btn2.whenPressed(new RunCommand(() -> {
-      climber.setClimbMotor(1);
-    }, climber)).whenReleased(climber::stopClimbMotor);
+    // Basic Run functionality*
+    // btn2.whileHeld(new RunCommand(() -> {
+    //   climber.setClimbMotor(-1);
+    // }, climber)).whenReleased(climber::stopClimbMotor);
 
-    btn3.whenPressed(new RunCommand(() -> {
-      ballTower.setTowerMotor(0.75);
-    }, ballTower)).whenReleased(new InstantCommand(
-        () -> {
-          ballTower.stopTower();
-        }, ballTower));
+    // btn3.whenPressed(new RunCommand(() -> {
+    //   ballTower.setTowerMotor(0.75);
+    // }, ballTower)).whenReleased(new InstantCommand(
+    //     () -> {
+    //       ballTower.stopTower();
+    //     }, ballTower));
 
-    btn4.whenPressed(new RunCommand(() -> {
-      ballHopper.setHopperMotor(0.75);
-    }, ballHopper)).whenReleased(new InstantCommand(
-        () -> {
-          ballHopper.stopHopperMotor();
-        }, ballHopper));
+    // btn4.whenPressed(new RunCommand(() -> {
+    //   ballHopper.setHopperMotor(0.75);
+    // }, ballHopper)).whenReleased(new InstantCommand(
+    //     () -> {
+    //       ballHopper.stopHopperMotor();
+    //     }, ballHopper));
 
-    btn5.whenPressed(new RunCommand(() -> {
-      climber.setTransverseMotor(0.25);
-    }, climber)).whenReleased(new InstantCommand(
-        () -> {
-          climber.stopTransverseMotor();
-        }, climber));
+    // btn5.whenPressed(new RunCommand(() -> {
+    //   climber.setTransverseMotor(0.25);
+    // }, climber)).whenReleased(new InstantCommand(
+    //     () -> {
+    //       climber.stopTransverseMotor();
+    //     }, climber));
 
-    btn7.whenPressed(new RunCommand(() -> {
-      drivetrain.frontRightDrive(0.25);
-    }, drivetrain)).whenReleased(new InstantCommand(() -> {
-      drivetrain.frontRightDrive(0);
-    }, drivetrain));
+    // btn7.whenPressed(new RunCommand(() -> {
+    //   drivetrain.frontRightDrive(0.25);
+    // }, drivetrain)).whenReleased(new InstantCommand(() -> {
+    //   drivetrain.frontRightDrive(0);
+    // }, drivetrain));
 
-    btn8.whenPressed(new RunCommand(() -> {
-      drivetrain.frontLeftDrive(0.25);
-    }, drivetrain)).whenReleased(new InstantCommand(() -> {
-      drivetrain.frontLeftDrive(0);
-    }, drivetrain));
+    // btn8.whenPressed(new RunCommand(() -> {
+    //   drivetrain.frontLeftDrive(0.25);
+    // }, drivetrain)).whenReleased(new InstantCommand(() -> {
+    //   drivetrain.frontLeftDrive(0);
+    // }, drivetrain));
 
-    // btn9.whenPressed(new RunCommand(() -> {
-    btn9.whenPressed(() -> flywheel.enabled = true).whenReleased(() -> flywheel.enabled = false);
-    btn10.whenPressed(flywheel::hoodBack).whenReleased(flywheel::stopHood);
+    // // btn9.whenPressed(new RunCommand(() -> {
+    // btn9.whenPressed(() -> flywheel.enabled = true).whenReleased(() -> flywheel.enabled = false);
+    btn10.whenPressed(flywheel::hoodBack, flywheel).whenReleased(flywheel::stopHood);
+    btn11.whenPressed(flywheel::hoodFoward).whenReleased(flywheel::stopHood);
+    // btn11.whenPressed(new RunCommand(() -> {
+    //   intake.setIntakeRoller(0.5, -0.5);
+    // }, intake)).whenReleased(new InstantCommand(
+    //     () -> {
+    //       intake.stopIntakeRoller();
+    //     }, intake));
 
-    btn11.whenPressed(new RunCommand(() -> {
-      intake.setIntakeRoller(0.5, -0.5);
-    }, intake)).whenReleased(new InstantCommand(
-        () -> {
-          intake.stopIntakeRoller();
-        }, intake));
+    // btn12.whenPressed(new RunCommand(() -> {
+    //   intake.setIntakeArm(1);
+    // }, intake)).whenReleased(new InstantCommand(
+    //     () -> {
+    //       intake.stopIntakeArm();
+    //     }, intake));
 
-    btn12.whenPressed(new RunCommand(() -> {
-      intake.setIntakeArm(1);
-    }, intake)).whenReleased(new InstantCommand(
-        () -> {
-          intake.stopIntakeArm();
-        }, intake));
+    // // /*
+    // // Reverse Buttons
+    // // */
+    // opbtn2.whenPressed(new RunCommand(() -> {
+    //   climber.setClimbMotor(-0.25);
+    // }, climber)).whenReleased(new InstantCommand(() -> {
+    //   climber.setClimbMotor(0);
+    // }, climber));
 
-    // /*
-    // Reverse Buttons
-    // */
-    opbtn2.whenPressed(new RunCommand(() -> {
-      climber.setClimbMotor(-0.25);
-    }, climber)).whenReleased(new InstantCommand(() -> {
-      climber.setClimbMotor(0);
-    }, climber));
+    // opbtn3.whenPressed(new RunCommand(() -> {
+    //   ballTower.setTowerMotor(-0.25);
+    // }, ballTower)).whenReleased(new InstantCommand(() -> {
+    //   ballTower.setTowerMotor(0);
+    // }, ballTower));
 
-    opbtn3.whenPressed(new RunCommand(() -> {
-      ballTower.setTowerMotor(-0.25);
-    }, ballTower)).whenReleased(new InstantCommand(() -> {
-      ballTower.setTowerMotor(0);
-    }, ballTower));
+    // opbtn4.whenPressed(new RunCommand(() -> {
+    //   ballHopper.setHopperMotor(-0.25);
+    // }, ballHopper)).whenReleased(new InstantCommand(() -> {
+    //   ballHopper.setHopperMotor(0);
+    // }, ballHopper));
 
-    opbtn4.whenPressed(new RunCommand(() -> {
-      ballHopper.setHopperMotor(-0.25);
-    }, ballHopper)).whenReleased(new InstantCommand(() -> {
-      ballHopper.setHopperMotor(0);
-    }, ballHopper));
-
-    opbtn5.whenPressed(new RunCommand(() -> {
-      climber.setTransverseMotor(-0.25);
-    }, climber)).whenReleased(new InstantCommand(() -> {
-      climber.setTransverseMotor(0);
-    }, climber));
+    // opbtn5.whenPressed(new RunCommand(() -> {
+    //   climber.setTransverseMotor(-0.25);
+    // }, climber)).whenReleased(new InstantCommand(() -> {
+    //   climber.setTransverseMotor(0);
+    // }, climber));
 
 
-    opbtn7.whenPressed(new RunCommand(() -> {
-      drivetrain.frontRightDrive(-0.25);
-    }, drivetrain)).whenReleased(new InstantCommand(() -> {
-      drivetrain.frontRightDrive(0);
-    }, drivetrain));
+    // opbtn7.whenPressed(new RunCommand(() -> {
+    //   drivetrain.frontRightDrive(-0.25);
+    // }, drivetrain)).whenReleased(new InstantCommand(() -> {
+    //   drivetrain.frontRightDrive(0);
+    // }, drivetrain));
 
-    opbtn8.whenPressed(new RunCommand(() -> {
-      drivetrain.frontLeftDrive(-0.25);
-    }, drivetrain)).whenReleased(new InstantCommand(() -> {
-      drivetrain.frontLeftDrive(0);
-    }, drivetrain));
+    // opbtn8.whenPressed(new RunCommand(() -> {
+    //   drivetrain.frontLeftDrive(-0.25);
+    // }, drivetrain)).whenReleased(new InstantCommand(() -> {
+    //   drivetrain.frontLeftDrive(0);
+    // }, drivetrain));
 
-    opbtn11.whenPressed(new RunCommand(() -> {
-      intake.setIntakeRoller(0.5, 0.5);
-    }, intake)).whenReleased(new InstantCommand(() -> {
-      intake.setIntakeRoller(0, 0);
-    }, intake));
+    // opbtn11.whenPressed(new RunCommand(() -> {
+    //   intake.setIntakeRoller(0.5, 0.5);
+    // }, intake)).whenReleased(new InstantCommand(() -> {
+    //   intake.setIntakeRoller(0, 0);
+    // }, intake));
 
-    opbtn12.whenPressed(new RunCommand(() -> {
-      intake.setIntakeArm(-1);
-    }, intake)).whenReleased(new InstantCommand(() -> {
-      intake.setIntakeArm(0);
-    }, intake));
+    // opbtn12.whenPressed(new RunCommand(() -> {
+    //   intake.setIntakeArm(-1);
+    // }, intake)).whenReleased(new InstantCommand(() -> {
+    //   intake.setIntakeArm(0);
+    // }, intake));
 
     /*
      * Diagnostic Buttons 
@@ -246,7 +282,21 @@ public class RobotContainer {
   }
 
   private void configureDefaultCommands() {
-    drivetrain.setDefaultCommand(new JoystickDrive(drivetrain, true));
+    
+    flywheel.setDefaultCommand(new InstantCommand(() -> flywheel.enabled = true)
+    .andThen(new RunCommand(
+      () -> {
+        // flywheel.setHood(42);
+        flywheel.setVoltage(4.5);
+      }, flywheel
+    )));
+    intake.setDefaultCommand(new RunCommand(
+      () -> {
+        intake.setIntakeRoller(.3, .3);
+      }, intake
+    ));
+
+    
   }
 
   public static Joystick getDriverJoystick() {

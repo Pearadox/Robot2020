@@ -13,8 +13,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import static frc.robot.Constants.MPConstants;
 import frc.robot.LaunchPadManager;
+import frc.robot.subsystems.Flywheel;
 
 import java.io.IOException;
 
@@ -74,10 +77,17 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
+    //new InstantCommand(() -> flywheel.setHood(0)).runsWhenDisabled();
   }
 
   @Override
   public void disabledPeriodic() {
+    var flywheel = Flywheel.getInstance();
+    if (flywheel.getHoodAngle() > 1) {
+      flywheel.hoodBack();
+    } else {
+      flywheel.stopHood();
+    }
   }
 
   /**
@@ -137,4 +147,6 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
   }
+
+  
 }
