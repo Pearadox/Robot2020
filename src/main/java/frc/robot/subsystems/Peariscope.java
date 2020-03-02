@@ -29,6 +29,7 @@ public class Peariscope extends SubsystemBase {
   private double kP = 0.05;
   private double MIN_PCT_DEADZONE = 2.5;
   private double MAX_PCT_DEADZONE = 80.0;
+  private boolean peariscopeLight = false;
 
   public Peariscope(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
@@ -49,14 +50,16 @@ public class Peariscope extends SubsystemBase {
       if (currentXPct >= MIN_PCT_DEADZONE & currentXPct <= MAX_PCT_DEADZONE) {
         //We need to turn left
         SmartDashboard.putBoolean("TurnRight", true);
-        double twist = 0.1 + currentXPct * kP;
-        // drivetrain.arcadeDrive(0, -twist, false);
+        // double twist = 0.1 + currentXPct * kP;
+        double twist = 0.1;
+        drivetrain.arcadeDrive(0, -twist);
       }
       else if (currentXPct < -MIN_PCT_DEADZONE & currentXPct > -MAX_PCT_DEADZONE) {
         //We need to turn right
-        SmartDashboard.putBoolean("TurnLeft", true);
-        double twist = 0.1 + currentXPct * kP;
-        // drivetrain.arcadeDrive(0, twist, false);
+        SmartDashboard.putBoolean("TurnLeft", false);
+        // double twist = 0.1 + currentXPct * kP;
+        double twist = 0.1;
+        drivetrain.arcadeDrive(0, twist);
       }
       else {
         //Do nothing
@@ -69,6 +72,7 @@ public class Peariscope extends SubsystemBase {
   public void setPeariscopeOn() {
     if (peariscope.getEntry("led_grn").getDouble(0) < 255) {
       peariscope.getEntry("led_grn").setDouble(255);
+      peariscopeLight = true;
     }
   }
 
@@ -77,8 +81,20 @@ public class Peariscope extends SubsystemBase {
       peariscope.getEntry("led_grn").setDouble(0);
       peariscope.getEntry("led_blu").setDouble(0);
       peariscope.getEntry("led_red").setDouble(0);
+      peariscopeLight = false;
     }
   }
+
+  public void peariscopeToggle() {
+    if (peariscopeLight) {
+      setPeariscopeOff();
+    }
+    else {
+      setPeariscopeOn();
+    }
+  }
+
+
 
   @Override
   public void periodic() {

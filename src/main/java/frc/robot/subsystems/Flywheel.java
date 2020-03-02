@@ -119,7 +119,7 @@ public class Flywheel extends SubsystemBase {
     hoodFlyMotor.setVoltage(0);
   }
 
-  public void hoodFoward() {
+  public void hoodForward() {
     hoodFlyMotor.setVoltage(3);
   }
 

@@ -34,7 +34,7 @@ public class Intake extends SubsystemBase {
   private CANSparkMax intakeArm;
   private CANSparkMax intakeTopRoller;
   private CANSparkMax intakeBotRoller;
-  private CANEncoder intakeEncoder;
+  public CANEncoder intakeEncoder;
   private boolean intakePosition; // true = up, false = down
 
   private Intake() {
@@ -42,7 +42,7 @@ public class Intake extends SubsystemBase {
     //       in the constructor or in the robot coordination class, such as RobotContainer.
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
-    intakeArm = MotorControllerFactory.createSparkMax(ARM_INTAKE_MOTOR, Motors.Snowblower);
+    intakeArm = MotorControllerFactory.createSparkMax(ARM_INTAKE_MOTOR, Motors.Neo550);
     intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
     intakeBotRoller = MotorControllerFactory.createSparkMax(BOT_INTAKE_MOTOR, Motors.Neo550);
 
@@ -50,6 +50,10 @@ public class Intake extends SubsystemBase {
 
     if (!SmartDashboard.containsKey("IntakePosition")) {
       SmartDashboard.putBoolean("IntakePosition", intakePosition);
+    }
+
+    if (!SmartDashboard.containsKey("IntakeEncoder")) {
+      SmartDashboard.putNumber("IntakeEncoder", getIntakeEncoder());
     }
   }
 
@@ -73,8 +77,8 @@ public class Intake extends SubsystemBase {
   /**
    * Encoder Methods
    */
-  public double getIntakeRotation() {
-    return intakeArm.() / 8618.5;
+  public double getIntakeEncoder() {
+    return intakeEncoder.getPosition() / 81.0; // 81:1 Ratio
   }
 
   /**
@@ -83,7 +87,8 @@ public class Intake extends SubsystemBase {
   public void setIntakePosition (boolean intakePosition) {
     this.intakePosition = intakePosition;
   }
-  public void zeroIntakePosition () {intakeArm.setSelectedSensorPosition(0); }
+
+  public void zeroIntakePosition () {intakeEncoder.setPosition(0); }
   public boolean getIntakePosition() {
     return intakePosition;
   }
@@ -98,8 +103,9 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    intakePosition = getIntakeRotation() >= -1.5;
+    intakePosition = getIntakeEncoder() >= -1.5;
     SmartDashboard.putBoolean("IntakePosition", intakePosition);
+    SmartDashboard.putNumber("IntakeEncoder", getIntakeEncoder());
   }
 
   public static Intake getInstance() {

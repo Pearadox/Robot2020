@@ -42,6 +42,7 @@ public class RobotContainer {
   Intake intake = Intake.getInstance();
   Drivetrain drivetrain = Drivetrain.getInstance();
   Flywheel flywheel = Flywheel.getInstance();
+  Peariscope peariscope = new Peariscope(drivetrain);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -60,7 +61,7 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
 
-   JoystickButton btn1 = new JoystickButton(driverJoyStick, 1);
+  JoystickButton btn1 = new JoystickButton(driverJoyStick, 1);
   JoystickButton btn2 = new JoystickButton(driverJoyStick, 2);
   JoystickButton btn3 = new JoystickButton(driverJoyStick, 3);
   JoystickButton btn4 = new JoystickButton(driverJoyStick, 4);
@@ -88,7 +89,6 @@ public class RobotContainer {
   private void configureButtonBindings() {
     boolean xbox = false;
     if (!xbox) {
-
       drivetrain.setDefaultCommand(new JoystickDrive(drivetrain, true));
       btn1.whileHeld(
       new TowerLoadIn(ballTower).withTimeout(.5)
@@ -161,10 +161,15 @@ public class RobotContainer {
     //   drivetrain.frontLeftDrive(0);
     // }, drivetrain));
 
-    // // btn9.whenPressed(new RunCommand(() -> {
+    // btn9.whenPressed(new RunCommand(() -> {
     // btn9.whenPressed(() -> flywheel.enabled = true).whenReleased(() -> flywheel.enabled = false);
+
+    btn7.whenPressed(peariscope::peariscopeToggle);wq
+    btn8.whileHeld(peariscope::runBangBangPeariscope);
+    
     btn10.whenPressed(flywheel::hoodBack, flywheel).whenReleased(flywheel::stopHood);
-    btn11.whenPressed(flywheel::hoodFoward).whenReleased(flywheel::stopHood);
+    btn11.whenPressed(flywheel::hoodForward).whenReleased(flywheel::stopHood);
+
     // btn11.whenPressed(new RunCommand(() -> {
     //   intake.setIntakeRoller(0.5, -0.5);
     // }, intake)).whenReleased(new InstantCommand(
@@ -174,10 +179,7 @@ public class RobotContainer {
 
     // btn12.whenPressed(new RunCommand(() -> {
     //   intake.setIntakeArm(1);
-    // }, intake)).whenReleased(new InstantCommand(
-    //     () -> {
-    //       intake.stopIntakeArm();
-    //     }, intake));
+    // }, intake)).whenReleased(intake::stopIntakeArm);
 
     // // /*
     // // Reverse Buttons
@@ -261,23 +263,25 @@ public class RobotContainer {
     // Competition Buttons
     // */
     /*
-     * btn6.whenPressed(new IntakeToggle(intake)); btn7.whenPressed(new
-     * TransportInSystem()); btn7.whenPressed(new RunCommand( () -> {
-     * flywheel.setFlywheelMotor(3); }, flywheel )).whenReleased(new InstantCommand(
-     * () -> { flywheel.setFlywheelMotor(0); } )); btn8.whileHeld(new
-     * TransportLoadInSystem().alongWith(new FlywheelPID(flywheel, 2500)));
+     * btn6.whenPressed(new IntakeToggle(intake)); 
+     * btn7.whenPressed(new TransportInSystem()); 
+     * btn7.whenPressed(new RunCommand( () -> { flywheel.setFlywheelMotor(3); }, flywheel )).whenReleased(new InstantCommand(
+     * () -> { flywheel.setFlywheelMotor(0); } )); 
+     * btn8.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelPID(flywheel, 2500)));
      * btn9.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelSector()));
      * btn10.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelTrench()));
      * btn11.whileHeld(new IntakeRollers(intake));
      * 
-     * opbtn3.whileHeld(new TowerLoadOut(ballTower)); opbtn4.whenPressed(new
-     * TowerLevelUp(ballTower)); opbtn5.whileHeld(new TransportLoadOutSystem());
-     * opbtn6.whenPressed(new IntakeHome(intake)); opbtn7.whileHeld(new
-     * ClimbUp(climber)); opbtn8.whileHeld(new ClimbDown(climber));
-     * opbtn9.whenPressed(new HoodSector()); opbtn10.whenPressed(new HoodTrench());
-     * opbtn11.whileHeld(new TransportLoadInSystem().alongWith(new
-     * FlywheelSector())); opbtn12.whileHeld(new
-     * TransportLoadInSystem().alongWith(new FlywheelTrench()));
+     * opbtn3.whileHeld(new TowerLoadOut(ballTower)); 
+     * opbtn4.whenPressed(new TowerLevelUp(ballTower)); 
+     * opbtn5.whileHeld(new TransportLoadOutSystem());
+     * opbtn6.whenPressed(new IntakeHome(intake)); 
+     * opbtn7.whileHeld(new ClimbUp(climber)); 
+     * opbtn8.whileHeld(new ClimbDown(climber));
+     * opbtn9.whenPressed(new HoodSector()); 
+     * opbtn10.whenPressed(new HoodTrench());
+     * opbtn11.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelSector())); 
+     * opbtn12.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelTrench()));
      */
   }
 

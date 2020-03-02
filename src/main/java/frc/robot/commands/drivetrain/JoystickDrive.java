@@ -41,7 +41,6 @@ public class JoystickDrive extends CommandBase {
     else {
       drivetrain.arcadeDrive(throttle, twist);
     }
-
   }
 
   @Override
