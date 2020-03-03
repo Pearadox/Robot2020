@@ -10,7 +10,7 @@ public class Neo550 extends MotorConfiguration {
     brushed = false;
     stallLimit = 20;
     freeLimit = 35;
-    stallThreshold = 30;
+    stallThreshold = 0;
     peakCurrentTime = 1000;
     this.coast = coast;
     this.inverted = inverted;

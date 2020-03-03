@@ -54,8 +54,9 @@ public class Robot extends TimedRobot {
     robotContainer.drivetrain.zeroEncoders();
     robotContainer.drivetrain.zeroGyro();
     // robotContainer.intake.intakeEncoder.setPosition(SmartDashboard.getNumber("IntakeEncoder", 0) * 81.0);
-    robotContainer.intake.zeroIntakePosition();
+    
     robotContainer.peariscope.setPeariscopeOff();
+    
   }
 
   /**
@@ -85,13 +86,13 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledPeriodic() {
-    var flywheel = Flywheel.getInstance();
-    if (flywheel.getHoodAngle() > 1) {
-      flywheel.hoodBack();
-    } else {
-      flywheel.stopHood();
-    }
-  }
+  //   var flywheel = Flywheel.getInstance();
+  //   if (flywheel.getHoodAngle() > 1) {
+  //     flywheel.hoodBack();
+  //   } else {
+  //     flywheel.stopHood();
+  //   }
+   }
 
   /**
    * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.

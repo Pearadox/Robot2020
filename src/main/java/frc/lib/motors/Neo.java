@@ -9,9 +9,9 @@ public class Neo extends MotorConfiguration {
 
   Neo(boolean coast, boolean inverted, SpeedController master, FeedbackSensor feedbackDevice) {
     brushed = false;
-    stallLimit = 60;
+    stallLimit = 30;
     freeLimit = 45;
-    stallThreshold = 30;
+    stallThreshold = 1;
     peakCurrentTime = 1000;
     this.coast = coast;
     this.inverted = inverted;

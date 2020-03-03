@@ -2,13 +2,8 @@ package frc.robot.subsystems;
 
 import static frc.robot.Constants.IntakeConstants.*;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.EncoderType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,15 +41,11 @@ public class Intake extends SubsystemBase {
     intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
     intakeBotRoller = MotorControllerFactory.createSparkMax(BOT_INTAKE_MOTOR, Motors.Neo550);
 
-    intakeEncoder = intakeArm.getEncoder(EncoderType.kQuadrature, 8192);
-
     if (!SmartDashboard.containsKey("IntakePosition")) {
       SmartDashboard.putBoolean("IntakePosition", intakePosition);
     }
 
-    if (!SmartDashboard.containsKey("IntakeEncoder")) {
-      SmartDashboard.putNumber("IntakeEncoder", getIntakeAngle());
-    }
+   
     
     if (!SmartDashboard.containsKey("amplitude")){SmartDashboard.putNumber("amplitude", 0.025);}
   }
@@ -79,9 +70,9 @@ public class Intake extends SubsystemBase {
   /**
    * Encoder Methods
    */
-  public double getIntakeAngle() {
-    return intakeEncoder.getPosition() / 81.0; // 81:1 Ratio
-  }
+  // public double getIntakeAngle() {
+  //   return intakeEncoder.getPosition() / 81.0; // 81:1 Ratio
+  // }
   
   /**
    * Intake Position Methods
@@ -96,7 +87,7 @@ public class Intake extends SubsystemBase {
     return equation;
   }
 
-  public void zeroIntakePosition () {intakeEncoder.setPosition(0); }
+  
   public boolean getIntakePosition() {
     return intakePosition;
   }
@@ -111,9 +102,9 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    intakePosition = getIntakeAngle() >= 50;
-    SmartDashboard.putBoolean("IntakePosition", intakePosition);
-    SmartDashboard.putNumber("IntakeEncoder", getIntakeAngle());
+   // intakePosition = getIntakeAngle() >= 50;
+   // SmartDashboard.putBoolean("IntakePosition", intakePosition);
+    //SmartDashboard.putNumber("IntakeEncoder", getIntakeAngle());
   }
 
   public static Intake getInstance() {

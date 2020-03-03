@@ -5,6 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.PWM;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.motors.MotorControllerFactory;
 import frc.lib.motors.Motors;
@@ -25,6 +28,7 @@ public class Climber extends SubsystemBase {
   private CANSparkMax transverseMotor;
   private CANEncoder transverseEncoder;
   private final static Climber INSTANCE = new Climber();
+  private Servo climbServo;
 
   /**
    * Creates a new instance of this ClimberSubsystem.
@@ -37,13 +41,21 @@ public class Climber extends SubsystemBase {
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.MiniCIM);
+    climbServo = new Servo(9);
     transverseMotor = MotorControllerFactory.createSparkMax(TRANSVERSE_CLIMB_MOTOR, Motors.Neo550);
     transverseEncoder = new CANEncoder(transverseMotor);
     transverseEncoder.setPositionConversionFactor(42);
+    if (!SmartDashboard.containsKey("ClimbVoltage")) {
+      SmartDashboard.putNumber("ClimbVoltage", 0);
+    }
   }
 
   public void setClimbMotor(double setSpeed) {
     climbMotor.set(ControlMode.PercentOutput, setSpeed);
+  }
+
+  public void setClimbServo(double setPosition) {
+    climbServo.set(setPosition);
   }
 
   public void setTransverseMotor(double setSpeed) {
@@ -61,6 +73,11 @@ public class Climber extends SubsystemBase {
    * should be used -- {@code ClimberSubsystem.getInstance();} -- by external
    * classes, rather than the constructor to get the instance of this class.
    */
+
+   @Override
+   public void periodic() {
+     SmartDashboard.putNumber("ClimbVoltage", climbMotor.getBusVoltage());
+   }
   public static Climber getInstance() {
     return INSTANCE;
   }

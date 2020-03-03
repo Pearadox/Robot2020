@@ -20,13 +20,13 @@ public class IntakeLoading extends CommandBase {
 
   @Override
   public void execute() {
-    intakeRotation = intake.getIntakeAngle();
-    if (intakeRotation >= maxRotations) {
-      intake.setIntakeArm(-0.5);
-    }
-    else {
-      intake.setIntakeArm(0.5);
-    }
+    // intakeRotation = intake.getIntakeAngle();
+    // if (intakeRotation >= maxRotations) {
+    //   intake.setIntakeArm(-0.5);
+    // }
+    // else {
+    //   intake.setIntakeArm(0.5);
+    // }
   }
 
   @Override
