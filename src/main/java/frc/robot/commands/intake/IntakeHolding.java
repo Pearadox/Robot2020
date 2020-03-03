@@ -10,17 +10,14 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-public class IntakeRollers extends CommandBase {
+public class IntakeHolding extends CommandBase {
   /**
-   * Creates a new IntakeRollers.
+   * Creates a new IntakeHolding.
    */
   Intake intake;
-  private double maxRotations = 1.5;
-  private double minRotations = 0.0;
-  public IntakeRollers(Intake intake) {
-    this.intake = intake;
-    addRequirements(intake);
+  public IntakeHolding(Intake intake) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.intake = intake;
   }
 
   // Called when the command is initially scheduled.
@@ -31,21 +28,13 @@ public class IntakeRollers extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (intake.getIntakeAngle() >= minRotations) {
-      intake.setIntakeRoller(0.0, 0.0);
-    }
-    else if (intake.getIntakeAngle() >= minRotations + 0.5 && intake.getIntakeAngle() <= maxRotations - 1) {
-      intake.setIntakeRoller(0.75, 0.75);
-    }
-    else if (intake.getIntakeAngle() >= maxRotations) {
-      intake.setIntakeRoller(0.75, 0.75);
-    }
+    intake.setIntakeArm(intake.calculateHoldOutput(intake.getIntakeAngle()));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.setIntakeRoller(0, 0);
+    intake.setIntakeArm(0);
   }
 
   // Returns true when the command should end.

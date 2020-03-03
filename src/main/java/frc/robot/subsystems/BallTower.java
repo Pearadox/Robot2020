@@ -31,6 +31,15 @@ public class BallTower extends SubsystemBase {
     levelOne = new DigitalInput(LEVEL_ONE);
     levelTwo = new DigitalInput(LEVEL_TWO);
     levelThree = new DigitalInput(LEVEL_THREE);
+    if (!SmartDashboard.containsKey("LevelOne")){
+      SmartDashboard.putBoolean("LevelOne", false);
+    }  
+    if (!SmartDashboard.containsKey("LevelTwo")){
+      SmartDashboard.putBoolean("LevelTwo", false);
+    }
+    if (!SmartDashboard.containsKey("LevelThree")){
+      SmartDashboard.putBoolean("LevelThree", false);
+    }
   }
   /**
    * Tower Motors
@@ -52,6 +61,7 @@ public class BallTower extends SubsystemBase {
     SmartDashboard.putNumber("TowerLevel", ballLevel);
     towerLevel = ballLevel;
   }
+  
   public void autoSetTowerLevel() {
     if (levelThree.get()) {
       setTowerLevel(3);
@@ -66,6 +76,7 @@ public class BallTower extends SubsystemBase {
       setTowerLevel(0);
     }
   }
+
   public int getTowerLevel() {
     return towerLevel;
   }
@@ -73,7 +84,9 @@ public class BallTower extends SubsystemBase {
     /**
    * Tower Stop
    */
-  public void stopTower() { setTowerMotor(0);}
+  public void stopTower() { 
+    setTowerMotor(0);
+  }
   /**
    * Returns the Singleton instance of this BallTowerSubsystem. This static method
    * should be used -- {@code BallTowerSubsystem.getInstance();} -- by external
@@ -84,6 +97,9 @@ public class BallTower extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     autoSetTowerLevel();
+    SmartDashboard.putBoolean("LevelOne", levelOne.get());
+    SmartDashboard.putBoolean("LevelTwo", levelTwo.get());
+    SmartDashboard.putBoolean("LevelThree", levelThree.get());
   }
 
   private static BallTower INSTANCE = new BallTower();

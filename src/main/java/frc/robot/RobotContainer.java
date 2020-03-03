@@ -10,15 +10,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autonomous.TLine;
+import frc.robot.autonomous.FollowPath;
 import frc.robot.commands.drivetrain.JoystickDrive;
-import frc.robot.commands.intake.IntakeRollers;
 // import frc.robot.commands.shooter.*;
 import frc.robot.commands.transportsystem.*;
 import frc.robot.subsystems.*;
@@ -164,7 +162,9 @@ public class RobotContainer {
     // btn9.whenPressed(new RunCommand(() -> {
     // btn9.whenPressed(() -> flywheel.enabled = true).whenReleased(() -> flywheel.enabled = false);
 
-    btn7.whenPressed(peariscope::peariscopeToggle);wq
+    btn7.whenPressed(peariscope::peariscopeToggle);
+    
+
     btn8.whileHeld(peariscope::runBangBangPeariscope);
     
     btn10.whenPressed(flywheel::hoodBack, flywheel).whenReleased(flywheel::stopHood);
@@ -296,11 +296,10 @@ public class RobotContainer {
     )));
     intake.setDefaultCommand(new RunCommand(
       () -> {
+        intake.setIntakeArm(intake.calculateHoldOutput(intake.getIntakeAngle()));
         intake.setIntakeRoller(.3, .3);
       }, intake
     ));
-
-    
   }
 
   public static Joystick getDriverJoystick() {
@@ -335,6 +334,7 @@ public class RobotContainer {
         .andThen(() -> {
           flywheel.setVoltage(0);
           flywheel.setHood(0);
-        });
+        })
+        .andThen(new FollowPath(drivetrain, "RStoT")).withTimeout(4.2);
   }
 }

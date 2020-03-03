@@ -53,8 +53,10 @@ public class Intake extends SubsystemBase {
     }
 
     if (!SmartDashboard.containsKey("IntakeEncoder")) {
-      SmartDashboard.putNumber("IntakeEncoder", getIntakeEncoder());
+      SmartDashboard.putNumber("IntakeEncoder", getIntakeAngle());
     }
+    
+    if (!SmartDashboard.containsKey("amplitude")){SmartDashboard.putNumber("amplitude", 0.025);}
   }
 
   /**
@@ -77,15 +79,21 @@ public class Intake extends SubsystemBase {
   /**
    * Encoder Methods
    */
-  public double getIntakeEncoder() {
+  public double getIntakeAngle() {
     return intakeEncoder.getPosition() / 81.0; // 81:1 Ratio
   }
-
+  
   /**
    * Intake Position Methods
    */
   public void setIntakePosition (boolean intakePosition) {
     this.intakePosition = intakePosition;
+  }
+
+  public double calculateHoldOutput(double angle){
+    double amplitude = SmartDashboard.getNumber("amplitude", 0.025);
+    double equation = amplitude * Math.sin(angle*Math.PI/180);
+    return equation;
   }
 
   public void zeroIntakePosition () {intakeEncoder.setPosition(0); }
@@ -103,9 +111,9 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    intakePosition = getIntakeEncoder() >= -1.5;
+    intakePosition = getIntakeAngle() >= 50;
     SmartDashboard.putBoolean("IntakePosition", intakePosition);
-    SmartDashboard.putNumber("IntakeEncoder", getIntakeEncoder());
+    SmartDashboard.putNumber("IntakeEncoder", getIntakeAngle());
   }
 
   public static Intake getInstance() {

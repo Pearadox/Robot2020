@@ -20,7 +20,7 @@ public class IntakeHome extends CommandBase {
 
   @Override
   public void execute() {
-    intakeRotation = intake.getIntakeEncoder();
+    intakeRotation = intake.getIntakeAngle();
     intake.setIntakeArm(-0.5);
   }
 
