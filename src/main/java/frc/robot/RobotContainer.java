@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autonomous.FollowPath;
+import frc.robot.commands.climber.ClimbRelease;
+import frc.robot.commands.climber.HangClimb;
 import frc.robot.commands.drivetrain.JoystickDrive;
 // import frc.robot.commands.shooter.*;
 import frc.robot.commands.transportsystem.*;
@@ -41,7 +43,7 @@ public class RobotContainer {
   Drivetrain drivetrain = Drivetrain.getInstance();
   Flywheel flywheel = Flywheel.getInstance();
   Peariscope peariscope = new Peariscope(drivetrain);
-  PDP pdp = new PDP();
+  Transverse transverse = Transverse.getInstance();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -89,75 +91,60 @@ public class RobotContainer {
     boolean xbox = false;
     if (!xbox) {
       drivetrain.setDefaultCommand(new JoystickDrive(drivetrain, true));
-      btn1.whileHeld(
-      new TowerLoadIn(ballTower).withTimeout(.5)
-        .andThen(new HopperIn(ballHopper).alongWith(new TowerLoadIn(ballTower)))
-    ).whenReleased(
-      () -> {
-        ballTower.stopTower();
-        ballHopper.stopHopperMotor();
-      }
-    );
-    }  else {
-      drivetrain.setDefaultCommand(
-        new RunCommand( () ->
-          drivetrain.arcadeDrive(
-            Math.copySign(driverJoyStick.getRawAxis(1) *driverJoyStick.getRawAxis(1), -driverJoyStick.getRawAxis(1)), 
-            Math.copySign(driverJoyStick.getRawAxis(4) *driverJoyStick.getRawAxis(4), -driverJoyStick.getRawAxis(4)))
-        , drivetrain)
-      );
-      new Button(() -> driverJoyStick.getRawAxis(3) > 0.5) {}
-      .whileHeld(
-      new TowerLoadIn(ballTower).withTimeout(.5)
-        .andThen(new HopperIn(ballHopper).alongWith(new TowerLoadIn(ballTower)))
-    ).whenReleased(
-      () -> {
-        ballTower.stopTower();
-        ballHopper.stopHopperMotor();
-      }
-    );}
-    if (driverJoyStick.getRawAxis(3) >= 0.5 ) {
-      climber.setClimbServo(0.6);
+      btn1.whileHeld(new TowerLoadIn(ballTower).withTimeout(.5)
+          .andThen(new HopperIn(ballHopper).alongWith(new TowerLoadIn(ballTower)))).whenReleased(() -> {
+            ballTower.stopTower();
+            ballHopper.stopHopperMotor();
+          });
+    } else {
+      drivetrain.setDefaultCommand(new RunCommand(() -> drivetrain.arcadeDrive(
+          Math.copySign(driverJoyStick.getRawAxis(1) * driverJoyStick.getRawAxis(1), -driverJoyStick.getRawAxis(1)),
+          Math.copySign(driverJoyStick.getRawAxis(4) * driverJoyStick.getRawAxis(4), -driverJoyStick.getRawAxis(4))),
+          drivetrain));
+      new Button(() -> driverJoyStick.getRawAxis(3) > 0.5) {
+      }.whileHeld(new TowerLoadIn(ballTower).withTimeout(.5)
+          .andThen(new HopperIn(ballHopper).alongWith(new TowerLoadIn(ballTower)))).whenReleased(() -> {
+            ballTower.stopTower();
+            ballHopper.stopHopperMotor();
+          });
     }
-    else {
-      climber.setDefaultCommand(new RunCommand(
-      () -> {
-        climber.setClimbServo(0.5);
-      }, climber
-      ));
-    }
+    // btn3.whenPressed(new RunCommand(() -> {
+    //   climber.setClimbServo(0.25);
+    // }, climber)).whenReleased(new InstantCommand(() -> {
+    //   climber.setClimbServo(0.0);
+    // }, climber));
 
     // /*
     //
     //
-    // Basic Run functionality*
+    // Basic Run functionality
+
     // btn2.whileHeld(new RunCommand(() -> {
-    //   climber.setClimbMotor(-1);
-    // }, climber)).whenReleased(climber::stopClimbMotor);
+    //   climber.setClimbMotor(-0.75);
+    // }, climber)).whenReleased(
+    //   () -> {
+    //     climber.setClimbMotor(0);
+    //   }, climber
+    // );
 
-
-    btn3.whenPressed(new RunCommand(() -> {
-      ballTower.setTowerMotor(0.75);
-    }, ballTower)).whenReleased(new InstantCommand(
-        () -> {
-          ballTower.stopTower();
-        }, ballTower));
+    // btn3.whenPressed(new RunCommand(() -> {
+    //   ballTower.setTowerMotor(0.75);
+    // }, ballTower)).whenReleased(new InstantCommand(() -> {
+    //   ballTower.stopTower();
+    // }, ballTower));
 
     btn4.whenPressed(new RunCommand(() -> {
       ballHopper.setHopperMotor(0.75);
-    }, ballHopper)).whenReleased(new InstantCommand(
-        () -> {
-          ballHopper.stopHopperMotor();
-        }, ballHopper));
+    }, ballHopper)).whenReleased(new InstantCommand(() -> {
+      ballHopper.stopHopperMotor();
+    }, ballHopper));
 
-    // btn5.whenPressed(new RunCommand(() -> {
-    //   climber.setTransverseMotor(0.25);
-    // }, climber)).whenReleased(new InstantCommand(
-    //     () -> {
-    //       climber.stopTransverseMotor();
-    //     }, climber));
-
-    
+    btn5.whenPressed(new RunCommand(() -> {
+    transverse.setTransverseMotor(1.0);
+    }, climber)).whenReleased(new InstantCommand(
+    () -> {
+    transverse.stopTransverseMotor();
+    }, climber));
 
     btn7.whenPressed(new RunCommand(() -> {
       flywheel.setHood(42);
@@ -165,53 +152,41 @@ public class RobotContainer {
       flywheel.setHood(42);
     }, drivetrain));
 
-    btn8.whenPressed(new RunCommand(() -> { 
-      flywheel.hoodForward();
-    },flywheel)).whenReleased(new InstantCommand(()-> {
-      flywheel.stopHood();},flywheel
-      ));
-    btn9.whenPressed(new RunCommand(() -> { 
-      flywheel.hoodBack();
-    },flywheel)).whenReleased(new InstantCommand(()-> {
-      flywheel.stopHood();},flywheel
-      ));
-
     // btn8.whenPressed(new RunCommand(() -> {
-    //   drivetrain.frontLeftDrive(0.25);
+    // drivetrain.frontLeftDrive(0.25);
     // }, drivetrain)).whenReleased(new InstantCommand(() -> {
-    //   drivetrain.frontLeftDrive(0);
+    // drivetrain.frontLeftDrive(0);
     // }, drivetrain));
 
-    // btn9.whenPressed(new RunCommand(() -> {
-    // btn9.whenPressed(() -> flywheel.enabled = true).whenReleased(() -> flywheel.enabled = false);
+    // btn9.whenPressed(() -> flywheel.enabled = true)
+    //      .whenReleased(() -> flywheel.enabled = false);
 
-    //btn7.whenPressed(peariscope::peariscopeToggle);
-    
+    // btn10.whenPressed(flywheel::hoodBack, flywheel).whenReleased(flywheel::stopHood);
 
-    //btn8.whileHeld(peariscope::runBangBangPeariscope);
-    
-    //btn10.whenPressed(flywheel::hoodBack, flywheel).whenReleased(flywheel::stopHood);
-    //btn11.whenPressed(flywheel::hoodForward).whenReleased(flywheel::stopHood);
+    // btn11.whenPressed(flywheel::hoodForward).whenReleased(flywheel::stopHood);
 
     btn11.whenPressed(new RunCommand(() -> {
       intake.setIntakeRoller(0.5, -0.5);
-    }, intake)).whenReleased(new InstantCommand(
-        () -> {
-          intake.stopIntakeRoller();
-        }, intake));
+    }, intake)).whenReleased(new InstantCommand(() -> {
+      intake.stopIntakeRoller();
+    }, intake));
 
-    btn12.whenPressed(new RunCommand(() -> {
-      intake.setIntakeArm(-.1);
-    }, intake)).whenReleased(intake::stopIntakeArm);
+    // btn12.whenPressed(new RunCommand(() -> {
+    //   intake.setIntakeArm(-.25);
+    // }, intake)).whenReleased(intake::stopIntakeArm);
 
     // // /*
     // // Reverse Buttons
     // // */
-    // opbtn2.whenPressed(new RunCommand(() -> {
-    //   climber.setClimbMotor(-0.25);
-    // }, climber)).whenReleased(new InstantCommand(() -> {
-    //   climber.setClimbMotor(0);
-    // }, climber));
+    opbtn2.whenPressed(new HangClimb(climber)).whenReleased(
+      () -> {
+        climber.setClimbMotor(0);
+      }, climber
+    );
+    
+    if (operatorJoystick.getRawButton(2)) {
+      transverse.setTransverseMotor(operatorJoystick.getX());
+    }
 
     opbtn3.whenPressed(new RunCommand(() -> {
       ballTower.setTowerMotor(-0.25);
@@ -221,29 +196,28 @@ public class RobotContainer {
 
     opbtn4.whenPressed(new RunCommand(() -> {
       ballHopper.setHopperMotor(-0.25);
-     }, ballHopper)).whenReleased(new InstantCommand(() -> {
-       ballHopper.setHopperMotor(0);
-     }, ballHopper));
+    }, ballHopper)).whenReleased(new InstantCommand(() -> {
+      ballHopper.setHopperMotor(0);
+    }, ballHopper));
 
-    // opbtn5.whenPressed(new RunCommand(() -> {
-    //   climber.setTransverseMotor(-0.25);
-    // }, climber)).whenReleased(new InstantCommand(() -> {
-    //   climber.setTransverseMotor(0);
-    // }, climber));
+    opbtn5.whenPressed(new RunCommand(() -> {
+    transverse.setTransverseMotor(-1.0);
+    }, climber)).whenReleased(new InstantCommand(() -> {
+    transverse.setTransverseMotor(0);
+    }, climber));
 
     opbtn6.whileHeld(flywheel::hoodBack).whenReleased(flywheel::stopHood);
 
-
     // opbtn7.whenPressed(new RunCommand(() -> {
-    //   drivetrain.frontRightDrive(-0.25);
+    // drivetrain.frontRightDrive(-0.25);
     // }, drivetrain)).whenReleased(new InstantCommand(() -> {
-    //   drivetrain.frontRightDrive(0);
+    // drivetrain.frontRightDrive(0);
     // }, drivetrain));
 
     // opbtn8.whenPressed(new RunCommand(() -> {
-    //   drivetrain.frontLeftDrive(-0.25);
+    // drivetrain.frontLeftDrive(-0.25);
     // }, drivetrain)).whenReleased(new InstantCommand(() -> {
-    //   drivetrain.frontLeftDrive(0);
+    // drivetrain.frontLeftDrive(0);
     // }, drivetrain));
 
     opbtn11.whenPressed(new RunCommand(() -> {
@@ -252,15 +226,15 @@ public class RobotContainer {
       intake.setIntakeRoller(0, 0);
     }, intake));
 
-    opbtn12.whenPressed(new RunCommand(() -> {
-      intake.setIntakeArm(.1);
-    }, intake)).whenReleased(new InstantCommand(() -> {
-      intake.setIntakeArm(0);
-    }, intake));
+    // opbtn12.whenPressed(new RunCommand(() -> {
+    //   intake.setIntakeArm(.1);
+    // }, intake)).whenReleased(new InstantCommand(() -> {
+    //   intake.setIntakeArm(0);
+    // }, intake));
 
     /*
      * Diagnostic Buttons 
-     * 2: Climber Motor
+     * 2: Climber Motor 
      * 3: BallTower Motor 
      * 4: Hopper Motor 
      * 5: Transverse Motor 
@@ -276,22 +250,52 @@ public class RobotContainer {
     //
     // */
 
+    // Button Testing
+    btn3.whenPressed(new ClimbRelease(climber)).whenReleased(
+      () -> {
+        climber.setClimbMotor(0);
+      }, climber
+    );
+
+    
+    // btn7.whenPressed(peariscope::peariscopeToggle);
+    // btn8.whileHeld(peariscope::runBangBangPeariscope);
+
+    btn8.whenPressed(new RunCommand(() -> {
+      flywheel.hoodForward();
+    }, flywheel)).whenReleased(new InstantCommand(() -> {
+      flywheel.stopHood();
+    }, flywheel));
+
+    btn9.whenPressed(new RunCommand(() -> {
+      flywheel.hoodBack();
+    }, flywheel)).whenReleased(new InstantCommand(() -> {
+      flywheel.stopHood();
+    }, flywheel));
+
+    
+
     // btn9.whenPressed(
-    //     new FlywheelPID(flywheel, SmartDashboard.getNumber("TargetRPM", 0)).alongWith(new RunCommand(() -> {
-    //       if (SmartDashboard.getNumber("FlywheelRPM", 0) >= SmartDashboard.getNumber("TargetRPM", 0)) {
-    //         new TransportLoadInSystem();
-    //         new IntakeRollers(intake);
-    //       }
-    //     }, intake, ballTower, ballHopper)));
+    // new FlywheelPID(flywheel, SmartDashboard.getNumber("TargetRPM",
+    // 0)).alongWith(new RunCommand(() -> {
+    // if (SmartDashboard.getNumber("FlywheelRPM", 0) >=
+    // SmartDashboard.getNumber("TargetRPM", 0)) {
+    // new TransportLoadInSystem();
+    // new IntakeRollers(intake);
+    // }
+    // }, intake, ballTower, ballHopper)));
+    // // //
 
     // /*
     // Competition Buttons
     // */
     /*
      * btn6.whenPressed(new IntakeToggle(intake)); 
-     * btn7.whenPressed(new TransportInSystem()); 
-     * btn7.whenPressed(new RunCommand( () -> { flywheel.setFlywheelMotor(3); }, flywheel )).whenReleased(new InstantCommand(
-     * () -> { flywheel.setFlywheelMotor(0); } )); 
+     * btn7.whenPressed(new TransportInSystem())
+     *      .whenReleased( () -> { hopper.setHopperMotor(0);
+     *                             });
+     * btn7.whenPressed(new RunCommand( () -> { flywheel.setFlywheelMotor(3); }, flywheel ))
+     *      .whenReleased(new InstantCommand( () -> { flywheel.setFlywheelMotor(0); } )); 
      * btn8.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelPID(flywheel, 2500)));
      * btn9.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelSector()));
      * btn10.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelTrench()));
@@ -303,29 +307,27 @@ public class RobotContainer {
      * opbtn6.whenPressed(new IntakeHome(intake)); 
      * opbtn7.whileHeld(new ClimbUp(climber)); 
      * opbtn8.whileHeld(new ClimbDown(climber));
-     * opbtn9.whenPressed(new HoodSector()); 
-     * opbtn10.whenPressed(new HoodTrench());
-     * opbtn11.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelSector())); 
-     * opbtn12.whileHeld(new TransportLoadInSystem().alongWith(new FlywheelTrench()));
+     * opbtn9.whenPressed(new HoodSector()); opbtn10.whenPressed(new HoodTrench());
+     * opbtn11.whileHeld(new TransportLoadInSystem().alongWith(new
+     * FlywheelSector())); opbtn12.whileHeld(new
+     * TransportLoadInSystem().alongWith(new FlywheelTrench()));
      */
   }
 
   private void configureDefaultCommands() {
-    flywheel.setDefaultCommand(new InstantCommand(() -> flywheel.enabled = true)
-    .andThen(new RunCommand(
-      () -> {
-        flywheel.setHood(42);
-        flywheel.setVoltage(4.5);
-      }, flywheel
-    )));
-    intake.setDefaultCommand(new RunCommand(
-      () -> {
-        intake.setIntakeRoller(.3, .3);
-      }, intake
-    ));
-    
-   }
-
+    // flywheel.setDefaultCommand(new InstantCommand(() -> flywheel.enabled = true)
+    // .andThen(new RunCommand(
+    // () -> {
+    // flywheel.setHood(42);
+    // flywheel.setVoltage(4.5);
+    // }, flywheel
+    // )));
+    // intake.setDefaultCommand(new RunCommand(
+    // () -> {
+    // intake.setIntakeRoller(.3, .3);
+    // }, intake
+    // ));
+  }
 
   public static Joystick getDriverJoystick() {
     return driverJoyStick;
@@ -342,27 +344,22 @@ public class RobotContainer {
    */
 
   public Command getAutonomousCommand() throws IOException {
-    return
-      new InstantCommand(() -> flywheel.setVoltage(3.0)) //4.5 SL
-        .andThen(() -> flywheel.enabled = true)
-        .andThen(() -> flywheel.setHood(30)) //41 SL
-        .andThen(new RunCommand(() -> {})
-        .withTimeout(4))
-        .andThen((new TowerLoadIn(ballTower)
-        .withTimeout(1.5))
-        .andThen((new RunCommand(ballHopper::stopHopperMotor)
-        .withTimeout(0.25))
-        .andThen(new TowerLoadIn(ballTower)))
-        .alongWith(new HopperIn(ballHopper))
-        // .alongWith(new InstantCommand(() -> intake.setIntakeRoller(.5, .5), intake))
-        .withTimeout(7))
+    return new InstantCommand(() -> flywheel.setVoltage(3.0)) // 4.5 SL
+        .andThen(() -> flywheel.enabled = true).andThen(() -> flywheel.setHood(30)) // 41 SL
+        .andThen(new RunCommand(() -> {
+        }).withTimeout(4))
+        .andThen((new TowerLoadIn(ballTower).withTimeout(1.5))
+            .andThen(
+                (new RunCommand(ballHopper::stopHopperMotor).withTimeout(0.25)).andThen(new TowerLoadIn(ballTower)))
+            .alongWith(new HopperIn(ballHopper))
+            // .alongWith(new InstantCommand(() -> intake.setIntakeRoller(.5, .5), intake))
+            .withTimeout(7))
         // .andThen(() -> flywheel.enabled = false)
-        .andThen(new InstantCommand(intake::stopIntakeRoller))
-        .andThen(() -> {
+        .andThen(new InstantCommand(intake::stopIntakeRoller)).andThen(() -> {
           flywheel.setVoltage(0);
           flywheel.setHood(0);
         });
-        // .andThen(new FollowPath(drivetrain, "RStoT"))
-        // .withTimeout(5);
+    // .andThen(new FollowPath(drivetrain, "RStoT"))
+    // .withTimeout(5);
   }
 }

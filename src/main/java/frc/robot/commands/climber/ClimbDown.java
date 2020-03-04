@@ -14,6 +14,7 @@ public class ClimbDown extends CommandBase {
   /**
    * Creates a new ClimbUp.
    */
+  double climberCurrent;
   Climber climber;
   public ClimbDown(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -24,12 +25,14 @@ public class ClimbDown extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    climber.setDisengageBrake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climber.setClimbMotor(-1);
+    climberCurrent = climber.getClimbCurrent();
+    climber.setClimbMotor(1);
   }
 
   // Called once the command ends or is interrupted.
@@ -41,6 +44,12 @@ public class ClimbDown extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    // if (climberCurrent >= 1) {
+    //   return true;
+    // }
+    // else {
+    //   return false;
+    // }
     return false;
   }
 }

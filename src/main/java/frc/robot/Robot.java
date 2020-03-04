@@ -51,6 +51,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("MPkP", MPConstants.DEFAULT_KP);
     SmartDashboard.putNumber("MPkV", MPConstants.DEFAULT_KV);
     SmartDashboard.putNumber("MPkA", MPConstants.DEFAULT_KA);
+    robotContainer.climber.setDisengageBrake();
     robotContainer.drivetrain.zeroEncoders();
     robotContainer.drivetrain.zeroGyro();
     // robotContainer.intake.intakeEncoder.setPosition(SmartDashboard.getNumber("IntakeEncoder", 0) * 81.0);

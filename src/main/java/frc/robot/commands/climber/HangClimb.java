@@ -7,41 +7,50 @@
 
 package frc.robot.commands.climber;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.Transverse;
 
-public class TransverseRight extends CommandBase {
+public class HangClimb extends CommandBase {
   /**
-   * Creates a new TransverseRight.
+   * Creates a new HangClimb.
    */
-  Transverse transverse;
-  public TransverseRight(Transverse transverse) {
-    this.transverse = transverse;
-    addRequirements(transverse);
+  Climber climber;
+  double climbCurrent;
+  public HangClimb(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
+    this.climber = climber;
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    climber.setEngageBrake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    transverse.setTransverseMotor(1);
+    climbCurrent = climber.getClimbCurrent();
+    climber.setClimbMotor(1.0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    transverse.setTransverseMotor(0);
+    climber.setClimbMotor(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (climbCurrent >= 30) {
+      climber.setClimbMotor(0);
+      return true;
+    }
+    else { 
+      return false;
+    }
   }
 }

@@ -117,8 +117,8 @@ public class LaunchPadManager {
         if (btns[8][4]) new RunCommand(() -> {robotContainer.climber.setClimbMotor(setSpeed);}, robotContainer.climber);// climber motor
         else if(!btns[8][4]) new InstantCommand(() -> {robotContainer.climber.setClimbMotor(0);}, robotContainer.climber);// stop climber motor
 
-        if (btns[8][5]) new RunCommand(() -> {robotContainer.climber.setTransverseMotor(setSpeed);}, robotContainer.climber);// transverse climber motor
-        else if(!btns[8][5]) new InstantCommand(() -> {robotContainer.climber.setTransverseMotor(0);}, robotContainer.climber);// stop transverse climber motor
+        if (btns[8][5]) new RunCommand(() -> {robotContainer.transverse.setTransverseMotor(setSpeed);}, robotContainer.transverse);// transverse climber motor
+        else if(!btns[8][5]) new InstantCommand(() -> {robotContainer.transverse.setTransverseMotor(0);}, robotContainer.transverse);// stop transverse climber motor
 
         try {
             if (btns[8][8]) {

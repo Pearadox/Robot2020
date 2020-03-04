@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
@@ -25,8 +26,6 @@ public class Climber extends SubsystemBase {
    */
 
   private WPI_TalonSRX climbMotor;
-  private CANSparkMax transverseMotor;
-  private CANEncoder transverseEncoder;
   private final static Climber INSTANCE = new Climber();
   private Servo climbServo;
 
@@ -42,9 +41,7 @@ public class Climber extends SubsystemBase {
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.MiniCIM);
     climbServo = new Servo(9);
-    transverseMotor = MotorControllerFactory.createSparkMax(TRANSVERSE_CLIMB_MOTOR, Motors.Neo550);
-    transverseEncoder = new CANEncoder(transverseMotor);
-    transverseEncoder.setPositionConversionFactor(42);
+    climbMotor.configOpenloopRamp(.25);
     if (!SmartDashboard.containsKey("ClimbVoltage")) {
       SmartDashboard.putNumber("ClimbVoltage", 0);
     }
@@ -54,19 +51,19 @@ public class Climber extends SubsystemBase {
     climbMotor.set(ControlMode.PercentOutput, setSpeed);
   }
 
-  public void setClimbServo(double setPosition) {
-    climbServo.set(setPosition);
+  public void setDisengageBrake() {
+    climbServo.set(0.0);
   }
 
-  public void setTransverseMotor(double setSpeed) {
-    transverseMotor.set(setSpeed);
+  public void setEngageBrake() {
+    climbServo.set(0.5);
   }
-
-  public double getTransverseRaw() { return transverseEncoder.getPosition();}
 
   public void stopClimbMotor() { setClimbMotor(0);}
 
-  public void stopTransverseMotor() { setTransverseMotor(0);}
+  public double getClimbCurrent() {
+    return climbMotor.getSupplyCurrent();
+  }
 
   /**
    * Returns the Singleton instance of this ClimberSubsystem. This static method
@@ -77,6 +74,7 @@ public class Climber extends SubsystemBase {
    @Override
    public void periodic() {
      SmartDashboard.putNumber("ClimbVoltage", climbMotor.getBusVoltage());
+     SmartDashboard.putNumber("ClimbCurrent", getClimbCurrent());
    }
   public static Climber getInstance() {
     return INSTANCE;
