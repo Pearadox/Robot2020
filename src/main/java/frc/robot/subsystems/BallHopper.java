@@ -47,6 +47,8 @@ public class BallHopper extends SubsystemBase {
     setHopperMotor(-setSpeed);
   }
 
+  
+
   public void stopHopperMotor() { setHopperMotor(0);}
 
   /**

@@ -14,6 +14,8 @@ import static frc.robot.Constants.DrivetrainConstants.*;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -53,9 +55,11 @@ public class Drivetrain extends SubsystemBase {
   private Drivetrain() {
     frontLeftMotor = MotorControllerFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.Neo.setInverted(true));
     backLeftMotor = MotorControllerFactory.createSparkMax(BACK_LEFT_MOTOR, Motors.Neo.withMaster(frontLeftMotor));
+    backLeftMotor.setIdleMode(IdleMode.kCoast);
 
     frontRightMotor = MotorControllerFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo.setInverted(false));
     backRightMotor = MotorControllerFactory.createSparkMax(BACK_RIGHT_MOTOR, Motors.Neo.withMaster(frontRightMotor));
+    backRightMotor.setIdleMode(IdleMode.kCoast);
     
     frontLeftEncoder = new CANEncoder(frontLeftMotor);
     backLeftEncoder = new CANEncoder(backLeftMotor);

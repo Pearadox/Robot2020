@@ -74,6 +74,7 @@ public class Flywheel extends SubsystemBase {
     }
 
     double output = SmartDashboard.getNumber("Target Voltage", voltageSetpoint);
+    SmartDashboard.putNumber("HoodCurrent", 0);
 
     // flywheelSetpoint = SmartDashboard.getNumber("TargetRPM", flywheelSetpoint);
     // kFF = SmartDashboard.getNumber("Flywheel FF", kFF);
@@ -93,21 +94,26 @@ public class Flywheel extends SubsystemBase {
 
   private void HoodLoop() {
     if (!enabled) { return; }
-    hoodSetpoint = SmartDashboard.getNumber("Target Hood", hoodSetpoint);
-    
-    if (getHoodAngle() > hoodSetpoint - 0.3 && getHoodAngle() < hoodSetpoint + 0.3) { stopHood(); return; }
-    if (getHoodAngle() < hoodSetpoint) {
-      if (getHoodAngle() >= 57) { 
-        stopHood();
-        return; 
+    if (hoodFlyMotor.getSupplyCurrent() < 5) {
+      hoodSetpoint = SmartDashboard.getNumber("Target Hood", hoodSetpoint);
+      
+      if (getHoodAngle() > hoodSetpoint - 0.3 && getHoodAngle() < hoodSetpoint + 0.3) { stopHood(); return; }
+      if (getHoodAngle() < hoodSetpoint) {
+        if (getHoodAngle() >= 57) { 
+          stopHood();
+          return; 
+        }
+        hoodFlyMotor.setVoltage(7);
+      } else {
+        if (getHoodAngle() <= 0) { 
+          stopHood();
+          return; 
+        }
+        hoodFlyMotor.setVoltage(-7);
       }
-      hoodFlyMotor.setVoltage(7);
-    } else {
-      if (getHoodAngle() <= 0) { 
-        stopHood();
-        return; 
-      }
-      hoodFlyMotor.setVoltage(-7);
+    }
+    else {
+      stopHood();
     }
   }
 
@@ -120,15 +126,23 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void hoodForward() {
-    hoodFlyMotor.setVoltage(3);
+    hoodFlyMotor.setVoltage(6.0);
   }
 
   public void hoodBack() {
-    hoodFlyMotor.setVoltage(-3);
+    hoodFlyMotor.setVoltage(-6.0);
   }
 
   public void setVoltage(double voltage) {
     SmartDashboard.putNumber("Target Voltage", voltage);
+  }
+
+  public double getHoodCurrent() {
+    return hoodFlyMotor.getSupplyCurrent();
+  }
+
+  public void zeroHood() {
+    hoodFlyMotor.setSelectedSensorPosition(0);
   }
 
   @Override
@@ -144,7 +158,8 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putNumber("Hood Angle", getHoodAngle());
 
     FlywheelPIDLoop();
-  
-    // HoodLoop();
+    
+    SmartDashboard.putNumber("HoodCurrent", getHoodCurrent());
+    HoodLoop();
   }
 }

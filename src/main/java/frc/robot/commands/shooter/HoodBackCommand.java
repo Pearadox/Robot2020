@@ -5,55 +5,47 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.transportsystem;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.BallTower;
+import frc.robot.subsystems.Flywheel;
 
-public class TowerLevelDown extends CommandBase {
+public class HoodBackCommand extends CommandBase {
   /**
-   * Creates a new TransportLevels.
+   * Creates a new HoodBackCommand.
    */
-
-  BallTower ballTower;
-  int lastLevel = 0;
-  int currentLevel = 0;
-  public TowerLevelDown(BallTower ballTower) {
+  Flywheel flywheel;
+  public HoodBackCommand(Flywheel flywheel) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.ballTower = ballTower;
-    addRequirements(ballTower);
+    this.flywheel = flywheel;
+    addRequirements(flywheel);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lastLevel = ballTower.getTowerLevel();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentLevel = ballTower.getTowerLevel();
-    if (currentLevel != lastLevel - 1) {
-      ballTower.outTower(0.5);
-    }
+    flywheel.hoodBack();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    ballTower.setTowerMotor(0);
+    flywheel.stopHood();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (currentLevel == 0) {
+    if (flywheel.getHoodCurrent() > 1.5) {
       return true;
     }
-    else if (currentLevel == lastLevel - 1) {
-      return true;
+    else {
+      return false;
     }
-    else { return false; }
   }
 }

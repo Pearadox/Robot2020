@@ -6,8 +6,10 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Servo;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.motors.MotorControllerFactory;
@@ -27,6 +29,7 @@ public class Climber extends SubsystemBase {
 
   private WPI_TalonSRX climbMotor;
   private final static Climber INSTANCE = new Climber();
+  public double kServoPos = 0.5;
   private Servo climbServo;
 
   /**
@@ -42,8 +45,12 @@ public class Climber extends SubsystemBase {
     climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.MiniCIM);
     climbServo = new Servo(9);
     climbMotor.configOpenloopRamp(.25);
+    
     if (!SmartDashboard.containsKey("ClimbVoltage")) {
       SmartDashboard.putNumber("ClimbVoltage", 0);
+    }
+    if (!SmartDashboard.containsKey("ServoPos")) {
+      SmartDashboard.putNumber("ServoPos", kServoPos);
     }
   }
 
@@ -75,6 +82,8 @@ public class Climber extends SubsystemBase {
    public void periodic() {
      SmartDashboard.putNumber("ClimbVoltage", climbMotor.getBusVoltage());
      SmartDashboard.putNumber("ClimbCurrent", getClimbCurrent());
+     double ServoPos = SmartDashboard.getNumber("ServoPos", kServoPos);
+     climbServo.set(ServoPos);
    }
   public static Climber getInstance() {
     return INSTANCE;

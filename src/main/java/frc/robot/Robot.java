@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
     robotContainer.climber.setDisengageBrake();
     robotContainer.drivetrain.zeroEncoders();
     robotContainer.drivetrain.zeroGyro();
+    // robotContainer.flywheel.zeroHood();
     // robotContainer.intake.intakeEncoder.setPosition(SmartDashboard.getNumber("IntakeEncoder", 0) * 81.0);
     
     robotContainer.peariscope.setPeariscopeOff();
