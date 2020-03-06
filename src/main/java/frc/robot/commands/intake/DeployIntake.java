@@ -5,51 +5,49 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.climber;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Intake;
 
-public class HangClimb extends CommandBase {
+public class DeployIntake extends CommandBase {
   /**
-   * Creates a new HangClimb.
+   * Creates a new DeployIntake.
    */
-  Climber climber;
-  double climbCurrent;
-  public HangClimb(Climber climber) {
+  private final Intake intake;
+  
+  public DeployIntake(Intake intake) {
+    this.intake = intake;
+    addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
-    this.climber = climber;
-    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    climber.setEngageBrake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    climbCurrent = climber.getClimbCurrent();
-    climber.setClimbMotor(1.0);
+    intake.setIntakeArm(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climber.setClimbMotor(0);
+    intake.setIntakeArm(0.0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (climbCurrent >= 40) {
-      climber.setClimbMotor(0);
+    if(intake.getIntakeRotation() > 4)
+    {
       return true;
     }
-    else { 
+    else
+    {
       return false;
     }
   }

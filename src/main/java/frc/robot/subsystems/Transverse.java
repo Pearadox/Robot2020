@@ -29,7 +29,7 @@ public class Transverse extends SubsystemBase {
     transverseMotor.setIdleMode(IdleMode.kBrake);
     transverseEncoder = new CANEncoder(transverseMotor);
     transverseEncoder.setPositionConversionFactor(42);
-    transverseMotor.setOpenLoopRampRate(0.5);
+    transverseMotor.setOpenLoopRampRate(0.75);
   }
 
   

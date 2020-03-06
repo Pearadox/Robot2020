@@ -18,7 +18,7 @@ public class TowerLoadOut extends CommandBase {
 
   @Override
   public void execute() {
-    ballTower.outTower(0.5);
+    ballTower.outTower(0.8);
   }
 
   @Override

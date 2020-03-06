@@ -36,12 +36,14 @@ public class Intake extends SubsystemBase {
   public CANEncoder intakeEncoder;
   public CANEncoder IntakeTopEncoder;
   private CANPIDController pidController;
-  private double DEADBAND = 1.25;
+  private double DEADBAND = 1.5;
   private double intakekP = -(1.0/15.0);
   private boolean intakePosition; // true = up, false = down
   public double kP, kI, kD, kIz, kFF, karbFF,kMaxOutput, kMinOutput;
   private double setRotation = 0;
   public boolean manual = false;
+  public double IntakeUp = 2.0;
+  public double IntakeDown = 15.0;
   private double kIntakeSpeed = 0.6;
 
   private Intake() {
@@ -167,11 +169,11 @@ public class Intake extends SubsystemBase {
   
    SmartDashboard.putNumber("IntakeEncoder", getIntakeRotation());
     if (manual) {
-      if (RobotContainer.getOperatorJoystick().getRawButton(11)) {
-        setIntakeArmV(-0.8*12.0);
+      if (RobotContainer.getOperatorJoystick().getRawButton(8)) {
+        setIntakeArmV(-1*12.0);
         setIntakeRoller(0, 0);
       }
-      else if (RobotContainer.getOperatorJoystick().getRawButton(12)) {
+      else if (RobotContainer.getOperatorJoystick().getRawButton(7)) {
         setIntakeArmV(0.1 * 12.0);
         setIntakeRoller(IntakeSpeed, IntakeSpeed);
       }
@@ -193,7 +195,7 @@ public class Intake extends SubsystemBase {
         setIntakeArmV(-0.07 * 12.0);
       }
 
-      if (getIntakeRotation() < -7) {
+      if (getIntakeRotation() < 7) {
         setIntakeRoller(0, 0);
       }
       else {

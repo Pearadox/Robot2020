@@ -31,6 +31,8 @@ public class Climber extends SubsystemBase {
   private final static Climber INSTANCE = new Climber();
   public double kServoPos = 0.5;
   private Servo climbServo;
+  public double BrakeEngaged = 1.0;
+  public double BrakeDisengaged = 0.5;
 
   /**
    * Creates a new instance of this ClimberSubsystem.
@@ -44,7 +46,7 @@ public class Climber extends SubsystemBase {
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     climbMotor = MotorControllerFactory.createTalonSRX(CLIMB_MOTOR, Motors.MiniCIM);
     climbServo = new Servo(9);
-    climbMotor.configOpenloopRamp(.25);
+    // climbMotor.configOpenloopRamp(.25);
     
     if (!SmartDashboard.containsKey("ClimbVoltage")) {
       SmartDashboard.putNumber("ClimbVoltage", 0);
@@ -59,11 +61,11 @@ public class Climber extends SubsystemBase {
   }
 
   public void setDisengageBrake() {
-    climbServo.set(0.0);
+    climbServo.set(BrakeDisengaged);
   }
 
   public void setEngageBrake() {
-    climbServo.set(0.5);
+    climbServo.set(BrakeEngaged);
   }
 
   public void stopClimbMotor() { setClimbMotor(0);}
@@ -83,7 +85,7 @@ public class Climber extends SubsystemBase {
      SmartDashboard.putNumber("ClimbVoltage", climbMotor.getBusVoltage());
      SmartDashboard.putNumber("ClimbCurrent", getClimbCurrent());
      double ServoPos = SmartDashboard.getNumber("ServoPos", kServoPos);
-     climbServo.set(ServoPos);
+     
    }
   public static Climber getInstance() {
     return INSTANCE;
