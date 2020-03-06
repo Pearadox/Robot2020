@@ -50,8 +50,8 @@ public class Intake extends SubsystemBase {
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     intakeArm = MotorControllerFactory.createSparkMax(ARM_INTAKE_MOTOR, Motors.Neo550);
-    intakeArm.setSmartCurrentLimit(35,40);
-    intakeArm.setOpenLoopRampRate(0.5);
+    intakeArm.setSmartCurrentLimit(40);
+    // intakeArm.setOpenLoopRampRate(0.5);
     // pidController = intakeArm.getPIDController();
     intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
     intakeBotRoller = MotorControllerFactory.createSparkMax(BOT_INTAKE_MOTOR, Motors.Neo550);

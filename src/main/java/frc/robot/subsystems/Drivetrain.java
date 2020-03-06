@@ -55,11 +55,15 @@ public class Drivetrain extends SubsystemBase {
   private Drivetrain() {
     frontLeftMotor = MotorControllerFactory.createSparkMax(FRONT_LEFT_MOTOR, Motors.Neo.setInverted(true));
     backLeftMotor = MotorControllerFactory.createSparkMax(BACK_LEFT_MOTOR, Motors.Neo.withMaster(frontLeftMotor));
-    backLeftMotor.setIdleMode(IdleMode.kCoast);
+    frontLeftMotor.setSmartCurrentLimit(80);
+    backLeftMotor.setSmartCurrentLimit(80);
+    // backLeftMotor.setIdleMode(IdleMode.kCoast);
 
     frontRightMotor = MotorControllerFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo.setInverted(false));
     backRightMotor = MotorControllerFactory.createSparkMax(BACK_RIGHT_MOTOR, Motors.Neo.withMaster(frontRightMotor));
-    backRightMotor.setIdleMode(IdleMode.kCoast);
+    frontRightMotor.setSmartCurrentLimit(80);
+    backRightMotor.setSmartCurrentLimit(80);
+    // backRightMotor.setIdleMode(IdleMode.kCoast);
     
     frontLeftEncoder = new CANEncoder(frontLeftMotor);
     backLeftEncoder = new CANEncoder(backLeftMotor);
@@ -69,7 +73,15 @@ public class Drivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("rightEncoderTicks", 0 );
     SmartDashboard.putNumber("rightbackEncoderTicks",0);
+    SmartDashboard.putNumber("frontLeftCurrent", frontLeftMotor.getOutputCurrent());
+    SmartDashboard.putNumber("backLeftCurrent", backLeftMotor.getOutputCurrent());
+    SmartDashboard.putNumber("frontRightCurrent", frontRightMotor.getOutputCurrent());
+    SmartDashboard.putNumber("backRightCurrent", backRightMotor.getOutputCurrent());
 
+    SmartDashboard.putNumber("frontLeftTemp", frontLeftMotor.getMotorTemperature());
+    SmartDashboard.putNumber("backLeftTemp", backLeftMotor.getMotorTemperature());
+    SmartDashboard.putNumber("frontRightTemp", frontRightMotor.getMotorTemperature());
+    SmartDashboard.putNumber("backRightTemp", backRightMotor.getMotorTemperature());
 
     // frontLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
     // backLeftEncoder.setPositionConversionFactor(DISTANCE_PER_REVOLUTION);
@@ -103,6 +115,7 @@ public class Drivetrain extends SubsystemBase {
 
   // Arcade Drive command
   public void arcadeDrive(double throttle, double twist) {
+    
 
     double leftOutput = throttle + twist;
     double rightOutput = throttle - twist;
@@ -205,6 +218,16 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("rightEncoderTicks", frontRightEncoder.getPosition() );
     SmartDashboard.putNumber("rightbackEncoderTicks",backRightEncoder.getPosition());
     odometry.update(getGyroAngle(), getLeftEncoders(), getRightEncoders());
+    
+    SmartDashboard.putNumber("frontLeftCurrent", frontLeftMotor.getOutputCurrent());
+    SmartDashboard.putNumber("backLeftCurrent", backLeftMotor.getOutputCurrent());
+    SmartDashboard.putNumber("frontRightCurrent", frontRightMotor.getOutputCurrent());
+    SmartDashboard.putNumber("backRightCurrent", backRightMotor.getOutputCurrent());    
+
+    SmartDashboard.putNumber("frontLeftTemp", frontLeftMotor.getMotorTemperature());
+    SmartDashboard.putNumber("backLeftTemp", backLeftMotor.getMotorTemperature());
+    SmartDashboard.putNumber("frontRightTemp", frontRightMotor.getMotorTemperature());
+    SmartDashboard.putNumber("backRightTemp", backRightMotor.getMotorTemperature());
   }
 
   public static Drivetrain getInstance() {return INSTANCE;}
