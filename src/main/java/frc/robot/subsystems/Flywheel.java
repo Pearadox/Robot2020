@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -26,6 +27,7 @@ public class Flywheel extends SubsystemBase {
 
   private final CANEncoder leftEncoder = leftMotor.getEncoder();
   private final CANEncoder rightEncoder = rightMotor.getEncoder();
+  private final DigitalInput hoodSwitch;
 
   public boolean enabled;
 
@@ -35,10 +37,11 @@ public class Flywheel extends SubsystemBase {
   private double kD;
   private double lastError;
   private double hoodSetpoint;
-  private double voltageSetpoint;
+  private double voltageSetpoint = 4.7;
 
   private Flywheel() {
-    hoodFlyMotor.setSelectedSensorPosition((int) (55.0 / (404.0/20) * 8618.5));
+    hoodFlyMotor.setSelectedSensorPosition(0);
+    hoodSwitch = new DigitalInput(9);
   }
 
   private static Flywheel INSTANCE = new Flywheel();
@@ -70,6 +73,8 @@ public class Flywheel extends SubsystemBase {
     if (!enabled) {
       rightMotor.set(0);
       leftMotor.set(0);
+      // rightMotor.setVoltage(0.4);
+      // leftMotor.setVoltage(0.4);
       return;
     }
 
@@ -117,6 +122,10 @@ public class Flywheel extends SubsystemBase {
     }
   }
 
+  public boolean getHoodSwitch() {
+    return hoodSwitch.get();
+  }
+
   public void setHood(double degrees) {
     SmartDashboard.putNumber("Target Hood", degrees);
   }
@@ -160,6 +169,10 @@ public class Flywheel extends SubsystemBase {
     FlywheelPIDLoop();
     
     SmartDashboard.putNumber("HoodCurrent", getHoodCurrent());
+    if (!getHoodSwitch()) {
+      hoodFlyMotor.setSelectedSensorPosition(0);
+    }
+    SmartDashboard.putBoolean("hood switch", getHoodSwitch());
     HoodLoop();
   }
 }

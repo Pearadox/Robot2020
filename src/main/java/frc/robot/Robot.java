@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -54,11 +55,12 @@ public class Robot extends TimedRobot {
     robotContainer.climber.setDisengageBrake();
     robotContainer.drivetrain.zeroEncoders();
     robotContainer.drivetrain.zeroGyro();
+    robotContainer.intake.zeroIntakeArm();
     // robotContainer.flywheel.zeroHood();
     // robotContainer.intake.intakeEncoder.setPosition(SmartDashboard.getNumber("IntakeEncoder", 0) * 81.0);
     
     robotContainer.peariscope.setPeariscopeOff();
-    
+    CameraServer.getInstance().startAutomaticCapture();
   }
 
   /**
@@ -74,6 +76,7 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
+    
     launchpad.periodicLoop();
     CommandScheduler.getInstance().run();
   }
@@ -101,12 +104,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    try {
-      autonomousCommand = robotContainer.getAutonomousCommand();
-    } catch (IOException e) {
-      DriverStation.reportWarning("Autonomous Missing", true);
-    }
-
+    autonomousCommand = robotContainer.getAutonomousCommand();
     // schedule the autonomous command (example)
     if (autonomousCommand != null) {
       autonomousCommand.schedule();
@@ -118,6 +116,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
+    
   }
 
   @Override

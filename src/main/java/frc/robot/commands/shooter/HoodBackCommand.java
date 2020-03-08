@@ -44,6 +44,10 @@ public class HoodBackCommand extends CommandBase {
     if (flywheel.getHoodCurrent() > 1.5) {
       return true;
     }
+    else if (flywheel.getHoodSwitch()) {
+      flywheel.zeroHood();
+      return true;
+    }
     else {
       return false;
     }

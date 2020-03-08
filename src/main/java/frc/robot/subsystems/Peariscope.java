@@ -30,6 +30,7 @@ public class Peariscope extends SubsystemBase {
   private double MIN_PCT_DEADZONE = 2.5;
   private double MAX_PCT_DEADZONE = 80.0;
   private boolean peariscopeLight = false;
+  public boolean enable;
 
   public Peariscope(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
@@ -99,5 +100,13 @@ public class Peariscope extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (!enable) {
+      setPeariscopeOff();
+      return ;
+    }
+    else {
+      setPeariscopeOn();
+      runBangBangPeariscope();
+    }
   }
 }

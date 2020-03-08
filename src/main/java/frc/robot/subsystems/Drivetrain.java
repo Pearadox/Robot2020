@@ -57,12 +57,17 @@ public class Drivetrain extends SubsystemBase {
     backLeftMotor = MotorControllerFactory.createSparkMax(BACK_LEFT_MOTOR, Motors.Neo.withMaster(frontLeftMotor));
     frontLeftMotor.setSmartCurrentLimit(80);
     backLeftMotor.setSmartCurrentLimit(80);
+    frontLeftMotor.setOpenLoopRampRate(.5);
+    backLeftMotor.setOpenLoopRampRate(.5);
     // backLeftMotor.setIdleMode(IdleMode.kCoast);
 
     frontRightMotor = MotorControllerFactory.createSparkMax(FRONT_RIGHT_MOTOR, Motors.Neo.setInverted(false));
     backRightMotor = MotorControllerFactory.createSparkMax(BACK_RIGHT_MOTOR, Motors.Neo.withMaster(frontRightMotor));
     frontRightMotor.setSmartCurrentLimit(80);
     backRightMotor.setSmartCurrentLimit(80);
+    frontRightMotor.setOpenLoopRampRate(.5);
+    backRightMotor.setOpenLoopRampRate(.5);
+    
     // backRightMotor.setIdleMode(IdleMode.kCoast);
     
     frontLeftEncoder = new CANEncoder(frontLeftMotor);
@@ -124,7 +129,7 @@ public class Drivetrain extends SubsystemBase {
         ? Math.copySign(MAX_OUTPUT, leftOutput) : leftOutput;
     rightOutput = Math.abs(rightOutput) > MAX_OUTPUT
         ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
-
+    
     frontLeftMotor.set(leftOutput);
     frontRightMotor.set(rightOutput);
   }

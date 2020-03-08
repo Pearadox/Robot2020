@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autonomous.FollowPath;
+import frc.robot.autonomous.ThreeBallAuton;
 import frc.robot.commands.climber.ClimbRelease;
 import frc.robot.commands.climber.HangClimb;
 import frc.robot.commands.drivetrain.JoystickDrive;
@@ -281,8 +282,16 @@ public class RobotContainer {
     // opbtn12.whileHeld(new TransportLoadInSystem()
     //        .alongWith(new FlywheelTrench()));
     //  */
-    btn1.whenPressed(() -> flywheel.enabled = true)
-    .whenReleased(() -> flywheel.enabled = false);
+    btn1.whenPressed(() -> {
+      flywheel.enabled = true;
+      peariscope.enable = true;
+    })
+    .whenReleased(() -> {
+      flywheel.enabled = false;
+      peariscope.enable = false;
+    });
+
+    btn2.whenPressed(new DeployIntake(intake));
 
     btn7.whenPressed(new RunCommand(() -> {
       flywheel.setVoltage(-6);
@@ -297,11 +306,14 @@ public class RobotContainer {
           ballHopper.stopHopperMotor();});
 
     btn11.whenPressed(new HoodBackCommand(flywheel)).whenReleased(() -> {flywheel.stopHood();});
+    
+    
 
     btn12.whileHeld(flywheel::hoodForward).whenReleased(() -> {flywheel.stopHood();});
     
     opbtn2.whenPressed(() -> {intake.zeroIntakeArm();});
     
+
     opbtn3.whenPressed(new HangClimb(climber)).whenReleased(
       () -> {
         climber.setClimbMotor(0);
@@ -366,16 +378,14 @@ public class RobotContainer {
         intake.manual = false;
         intake.setIntakeRotation(intake.IntakeUp);
       }, intake));
+
+    new Button(() -> operatorJoystick.getPOV() == 0) {}.whileHeld(new TowerLoadIn(ballTower));
+    new Button(() -> operatorJoystick.getPOV() == 180) {}.whileHeld(new TowerLoadOut(ballTower));
+    new Button(() -> operatorJoystick.getPOV() == 90) {}.whileHeld(new HopperOut(ballHopper));
+    new Button(() -> operatorJoystick.getPOV() == 270) {}.whileHeld(new HopperIn(ballHopper));
   }
 
   private void configureDefaultCommands() {
-    flywheel.setDefaultCommand(new InstantCommand(() -> flywheel.enabled = true)
-    .andThen(new RunCommand(
-    () -> {
-    flywheel.setHood(42);
-    flywheel.setVoltage(4.5);
-    }, flywheel)));
-
     // intake.setDefaultCommand(new RunCommand(
     // () -> {
     // intake.setIntakeRoller(.3, .3);
@@ -396,23 +406,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
 
-  public Command getAutonomousCommand() throws IOException {
-    return new InstantCommand(() -> flywheel.setVoltage(3.0)) // 4.5 SL
-        .andThen(() -> flywheel.enabled = true).andThen(() -> flywheel.setHood(30)) // 41 SL
-        .andThen(new RunCommand(() -> {
-        }).withTimeout(4))
-        .andThen((new TowerLoadIn(ballTower).withTimeout(1.5))
-            .andThen(
-                (new RunCommand(ballHopper::stopHopperMotor).withTimeout(0.25)).andThen(new TowerLoadIn(ballTower)))
-            .alongWith(new HopperIn(ballHopper))
-            // .alongWith(new InstantCommand(() -> intake.setIntakeRoller(.5, .5), intake))
-            .withTimeout(7))
-        // .andThen(() -> flywheel.enabled = false)
-        .andThen(new InstantCommand(intake::stopIntakeRoller)).andThen(() -> {
-          flywheel.setVoltage(0);
-          flywheel.setHood(0);
-        });
-    // .andThen(new FollowPath(drivetrain, "RStoT"))
-    // .withTimeout(5);
+  public Command getAutonomousCommand() {
+    return new ThreeBallAuton();
   }
 }

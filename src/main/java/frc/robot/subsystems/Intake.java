@@ -52,13 +52,14 @@ public class Intake extends SubsystemBase {
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     intakeArm = MotorControllerFactory.createSparkMax(ARM_INTAKE_MOTOR, Motors.Neo550);
-    intakeArm.setSmartCurrentLimit(40);
+    intakeArm.setSmartCurrentLimit(35);
     // intakeArm.setOpenLoopRampRate(0.5);
     // pidController = intakeArm.getPIDController();
     intakeTopRoller = MotorControllerFactory.createSparkMax(TOP_INTAKE_MOTOR, Motors.Neo550);
     intakeBotRoller = MotorControllerFactory.createSparkMax(BOT_INTAKE_MOTOR, Motors.Neo550);
     intakeEncoder = intakeArm.getEncoder();
     IntakeTopEncoder = intakeTopRoller.getEncoder();
+    zeroIntakeArm();
     if (!SmartDashboard.containsKey("IntakePosition")) {
       SmartDashboard.putBoolean("IntakePosition", intakePosition);
     }
@@ -166,6 +167,8 @@ public class Intake extends SubsystemBase {
    // intakePosition = getIntakeAngle() >= 50;
    // SmartDashboard.putBoolean("IntakePosition", intakePosition);
    double IntakeSpeed = SmartDashboard.getNumber("IntakeSpeed", kIntakeSpeed);
+   SmartDashboard.putNumber("Intake Arm Current", intakeArm.getOutputCurrent());
+   SmartDashboard.putNumber("Intake Arm Temperature", intakeArm.getMotorTemperature());
   
    SmartDashboard.putNumber("IntakeEncoder", getIntakeRotation());
     if (manual) {
