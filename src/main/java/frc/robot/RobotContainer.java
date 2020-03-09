@@ -15,17 +15,14 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autonomous.FollowPath;
-import frc.robot.autonomous.ThreeBallAuton;
+import frc.robot.commands.autonomous.ThreeBallAuton;
 import frc.robot.commands.climber.ClimbRelease;
 import frc.robot.commands.climber.HangClimb;
 import frc.robot.commands.drivetrain.JoystickDrive;
 import frc.robot.commands.intake.DeployIntake;
-import frc.robot.commands.shooter.HoodBackCommand;
+import frc.robot.commands.hood.ZeroHood;
 import frc.robot.commands.transportsystem.*;
 import frc.robot.subsystems.*;
-
-import java.io.IOException;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -46,6 +43,7 @@ public class RobotContainer {
   Flywheel flywheel = Flywheel.getInstance();
   Peariscope peariscope = new Peariscope(drivetrain);
   Transverse transverse = Transverse.getInstance();
+  Hood hood = Hood.getInstance();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -305,11 +303,8 @@ public class RobotContainer {
           ballTower.stopTower();
           ballHopper.stopHopperMotor();});
 
-    btn11.whenPressed(new HoodBackCommand(flywheel)).whenReleased(() -> {flywheel.stopHood();});
-    
-    
+    btn11.whenPressed(new ZeroHood(hood));
 
-    btn12.whileHeld(flywheel::hoodForward).whenReleased(() -> {flywheel.stopHood();});
     
     opbtn2.whenPressed(() -> {intake.zeroIntakeArm();});
     

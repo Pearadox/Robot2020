@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.autonomous;
+package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -32,13 +32,10 @@ public class ThreeBallAuton extends SequentialCommandGroup {
       new DeployIntake(Intake.getInstance()).withTimeout(0.75),
       new InstantCommand(() -> Flywheel.getInstance().setVoltage(4.7)),
       new RunCommand(() -> Flywheel.getInstance().enabled = true).withTimeout(2),
-      //new RunCommand(() -> Flywheel.getInstance().setHood(41)).withTimeout(2),
       (new HopperIn(BallHopper.getInstance()).alongWith(
         new TowerLoadIn(BallTower.getInstance()))).withTimeout(6),
       new InstantCommand(() -> Flywheel.getInstance().enabled = false),
-       //new RunCommand(() -> Drivetrain.getInstance().frontLeftDrive(0.6))
        new RunCommand(() -> Drivetrain.getInstance().arcadeDrive(.6, 0), Drivetrain.getInstance()).withTimeout(1)
-      
     );
   }
 }

@@ -40,6 +40,11 @@ public final class Constants {
         public static final double flykD = 0.004;
     }
 
+    public static final class HoodConstants {
+        public static final int HOOD_MOTOR_ID = 6;
+        public static final int HOOD_SWITCH_PORT = 9;
+    }
+
     public static final class RamseteConstants {
         public static final double B = 0.0d;
         public static final double ZETA = 0.0d;

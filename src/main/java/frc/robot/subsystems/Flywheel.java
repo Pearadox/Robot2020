@@ -21,13 +21,9 @@ public class Flywheel extends SubsystemBase {
   private final CANSparkMax leftMotor = MotorControllerFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.Neo.setIdleMode(true));
   private final CANSparkMax rightMotor = MotorControllerFactory.createSparkMax(RIGHT_FLY_MOTOR, Motors.Neo.setIdleMode(true).setInverted(true));
 
-  private final WPI_TalonSRX hoodFlyMotor = MotorControllerFactory.createTalonSRX(
-    HOOD_FLY_MOTOR, Motors.Snowblower.withFeedbackDevice(new MotorConfiguration.FeedbackSensor(
-        FeedbackDevice.QuadEncoder, 1)));
-
   private final CANEncoder leftEncoder = leftMotor.getEncoder();
   private final CANEncoder rightEncoder = rightMotor.getEncoder();
-  private final DigitalInput hoodSwitch;
+
 
   public boolean enabled;
 
@@ -39,26 +35,11 @@ public class Flywheel extends SubsystemBase {
   private double hoodSetpoint;
   private double voltageSetpoint = 4.7;
 
-  private Flywheel() {
-    hoodFlyMotor.setSelectedSensorPosition(0);
-    hoodSwitch = new DigitalInput(9);
-  }
-
   private static Flywheel INSTANCE = new Flywheel();
 
   public static Flywheel getInstance() {
     return INSTANCE;
   }
-
-
-  public double getRawHoodAngle() {
-    return hoodFlyMotor.getSelectedSensorPosition() / 8618.5;
-  }
-
-  // total teeth/pinion teeth
-  public double getHoodAngle() {
-    return getRawHoodAngle() * 404/20; 
-  } 
 
   public void setSetpoint(double setpoint) {
     SmartDashboard.putNumber("TargetRPM", setpoint);
@@ -97,62 +78,11 @@ public class Flywheel extends SubsystemBase {
     leftMotor.setVoltage(output);
   }
 
-  private void HoodLoop() {
-    if (!enabled) { return; }
-    if (hoodFlyMotor.getSupplyCurrent() < 5) {
-      hoodSetpoint = SmartDashboard.getNumber("Target Hood", hoodSetpoint);
-      
-      if (getHoodAngle() > hoodSetpoint - 0.3 && getHoodAngle() < hoodSetpoint + 0.3) { stopHood(); return; }
-      if (getHoodAngle() < hoodSetpoint) {
-        if (getHoodAngle() >= 57) { 
-          stopHood();
-          return; 
-        }
-        hoodFlyMotor.setVoltage(7);
-      } else {
-        if (getHoodAngle() <= 0) { 
-          stopHood();
-          return; 
-        }
-        hoodFlyMotor.setVoltage(-7);
-      }
-    }
-    else {
-      stopHood();
-    }
-  }
-
-  public boolean getHoodSwitch() {
-    return hoodSwitch.get();
-  }
-
-  public void setHood(double degrees) {
-    SmartDashboard.putNumber("Target Hood", degrees);
-  }
-
-  public void stopHood() {
-    hoodFlyMotor.setVoltage(0);
-  }
-
-  public void hoodForward() {
-    hoodFlyMotor.setVoltage(6.0);
-  }
-
-  public void hoodBack() {
-    hoodFlyMotor.setVoltage(-6.0);
-  }
 
   public void setVoltage(double voltage) {
     SmartDashboard.putNumber("Target Voltage", voltage);
   }
 
-  public double getHoodCurrent() {
-    return hoodFlyMotor.getSupplyCurrent();
-  }
-
-  public void zeroHood() {
-    hoodFlyMotor.setSelectedSensorPosition(0);
-  }
 
   @Override
   public void periodic() {
@@ -162,17 +92,7 @@ public class Flywheel extends SubsystemBase {
     if (!SmartDashboard.containsKey("Flywheel D")) { SmartDashboard.putNumber("Flywheel D", kD); }
     if (!SmartDashboard.containsKey("Target Hood")) { SmartDashboard.putNumber("Target Hood", hoodSetpoint); }
     if (!SmartDashboard.containsKey("Target Voltage")) { SmartDashboard.putNumber("Target Voltage", voltageSetpoint); }
-
     SmartDashboard.putNumber("Flywheel RPM", getRPM());
-    SmartDashboard.putNumber("Hood Angle", getHoodAngle());
-
     FlywheelPIDLoop();
-    
-    SmartDashboard.putNumber("HoodCurrent", getHoodCurrent());
-    if (!getHoodSwitch()) {
-      hoodFlyMotor.setSelectedSensorPosition(0);
-    }
-    SmartDashboard.putBoolean("hood switch", getHoodSwitch());
-    HoodLoop();
   }
 }
