@@ -6,7 +6,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -17,7 +19,6 @@ import frc.lib.motors.MotorControllerFactory;
 import frc.lib.motors.Motors;
 
 public class Flywheel extends SubsystemBase {
-
   private final CANSparkMax leftMotor = MotorControllerFactory.createSparkMax(LEFT_FLY_MOTOR, Motors.Neo.setIdleMode(true));
   private final CANSparkMax rightMotor = MotorControllerFactory.createSparkMax(RIGHT_FLY_MOTOR, Motors.Neo.setIdleMode(true).setInverted(true));
 
@@ -92,7 +93,15 @@ public class Flywheel extends SubsystemBase {
     if (!SmartDashboard.containsKey("Flywheel D")) { SmartDashboard.putNumber("Flywheel D", kD); }
     if (!SmartDashboard.containsKey("Target Hood")) { SmartDashboard.putNumber("Target Hood", hoodSetpoint); }
     if (!SmartDashboard.containsKey("Target Voltage")) { SmartDashboard.putNumber("Target Voltage", voltageSetpoint); }
+    if (!SmartDashboard.containsKey("Flywheel Enabled")) { SmartDashboard.putBoolean("Flywheel Enabled", false); }
     SmartDashboard.putNumber("Flywheel RPM", getRPM());
+
+    if (DriverStation.getInstance().isFMSAttached()) {
+      enabled = true;
+    } else {
+      enabled = SmartDashboard.getBoolean("Flywheel Enabled", false);
+    }
+
     FlywheelPIDLoop();
   }
 }

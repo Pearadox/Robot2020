@@ -28,9 +28,9 @@ public class BallTower extends SubsystemBase {
     //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
     //       such as SpeedControllers, Encoders, DigitalInputs, etc.
     towerMotor = MotorControllerFactory.createVictorSPX(TOWER_MOTOR, Motors.Bag);
-    levelOne = new DigitalInput(LEVEL_ONE);
-    levelTwo = new DigitalInput(LEVEL_TWO);
-    levelThree = new DigitalInput(LEVEL_THREE);
+    levelOne = new DigitalInput(BOTTOM_SENSOR_DIO);
+    levelTwo = new DigitalInput(MIDDLE_SENSOR_DIO);
+    levelThree = new DigitalInput(TOP_SENSOR_DIO);
     if (!SmartDashboard.containsKey("LevelOne")){
       SmartDashboard.putBoolean("LevelOne", false);
     }  

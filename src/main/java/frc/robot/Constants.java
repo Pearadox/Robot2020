@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Units;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public final class Constants {
     public static final class DrivetrainConstants {
         public static final int FRONT_RIGHT_MOTOR = 2;
@@ -38,11 +41,17 @@ public final class Constants {
 
         public static final double flykP = 0.0018;
         public static final double flykD = 0.004;
+
+        public static final double TARGET_ZONE_VOLTAGE = 3.75;
+        public static final double INITIATION_LINE_VOLTAGE = 4.0;
     }
 
     public static final class HoodConstants {
         public static final int HOOD_MOTOR_ID = 6;
         public static final int HOOD_SWITCH_PORT = 9;
+
+        public static final double TARGET_ZONE_ANGLE_DEG = 7;
+        public static final double INITIATION_LINE_ANGLE_DEG = 38;
     }
 
     public static final class RamseteConstants {
@@ -62,9 +71,9 @@ public final class Constants {
 
     public static final class TowerConstants {
         public static final int TOWER_MOTOR = 12;
-        public static final int LEVEL_ONE = 0;
-        public static final int LEVEL_TWO = 1;
-        public static final int LEVEL_THREE = 2;
+        public static final int BOTTOM_SENSOR_DIO = 0;
+        public static final int MIDDLE_SENSOR_DIO = 1;
+        public static final int TOP_SENSOR_DIO = 2;
     }
 
     public static final class ClimberConstants {
@@ -80,5 +89,12 @@ public final class Constants {
 
     public static final class TransportConstants {
         public static final int HOPPER_MOTOR = 11;
+    }
+
+    public static final class LimelightConstants {
+        public static final double LIMELIGHT_ANGLE = 0.872665; // Radians
+        public static final double LIMELIGHT_HEIGHT = 0.7747; // Meters
+        private static final double PORT_HEIGHT = 2.5; // Meters
+        public static final double HEIGHT_DIFFERENCE = PORT_HEIGHT - LIMELIGHT_HEIGHT;
     }
 }

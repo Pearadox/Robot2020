@@ -129,7 +129,7 @@ public class Drivetrain extends SubsystemBase {
         ? Math.copySign(MAX_OUTPUT, leftOutput) : leftOutput;
     rightOutput = Math.abs(rightOutput) > MAX_OUTPUT
         ? Math.copySign(MAX_OUTPUT, rightOutput) : rightOutput;
-    
+
     frontLeftMotor.set(leftOutput);
     frontRightMotor.set(rightOutput);
   }
@@ -146,6 +146,7 @@ public class Drivetrain extends SubsystemBase {
     frontLeftMotor.set(leftOutput);
     frontRightMotor.set(rightOutput);
   }
+
 
   /**
    * Sums the left encoder positions and averages them.
